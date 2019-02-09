@@ -1,10 +1,8 @@
 package com.instapopulars.instapopular.groups;
 
-import java.util.Map;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GroupsController {
@@ -14,12 +12,10 @@ public class GroupsController {
     @Autowired
     public GroupsController(GroupsService groupsService) {
         this.groupsService = groupsService;
+        WebDriver webDriver = getDriver();
     }
 
-
-    @GetMapping("/groups")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Map<String, Object> model) {
-        model.put("name", name);
-        return "groups";
+    public WebDriver getDriver(){
+        return groupsService.getDriver();
     }
 }

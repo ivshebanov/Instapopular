@@ -2,6 +2,7 @@ package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.DAO.DriverDao;
 import com.instapopulars.instapopular.DAO.InstagramDao;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +16,9 @@ public class GroupsDao {
     public GroupsDao(InstagramDao instagramDao, DriverDao driverDao) {
         this.instagramDao = instagramDao;
         this.driverDao = driverDao;
+    }
+
+    public WebDriver getDriver(){
+        return driverDao.getDriver();
     }
 }
