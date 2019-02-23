@@ -7,7 +7,7 @@ public interface Constant {
         interface MessageConstants {
             String GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES = "getLoginAndPasswordFromProperties()";
             String GET_HESTAG_FROM_PROPERTIES = "getHestagFromProperties()";
-            String GET_GROUPS = "getGroups()";
+            String GET_GROUPS = "getGroupsFromProperties()";
             String GET_DRIVER = "getDriver() Local time: %tT";
             String QUIT_DRIVER = "quitDriver() Local time: %tT";
             String SET_PROPERTY = "initDriver(%s, %s)";
