@@ -11,6 +11,6 @@ public class GroupsController {
     @Autowired
     public GroupsController(GroupsService groupsService) {
         this.groupsService = groupsService;
-        groupsService.run();
+        //groupsService.run();
     }
 }
