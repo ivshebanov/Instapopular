@@ -25,8 +25,8 @@ public interface Constant {
 
             interface Chrome {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-                String CHROME_DRIVER = "chromedriver";//mac
-//                String CHROME_DRIVER="chromedriver.exe";//windows
+//                String CHROME_DRIVER = "chromedriver";//mac
+                String CHROME_DRIVER="chromedriver.exe";//windows
             }
 
             interface Firefox {
