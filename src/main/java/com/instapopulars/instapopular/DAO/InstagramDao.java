@@ -1,12 +1,27 @@
 package com.instapopulars.instapopular.DAO;
 
-import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.*;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
-import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.*;
+import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
+import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.ACCOUNT;
+import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.GROUPS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.ARIA_LABEL;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PAGE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PASSWORD_INPUT;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.SET_LIKE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Link.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
@@ -19,11 +34,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
@@ -47,7 +60,7 @@ public class InstagramDao {
     private static final String HESHTEG_PATH = requireNonNull(classloader.getResource(HASHTAGS)).getPath();
     private static final String ACCOUNT_PATH = requireNonNull(classloader.getResource(ACCOUNT)).getPath();
     private static final String GROUPS_PATH = requireNonNull(classloader.getResource(GROUPS)).getPath();
-    private static ResourceBundle resWebdriver = ResourceBundle.getBundle(WEBDRIVER, Locale.ENGLISH);
+    private static final String CHROME_DRIVER_PATH = requireNonNull(classloader.getResource(CHROME_DRIVER)).getPath();
 
     private WebDriver driver;
     private String login;
@@ -97,10 +110,8 @@ public class InstagramDao {
     }
 
     private void init() {
-        String key = resWebdriver.getString(WEBDRIVER_CHROME_DRIVER);
-        String value = requireNonNull(classloader.getResource(resWebdriver.getString(CHROME_DRIVER))).getPath();
-        logger.debug(format(SET_PROPERTY, key, value));
-        System.setProperty(key, value);
+        logger.debug(format(SET_PROPERTY, WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH));
+        System.setProperty(WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH);
         driver = new ChromeDriver();
         driver.manage().window().setSize(new Dimension(1400, 900));
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);

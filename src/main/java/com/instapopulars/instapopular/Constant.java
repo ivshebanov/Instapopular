@@ -1,5 +1,7 @@
 package com.instapopulars.instapopular;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 public interface Constant {
 
     interface DriverConstant {
@@ -15,8 +17,17 @@ public interface Constant {
 
         interface Driver {
             String WEBDRIVER = "webdriver";
-            String WEBDRIVER_CHROME_DRIVER = "WEBDRIVER_CHROME_DRIVER";
-            String CHROME_DRIVER = "CHROME_DRIVER";
+
+            interface Chrome {
+                String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
+                String CHROME_DRIVER = "chromedriver";//mac
+//                String CHROME_DRIVER="chromedriver.exe";//windows
+            }
+
+            interface Firefox {
+                String WEBDRIVER_GECKO_DRIVER = "webdriver.gecko.driver";
+                String GECKO_DRIVER = "geckodriver";
+            }
         }
 
         interface propertiesName {
