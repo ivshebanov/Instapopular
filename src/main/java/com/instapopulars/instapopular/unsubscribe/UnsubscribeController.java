@@ -11,7 +11,7 @@ public class UnsubscribeController {
     @Autowired
     public UnsubscribeController(UnsubscribeService unsubscribeService) {
         this.unsubscribeService = unsubscribeService;
-//        unsubscribeService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
-//        unsubscribeService.unsubscribe(400);
+        unsubscribeService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
+        unsubscribeService.unsubscribe(400);
     }
 }

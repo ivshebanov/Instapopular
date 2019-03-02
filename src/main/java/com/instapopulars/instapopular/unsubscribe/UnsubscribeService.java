@@ -19,6 +19,7 @@ public class UnsubscribeService {
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
             unsubscribeDao.quitDriver();
         }
     }
@@ -29,6 +30,7 @@ public class UnsubscribeService {
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
             unsubscribeDao.quitDriver();
         }
     }

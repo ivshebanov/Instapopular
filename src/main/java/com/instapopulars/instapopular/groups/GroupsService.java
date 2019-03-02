@@ -28,6 +28,7 @@ public class GroupsService {
             System.out.println();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
             groupsDao.quitDriver();
         }
     }

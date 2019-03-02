@@ -91,7 +91,7 @@ public interface Constant {
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
             //html/body/div[4]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN mac
             //html/body/div[3]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN windows
-            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";
+            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";

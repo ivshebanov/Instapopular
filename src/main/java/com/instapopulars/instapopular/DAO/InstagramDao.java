@@ -259,6 +259,5 @@ public class InstagramDao {
 
     public List<WebElement> getWebElements(int timeOutlnSeconds, String xpathExpression) {
         return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
-
     }
 }

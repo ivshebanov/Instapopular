@@ -11,7 +11,7 @@ public class GroupsController {
     @Autowired
     public GroupsController(GroupsService groupsService) {
         this.groupsService = groupsService;
-        groupsService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
-        groupsService.run(300);
+//        groupsService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
+//        groupsService.run(300);
     }
 }
