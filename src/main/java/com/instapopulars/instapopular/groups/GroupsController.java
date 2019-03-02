@@ -1,5 +1,7 @@
 package com.instapopulars.instapopular.groups;
 
+import static com.instapopulars.instapopular.Constant.User.LOGIN;
+import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,7 +13,11 @@ public class GroupsController {
     @Autowired
     public GroupsController(GroupsService groupsService) {
         this.groupsService = groupsService;
-//        groupsService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
+        groups();
+    }
+
+    private void groups() {
+//        groupsService.loginOnWebSite(LOGIN, PASSWORD);
 //        groupsService.run(300);
     }
 }

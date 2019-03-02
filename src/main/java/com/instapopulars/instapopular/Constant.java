@@ -2,6 +2,14 @@ package com.instapopulars.instapopular;
 
 public interface Constant {
 
+    interface User {
+        String LOGIN = "kj2a";
+        String PASSWORD ="U3fony6c";
+
+//        String LOGIN = "lilka.lily.1";
+//        String PASSWORD ="Sxsblpwiwn";
+    }
+
     interface DriverConstant {
 
         interface MessageConstants {

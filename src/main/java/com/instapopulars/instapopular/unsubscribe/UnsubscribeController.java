@@ -1,5 +1,7 @@
 package com.instapopulars.instapopular.unsubscribe;
 
+import static com.instapopulars.instapopular.Constant.User.LOGIN;
+import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,7 +13,11 @@ public class UnsubscribeController {
     @Autowired
     public UnsubscribeController(UnsubscribeService unsubscribeService) {
         this.unsubscribeService = unsubscribeService;
-        unsubscribeService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
+        unsubscribe();
+    }
+
+    private void unsubscribe(){
+        unsubscribeService.loginOnWebSite(LOGIN, PASSWORD);
         unsubscribeService.unsubscribe(400);
     }
 }
