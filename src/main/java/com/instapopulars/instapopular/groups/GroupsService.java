@@ -2,7 +2,6 @@ package com.instapopulars.instapopular.groups;
 
 import java.io.IOException;
 import java.util.Set;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +15,14 @@ public class GroupsService {
         this.groupsDao = groupsDao;
     }
 
-    public WebDriver initDriver(){
-        return groupsDao.initDriver();
+    public void initDriver() {
+        groupsDao.initDriver();
     }
 
-    public void run(int countSubscriptions){
+    public void run(int countSubscriptions) {
         try {
             Set<String> groups = groupsDao.getGroupsFromProperties();
-            for (String urlGroup : groups){
+            for (String urlGroup : groups) {
                 groupsDao.subscribeToGroupMembers(urlGroup, countSubscriptions);
             }
             System.out.println();
@@ -37,7 +36,7 @@ public class GroupsService {
         try {
             groupsDao.initDriver();
             return groupsDao.loginOnWebSite(login, password);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             groupsDao.quitDriver();
         }

@@ -18,11 +18,7 @@ import static java.lang.String.format;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +29,6 @@ public class GroupsDao {
 
     private static final Logger logger = LoggerFactory.getLogger(GroupsDao.class);
     private final InstagramDao instagramDao;
-    private WebDriver driver;
 
     @Autowired
     public GroupsDao(InstagramDao instagramDao) {
@@ -41,12 +36,15 @@ public class GroupsDao {
     }
 
     public void subscribeToGroupMembers(String channelName, int countSubscriptions) {
-        logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName));
+        logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
+        if (channelName == null || countSubscriptions == 0) {
+            return;
+        }
         String baseWindowHandle = null;
-        if (!instagramDao.getCurrentUrl().equalsIgnoreCase(format(HOME_PAGE, channelName))) {
+        if (!format(HOME_PAGE, channelName).equalsIgnoreCase(instagramDao.getCurrentUrl())) {
             baseWindowHandle = instagramDao.openUrl(format(HOME_PAGE, channelName));
         }
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(OPEN_SUBSCRIBERS))).click();
+        instagramDao.getWebElement(60, OPEN_SUBSCRIBERS).click();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i < countSubscriptions; i++) {
             try {
@@ -55,15 +53,13 @@ public class GroupsDao {
                     countSubscriptions++;
                     continue;
                 }
-
-                (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(IS_SUBSCRIBED, i)))).click();
+                instagramDao.getWebElement(60, format(IS_SUBSCRIBED, i)).click();
                 Thread.sleep(2000);
                 if (requestSent(format(IS_SUBSCRIBED, i))) {
                     continue;
                 }
 
-                String urlUser = (new WebDriverWait(driver, 60)).
-                        until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(USER_LINK_TO_SUBSCRIBERS, i)))).getAttribute(HREF);
+                String urlUser = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
                 String userWindowHandle = instagramDao.openUrlNewTab(urlUser);
                 int countPhoto;
                 try {
@@ -77,8 +73,7 @@ public class GroupsDao {
                 if (countPhoto != 0) {
                     for (int j = 1; j <= countPhoto; j++) {
                         try {
-                            String urlPhoto = (new WebDriverWait(driver, 60)).
-                                    until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(URL_PHOTO, j)))).getAttribute(HREF);
+                            String urlPhoto = instagramDao.getWebElement(60, format(URL_PHOTO, j)).getAttribute(HREF);
                             instagramDao.setLike(urlPhoto);
                         } catch (Exception e) {
                             logger.error(e.getMessage(), e);
@@ -91,7 +86,7 @@ public class GroupsDao {
                 instagramDao.selectTab(baseWindowHandle);
                 Random random = new Random();
                 int num = 20000 + random.nextInt(100000 - 20000);
-                Thread.sleep(num);
+                Thread.sleep(5000);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramDao.selectTab(baseWindowHandle);
@@ -100,23 +95,22 @@ public class GroupsDao {
     }
 
     private boolean isSubscribed(String xpath) {
-        String isSubscribed = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))).getText();
-        return isSubscribed.equalsIgnoreCase(SUBSCRIPTIONS) || isSubscribed.equalsIgnoreCase(REQUEST_SENT);
+        String isSubscribed = instagramDao.getWebElement(60, xpath).getText();
+        return SUBSCRIPTIONS.equalsIgnoreCase(isSubscribed) || REQUEST_SENT.equalsIgnoreCase(isSubscribed);
     }
 
     private boolean requestSent(String xpath) {
-        String isSubscribed = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))).getText();
-        return isSubscribed.equalsIgnoreCase(REQUEST_SENT);
+        String isSubscribed = instagramDao.getWebElement(60, xpath).getText();
+        return REQUEST_SENT.equalsIgnoreCase(isSubscribed);
     }
 
     private int checkPhoto() {
-        List<WebElement> webElement = (new WebDriverWait(driver, 20)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(CHECK_PHOTO)));
+        List<WebElement> webElement = instagramDao.getWebElements(20, CHECK_PHOTO);
         return (webElement == null) ? 0 : webElement.size();
     }
 
-    public WebDriver initDriver() {
-        driver = instagramDao.initDriver();
-        return driver;
+    public void initDriver() {
+        instagramDao.initDriver();
     }
 
     public Set<String> getGroupsFromProperties() throws IOException {

@@ -1,7 +1,5 @@
 package com.instapopulars.instapopular;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
-
 public interface Constant {
 
     interface DriverConstant {
@@ -16,7 +14,6 @@ public interface Constant {
         }
 
         interface Driver {
-            String WEBDRIVER = "webdriver";
 
             interface Chrome {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
@@ -40,7 +37,7 @@ public interface Constant {
     interface GroupsConstant {
 
         interface MessageConstants {
-            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToGroupMembers(%s)";
+            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToGroupMembers(%s, %d)";
             String SUBSCRIPTIONS = "Подписки";
             String REQUEST_SENT = "Запрос отправлен";
             String SUBSCRIBE_TO_GROUP = "subscribe from %d";
@@ -80,7 +77,7 @@ public interface Constant {
     interface UnsubscribeConstant {
 
         interface MessageConstants {
-            String UNSUBSCRIBE_FROM_USERS = "unsubscribeFromUsers()";
+            String UNSUBSCRIBE_FROM_USERS = "unsubscribeFromUsers(%d)";
             String GET_ALL_SUBSCRIBERS = "getAllSubscribers()";
             String GET_ALL_SUBSCRIPTIONS = "getAllSubscriptions()";
             String UNSUBSCRIBED_FROM = "unsubscribed from %d";
@@ -92,8 +89,8 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-                                     //html/body/div[4]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN mac
-                                     //html/body/div[3]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN windows
+            //html/body/div[4]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN mac
+            //html/body/div[3]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN windows
             String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";

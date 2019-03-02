@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
@@ -123,10 +124,10 @@ public class InstagramDao {
         logger.info(format(LOGIN_ON_WEB_SITE, login, password));
         this.login = login;
         openUrl(LOGIN_PAGE);
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(LOGIN_USERNAME_INPUT))).sendKeys(login);
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(LOGIN_PASSWORD_INPUT))).sendKeys(password);
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(LOGIN_BUTTON))).click();
-        String accountName = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(CHECK_LOGIN_BY_NAME))).getText();
+        getWebElement(60, LOGIN_USERNAME_INPUT).sendKeys(login);
+        getWebElement(60, LOGIN_PASSWORD_INPUT).sendKeys(password);
+        getWebElement(60, LOGIN_BUTTON).click();
+        String accountName = getWebElement(60, CHECK_LOGIN_BY_NAME).getText();
         return login.equalsIgnoreCase(accountName);
     }
 
@@ -134,7 +135,7 @@ public class InstagramDao {
         if (!driver.getCurrentUrl().equalsIgnoreCase(format(HOME_PAGE, login))) {
             openUrl(format(HOME_PAGE, login));
         }
-        String accountName = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(ACCOUNT_NAME))).getText();
+        String accountName = getWebElement(60, ACCOUNT_NAME).getText();
         return login.equalsIgnoreCase(accountName);
     }
 
@@ -165,7 +166,7 @@ public class InstagramDao {
     }
 
     public void scrollElementSubscriptions(String xPathElement) {
-        WebElement scroll = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xPathElement)));
+        WebElement scroll = getWebElement(60, xPathElement);
         Coordinates coordinate = ((Locatable) scroll).getCoordinates();
         coordinate.onPage();
         coordinate.inViewPort();
@@ -225,10 +226,8 @@ public class InstagramDao {
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
             if (!isActiveLike()) {
-                (new WebDriverWait(driver, 60))
-                        .until(ExpectedConditions.presenceOfElementLocated(By.xpath(SET_LIKE))).click();
+                getWebElement(60, SET_LIKE).click();
             }
-
         } catch (Exception ignored) {
 
         } finally {
@@ -242,9 +241,7 @@ public class InstagramDao {
     }
 
     private boolean isActiveLike() {
-        String ariaLable = (new WebDriverWait(driver, 60))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath(IS_ACTIVE_LIKE)))
-                .getAttribute(ARIA_LABEL);
+        String ariaLable = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
         return ariaLable.equalsIgnoreCase(I_DO_NOT_LIKE);
     }
 
@@ -254,5 +251,14 @@ public class InstagramDao {
 
     public String getLogin() {
         return login;
+    }
+
+    public WebElement getWebElement(int timeOutlnSeconds, String xpathExpression) {
+        return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpression)));
+    }
+
+    public List<WebElement> getWebElements(int timeOutlnSeconds, String xpathExpression) {
+        return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
+
     }
 }

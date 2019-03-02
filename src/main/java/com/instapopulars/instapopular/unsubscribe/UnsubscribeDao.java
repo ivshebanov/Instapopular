@@ -17,10 +17,6 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,6 @@ public class UnsubscribeDao {
 
     private static final Logger logger = LoggerFactory.getLogger(UnsubscribeDao.class);
     private final InstagramDao instagramDao;
-    private WebDriver driver;
 
     @Autowired
     public UnsubscribeDao(InstagramDao instagramDao) {
@@ -39,11 +34,11 @@ public class UnsubscribeDao {
     }
 
     public void unsubscribeFromUsers(int countSubscribers, List<User> subscribers) {
-        logger.info(UNSUBSCRIBE_FROM_USERS);
+        logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
         if (!instagramDao.openHomePage()) {
             return;
         }
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(OPEN_SUBSCRIPTIONS))).click();
+        instagramDao.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i < countSubscribers; i++) {
             try {
@@ -55,8 +50,8 @@ public class UnsubscribeDao {
                 Random random = new Random();
                 int timeOut = 20000 + random.nextInt(80000 - 20000);
                 Thread.sleep(timeOut);
-                (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(SUBSCRIPTIONS_BTN, i)))).click();
-                (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(UNSUBSCRIBE_BTN))).click();
+                instagramDao.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
+                instagramDao.getWebElement(60, UNSUBSCRIBE_BTN).click();
                 logger.info(format(UNSUBSCRIBED_FROM, i));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -67,7 +62,7 @@ public class UnsubscribeDao {
     }
 
     private boolean isSubscribed(List<User> subscribers, String xpath) {
-        String url = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))).getAttribute(HREF);
+        String url = instagramDao.getWebElement(60, xpath).getAttribute(HREF);
         User user = instagramDao.getUserByUrl(url);
         return subscribers.contains(user);
     }
@@ -78,9 +73,9 @@ public class UnsubscribeDao {
         if (!instagramDao.openHomePage()) {
             return resultUser;
         }
-        String countSubscribersStr = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(COUNT_SUBSCRIBERS))).getText();
+        String countSubscribersStr = instagramDao.getWebElement(60, COUNT_SUBSCRIBERS).getText();
         int countSubscribers = instagramDao.convertStringToInt(countSubscribersStr);
-        (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(OPEN_SUBSCRIBERS))).click();
+        instagramDao.getWebElement(60, OPEN_SUBSCRIBERS).click();
         if (countSubscribers > 2400) {
             resultUser.addAll(getUserLinks(2400));
         }
@@ -96,8 +91,7 @@ public class UnsubscribeDao {
         for (int i = 1; i < count; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                String url = (new WebDriverWait(driver, 60)).
-                        until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(USER_LINK_TO_SUBSCRIBERS, i)))).getAttribute(HREF);
+                String url = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
                 resultUrls.add(instagramDao.getUserByUrl(url));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -107,9 +101,8 @@ public class UnsubscribeDao {
         return resultUrls;
     }
 
-    public WebDriver initDriver() {
-        driver = instagramDao.initDriver();
-        return driver;
+    public void initDriver() {
+        instagramDao.initDriver();
     }
 
     public void quitDriver() {
