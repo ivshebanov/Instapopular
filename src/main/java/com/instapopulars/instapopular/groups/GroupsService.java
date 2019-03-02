@@ -20,18 +20,27 @@ public class GroupsService {
         return groupsDao.initDriver();
     }
 
-    public void run(){
+    public void run(int countSubscriptions){
         try {
-            groupsDao.initDriver();
-            groupsDao.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
             Set<String> groups = groupsDao.getGroupsFromProperties();
             for (String urlGroup : groups){
-                groupsDao.subscribeToGroupMembers(urlGroup);
+                groupsDao.subscribeToGroupMembers(urlGroup, countSubscriptions);
             }
             System.out.println();
         } catch (IOException e) {
             e.printStackTrace();
             groupsDao.quitDriver();
         }
+    }
+
+    public boolean loginOnWebSite(String login, String password) {
+        try {
+            groupsDao.initDriver();
+            return groupsDao.loginOnWebSite(login, password);
+        } catch (Exception e){
+            e.printStackTrace();
+            groupsDao.quitDriver();
+        }
+        return false;
     }
 }

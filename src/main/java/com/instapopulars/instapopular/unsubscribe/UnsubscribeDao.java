@@ -53,7 +53,7 @@ public class UnsubscribeDao {
                     continue;
                 }
                 Random random = new Random();
-                int timeOut = 40000 + random.nextInt(80000 - 40000);
+                int timeOut = 20000 + random.nextInt(80000 - 20000);
                 Thread.sleep(timeOut);
                 (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(SUBSCRIPTIONS_BTN, i)))).click();
                 (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(UNSUBSCRIBE_BTN))).click();

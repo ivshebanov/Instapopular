@@ -1,11 +1,13 @@
 package com.instapopulars.instapopular.groups;
 
-import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.REQUEST_SENT;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Link.HOME_PAGE;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.COUNT_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.HREF;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
@@ -38,26 +40,22 @@ public class GroupsDao {
         this.instagramDao = instagramDao;
     }
 
-    public void subscribeToGroupMembers(String channelName) {
+    public void subscribeToGroupMembers(String channelName, int countSubscriptions) {
         logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName));
         String baseWindowHandle = null;
         if (!instagramDao.getCurrentUrl().equalsIgnoreCase(format(HOME_PAGE, channelName))) {
             baseWindowHandle = instagramDao.openUrl(format(HOME_PAGE, channelName));
         }
-        String countSubscribersStr = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(COUNT_SUBSCRIBERS))).getText();
-        int countSubscribers = instagramDao.convertStringToInt(countSubscribersStr);
-        if (countSubscribers > 300) {
-            countSubscribers = 300;
-        }
         (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(OPEN_SUBSCRIBERS))).click();
         instagramDao.scrollSubscriptions(20);
-        for (int i = 1; i < 300; i++) {
+        for (int i = 1; i < countSubscriptions; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
                 if (isSubscribed(format(IS_SUBSCRIBED, i))) {
-                    countSubscribers++;
+                    countSubscriptions++;
                     continue;
                 }
+
                 (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(format(IS_SUBSCRIBED, i)))).click();
                 Thread.sleep(2000);
                 if (requestSent(format(IS_SUBSCRIBED, i))) {
