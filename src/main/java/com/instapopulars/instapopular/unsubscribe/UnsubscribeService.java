@@ -13,16 +13,34 @@ public class UnsubscribeService {
         this.unsubscribeDao = unsubscribeDao;
     }
 
-    public void run() {
+    public void unsubscribe(int count) {
         try {
-            unsubscribeDao.initDriver();
-            unsubscribeDao.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
-            unsubscribeDao.unsubscribeFromUsers(400, null);
+            unsubscribeDao.unsubscribeFromUsers(count, null);
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
             unsubscribeDao.quitDriver();
         }
+    }
 
+    public void unsubscribeFromUnsigned(int count){
+        try {
+            unsubscribeDao.unsubscribeFromUsers(count, unsubscribeDao.getAllSubscribers());
+            System.out.println();
+        } catch (Exception e) {
+            e.printStackTrace();
+            unsubscribeDao.quitDriver();
+        }
+    }
+
+    public boolean loginOnWebSite(String login, String password) {
+        try {
+            unsubscribeDao.initDriver();
+            return unsubscribeDao.loginOnWebSite(login, password);
+        } catch (Exception e){
+            e.printStackTrace();
+            unsubscribeDao.quitDriver();
+        }
+        return false;
     }
 }

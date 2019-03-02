@@ -4,7 +4,8 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.*;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.*;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.I_DO_NOT_LIKE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Link.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
@@ -13,8 +14,6 @@ import com.instapopulars.instapopular.model.User;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,10 +116,7 @@ public class InstagramDao {
         (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(LOGIN_PASSWORD_INPUT))).sendKeys(password);
         (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(LOGIN_BUTTON))).click();
         String accountName = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(CHECK_LOGIN_BY_NAME))).getText();
-        if (login.equalsIgnoreCase(accountName)) {
-            return true;
-        }
-        return false;
+        return login.equalsIgnoreCase(accountName);
     }
 
     public boolean openHomePage() {
@@ -128,10 +124,7 @@ public class InstagramDao {
             openUrl(format(HOME_PAGE, login));
         }
         String accountName = (new WebDriverWait(driver, 60)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(ACCOUNT_NAME))).getText();
-        if (login.equalsIgnoreCase(accountName)) {
-            return TRUE;
-        }
-        return FALSE;
+        return login.equalsIgnoreCase(accountName);
     }
 
     public int convertStringToInt(String count) {
