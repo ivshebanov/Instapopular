@@ -17,7 +17,7 @@ public class GroupsController {
     }
 
     private void groups() {
-//        groupsService.loginOnWebSite(LOGIN, PASSWORD);
-//        groupsService.run(300);
+        groupsService.loginOnWebSite(LOGIN, PASSWORD);
+        groupsService.run(350);
     }
 }

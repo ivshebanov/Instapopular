@@ -16,7 +16,7 @@ public class UnsubscribeController {
     @Autowired
     public UnsubscribeController(UnsubscribeService unsubscribeService) {
         this.unsubscribeService = unsubscribeService;
-        unsubscribe();
+//        unsubscribe();
     }
 
     private void unsubscribe(){
@@ -24,13 +24,11 @@ public class UnsubscribeController {
         unsubscribeService.unsubscribe(400);
     }
 
-    public String index() {
+    public void index() {
         logger.trace("A TRACE Message");
         logger.debug("A DEBUG Message");
         logger.info("An INFO Message");
         logger.warn("A WARN Message");
         logger.error("An ERROR Message");
-
-        return "Howdy! Check out the Logs to see the output...";
     }
 }
