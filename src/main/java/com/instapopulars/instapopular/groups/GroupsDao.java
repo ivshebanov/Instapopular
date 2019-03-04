@@ -18,16 +18,16 @@ import static java.lang.String.format;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class GroupsDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(GroupsDao.class);
+    private static final Logger logger = LogManager.getLogger(GroupsDao.class);
     private final InstagramDao instagramDao;
 
     @Autowired
