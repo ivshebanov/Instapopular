@@ -73,11 +73,11 @@ public class GroupsDao {
                 if (countPhoto != 0) {
                     for (int j = 1; j <= countPhoto; j++) {
                         try {
-                            String urlPhoto = instagramDao.getWebElement(60, format(URL_PHOTO, j)).getAttribute(HREF);
+                            String urlPhoto = instagramDao.getWebElement(10, format(URL_PHOTO, j)).getAttribute(HREF);
                             instagramDao.setLike(urlPhoto);
                         } catch (Exception e) {
-                            logger.error(e.getMessage(), e);
                             instagramDao.selectTab(userWindowHandle);
+                            break;
                         }
                     }
                 }
