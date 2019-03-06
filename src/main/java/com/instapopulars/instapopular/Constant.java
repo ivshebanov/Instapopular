@@ -7,7 +7,7 @@ public interface Constant {
         String PASSWORD ="U3fony6c";
 
 //        String LOGIN = "lilka.lily.1";
-//        String PASSWORD ="Sxsblpwiwn";
+//        String PASSWORD = "Sxsblpwiwn";
     }
 
     interface DriverConstant {
@@ -27,6 +27,10 @@ public interface Constant {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
 //                String CHROME_DRIVER = "chromedriver";//mac
                 String CHROME_DRIVER="chromedriver.exe";//windows
+            }
+
+            interface PhantomJs {
+                String PHANTOMJS = "phantomjs";
             }
 
             interface Firefox {
@@ -66,7 +70,6 @@ public interface Constant {
 
         interface MessageConstants {
             String LOGIN_ON_WEB_SITE = "loginOnWebSite(%s, %s)";
-            String LOGIN_ON_WEB_SITE_SUCCESS = "loginOnWebSite() = success";
             String I_DO_NOT_LIKE = "Не нравится";
         }
 
@@ -97,9 +100,8 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-            //html/body/div[4]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN mac
-            //html/body/div[3]/div/div/div[3]/button[1] - UNSUBSCRIBE_BTN windows
-            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";
+//            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
+            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";

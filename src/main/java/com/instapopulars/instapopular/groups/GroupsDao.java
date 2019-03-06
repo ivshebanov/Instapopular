@@ -105,7 +105,7 @@ public class GroupsDao {
     }
 
     private int checkPhoto() {
-        List<WebElement> webElement = instagramDao.getWebElements(20, CHECK_PHOTO);
+        List<WebElement> webElement = instagramDao.getWebElements(10, CHECK_PHOTO);
         return (webElement == null) ? 0 : webElement.size();
     }
 
