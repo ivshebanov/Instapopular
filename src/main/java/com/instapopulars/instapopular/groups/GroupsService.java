@@ -26,7 +26,7 @@ public class GroupsService {
                 groupsDao.subscribeToGroupMembers(urlGroup, countSubscriptions);
             }
             System.out.println();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             groupsDao.quitDriver();

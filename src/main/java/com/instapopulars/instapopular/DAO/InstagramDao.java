@@ -66,7 +66,7 @@ public class InstagramDao {
     private WebDriver driver;
     private String login;
 
-    public synchronized Map<String, String> getLoginAndPasswordFromProperties() throws IOException {
+    public Map<String, String> getLoginAndPasswordFromProperties() throws IOException {
         logger.info(GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES);
         Map<String, String> resultLoginAndPassword = new LinkedHashMap<>();
         Properties properties = new Properties();
@@ -77,7 +77,7 @@ public class InstagramDao {
         return resultLoginAndPassword;
     }
 
-    public synchronized Set<String> getHestagFromProperties() throws IOException {
+    public Set<String> getHestagFromProperties() throws IOException {
         logger.info(GET_HESTAG_FROM_PROPERTIES);
         Set<String> resultHeshtegs = new LinkedHashSet<>();
         Properties properties = new Properties();
@@ -99,14 +99,13 @@ public class InstagramDao {
         return resultGroups;
     }
 
-    public synchronized WebDriver initDriver() {
+    public WebDriver initDriver() {
         logger.info(format(GET_DRIVER, Calendar.getInstance()));
         initChromeDriver();
-//        initPhantomJs();
         return driver;
     }
 
-    public synchronized void quitDriver() {
+    public void quitDriver() {
         logger.info(format(QUIT_DRIVER, Calendar.getInstance()));
         driver.quit();
     }
@@ -147,10 +146,10 @@ public class InstagramDao {
         if (count.length() == 5) {
             return Integer.parseInt(removeCharAt(count, 1));
         }
-        if (count.length() == 6) {
+        if (count.length() == 6) {//переделать
             return Integer.parseInt(removeCharAt(count, 2));
         }
-        if (count.length() == 7) {
+        if (count.length() == 7) {//переделать
             return Integer.parseInt(removeCharAt(count, 3));
         }
         return 0;
