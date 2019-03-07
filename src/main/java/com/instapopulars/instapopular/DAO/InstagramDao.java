@@ -2,7 +2,6 @@ package com.instapopulars.instapopular.DAO;
 
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.PhantomJs.PHANTOMJS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
@@ -49,9 +48,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import static org.openqa.selenium.phantomjs.PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -66,7 +62,6 @@ public class InstagramDao {
     private static final String ACCOUNT_PATH = requireNonNull(classloader.getResource(ACCOUNT)).getPath();
     private static final String GROUPS_PATH = requireNonNull(classloader.getResource(GROUPS)).getPath();
     private static final String CHROME_DRIVER_PATH = requireNonNull(classloader.getResource(CHROME_DRIVER)).getPath();
-    private static final String PHANTOM_JS_DRIVER_PATH = requireNonNull(classloader.getResource(PHANTOMJS)).getPath();
 
     private WebDriver driver;
     private String login;
@@ -124,14 +119,6 @@ public class InstagramDao {
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
-    }
-
-    private void initPhantomJs() {
-        logger.debug(format(SET_PROPERTY, PHANTOMJS_EXECUTABLE_PATH_PROPERTY, PHANTOM_JS_DRIVER_PATH));
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setJavascriptEnabled(true);
-        caps.setCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, PHANTOM_JS_DRIVER_PATH);
-        driver = new PhantomJSDriver(caps);
     }
 
     public boolean loginOnWebSite(String login, String password) {

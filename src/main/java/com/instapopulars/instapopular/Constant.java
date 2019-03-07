@@ -28,15 +28,6 @@ public interface Constant {
 //                String CHROME_DRIVER = "chromedriver";//mac
                 String CHROME_DRIVER="chromedriver.exe";//windows
             }
-
-            interface PhantomJs {
-                String PHANTOMJS = "phantomjs";
-            }
-
-            interface Firefox {
-                String WEBDRIVER_GECKO_DRIVER = "webdriver.gecko.driver";
-                String GECKO_DRIVER = "geckodriver";
-            }
         }
 
         interface propertiesName {
