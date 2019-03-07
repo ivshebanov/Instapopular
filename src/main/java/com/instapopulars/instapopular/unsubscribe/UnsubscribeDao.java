@@ -48,7 +48,7 @@ public class UnsubscribeDao {
                     continue;
                 }
                 Random random = new Random();
-                int timeOut = 20000 + random.nextInt(80000 - 20000);
+                int timeOut = 50000 + random.nextInt(150000 - 50000);
                 Thread.sleep(timeOut);
                 instagramDao.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
                 instagramDao.getWebElement(60, UNSUBSCRIBE_BTN).click();

@@ -85,7 +85,7 @@ public class GroupsDao {
                 instagramDao.closeTab(userWindowHandle);
                 instagramDao.selectTab(baseWindowHandle);
                 Random random = new Random();
-                int num = 20000 + random.nextInt(100000 - 20000);
+                int num = 50000 + random.nextInt(150000 - 50000);
                 Thread.sleep(num);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
