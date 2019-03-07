@@ -8,7 +8,7 @@
 
         <RollingFile name="RollingFile"
                      fileName="./logs/instapopulars.log"
-                     filePattern="./logs/$${date:yyyy-MM-dd}/instapopulars-%d{-dd-MMMM-yyyy}-%i.log">
+                     filePattern="./logs/$${date:yyyy-MM-dd}/instapopulars.%d{MM-dd-yyyy-HH:mm}.log">
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
             </PatternLayout>
@@ -17,7 +17,7 @@
                 <SizeBasedTriggeringPolicy size="10 MB" />
                 <TimeBasedTriggeringPolicy />
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="100"/>
         </RollingFile>
     </Appenders>
 
