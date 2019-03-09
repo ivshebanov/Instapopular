@@ -1,10 +1,11 @@
 package com.instapopulars.instapopular.unsubscribe;
 
+import static com.instapopulars.instapopular.Constant.Attribute.HREF;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.GET_ALL_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBED_FROM;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.COUNT_SUBSCRIBERS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.HREF;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
@@ -16,7 +17,6 @@ import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +47,7 @@ public class UnsubscribeDao {
                     i++;
                     continue;
                 }
-                Random random = new Random();
-                int timeOut = 50000 + random.nextInt(150000 - 50000);
-                Thread.sleep(timeOut);
+                instagramDao.timeOut(150000, 50000);
                 instagramDao.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
                 instagramDao.getWebElement(60, UNSUBSCRIBE_BTN).click();
                 logger.info(format(UNSUBSCRIBED_FROM, i));

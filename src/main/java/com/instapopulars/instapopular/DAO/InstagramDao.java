@@ -1,5 +1,8 @@
 package com.instapopulars.instapopular.DAO;
 
+import static com.instapopulars.instapopular.Constant.Attribute.ARIA_LABEL;
+import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
+import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
@@ -12,17 +15,16 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesN
 import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.ARIA_LABEL;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PAGE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PASSWORD_INPUT;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.SET_LIKE;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Link.HOME_PAGE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.SUBSCRIBE;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import com.instapopulars.instapopular.model.User;
@@ -32,12 +34,15 @@ import java.io.IOException;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
@@ -68,7 +73,7 @@ public class InstagramDao {
 
     public Map<String, String> getLoginAndPasswordFromProperties() throws IOException {
         logger.info(GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES);
-        Map<String, String> resultLoginAndPassword = new LinkedHashMap<>();
+        Map<String, String> resultLoginAndPassword = new HashMap<>();
         Properties properties = new Properties();
         properties.load(new FileReader(new File(ACCOUNT_PATH)));
         for (String key : properties.stringPropertyNames()) {
@@ -79,7 +84,7 @@ public class InstagramDao {
 
     public Set<String> getHestagFromProperties() throws IOException {
         logger.info(GET_HESTAG_FROM_PROPERTIES);
-        Set<String> resultHeshtegs = new LinkedHashSet<>();
+        Set<String> resultHeshtegs = new HashSet<>();
         Properties properties = new Properties();
         properties.load(new FileReader(new File(HESHTEG_PATH)));
         for (String key : properties.stringPropertyNames()) {
@@ -90,7 +95,7 @@ public class InstagramDao {
 
     public Set<String> getGroupsFromProperties() throws IOException {
         logger.info(GET_GROUPS);
-        Set<String> resultGroups = new LinkedHashSet<>();
+        Set<String> resultGroups = new HashSet<>();
         Properties properties = new Properties();
         properties.load(new FileReader(new File(GROUPS_PATH)));
         for (String key : properties.stringPropertyNames()) {
@@ -122,6 +127,9 @@ public class InstagramDao {
 
     public boolean loginOnWebSite(String login, String password) {
         logger.info(format(LOGIN_ON_WEB_SITE, login, password));
+        if (login == null || login.length() == 0 || password == null || password.length() == 0) {
+            return false;
+        }
         this.login = login;
         openUrl(LOGIN_PAGE);
         getWebElement(60, LOGIN_USERNAME_INPUT).sendKeys(login);
@@ -220,13 +228,15 @@ public class InstagramDao {
         driver.close();
     }
 
-    public void setLike(String urlPhoto) {
+    public boolean setLike(String urlPhoto) {
         String currentWindowHandle = driver.getWindowHandle();
         String photoWindowHandle = null;
+        boolean checkLike = false;
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
             if (!isActiveLike()) {
                 getWebElement(60, SET_LIKE).click();
+                checkLike = true;
             }
         } catch (Exception ignored) {
 
@@ -234,6 +244,50 @@ public class InstagramDao {
             closeTab(photoWindowHandle);
             selectTab(currentWindowHandle);
         }
+        return checkLike;
+    }
+
+    public boolean subscribe(String urlPhoto) {
+        String currentWindowHandle = driver.getWindowHandle();
+        String photoWindowHandle = null;
+        boolean checkSubscribe = false;
+        try {
+            photoWindowHandle = openUrlNewTab(urlPhoto);
+            if (!isSubscribe()) {
+                getWebElement(60, SUBSCRIBE).click();
+                checkSubscribe = true;
+            }
+            Thread.sleep(2000);
+        } catch (Exception ignored) {
+
+        } finally {
+            closeTab(photoWindowHandle);
+            selectTab(currentWindowHandle);
+        }
+        return checkSubscribe;
+    }
+
+    public boolean setLikeAndSubscribe(String urlPhoto) {
+        String currentWindowHandle = driver.getWindowHandle();
+        String photoWindowHandle = null;
+        boolean checkSubscribe = false;
+        try {
+            photoWindowHandle = openUrlNewTab(urlPhoto);
+            if (!isActiveLike()) {
+                getWebElement(60, SET_LIKE).click();
+            }
+            if (!isSubscribe()) {
+                getWebElement(60, SUBSCRIBE).click();
+                checkSubscribe = true;
+            }
+            Thread.sleep(2000);
+        } catch (Exception ignored) {
+
+        } finally {
+            closeTab(photoWindowHandle);
+            selectTab(currentWindowHandle);
+        }
+        return checkSubscribe;
     }
 
     public String getCurrentUrl() {
@@ -242,7 +296,12 @@ public class InstagramDao {
 
     private boolean isActiveLike() {
         String ariaLable = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
-        return ariaLable.equalsIgnoreCase(I_DO_NOT_LIKE);
+        return I_DO_NOT_LIKE.equalsIgnoreCase(ariaLable);
+    }
+
+    private boolean isSubscribe() {
+        String ariaLable = getWebElement(60, SUBSCRIBE).getText();
+        return SUBSCRIPTIONS.equalsIgnoreCase(ariaLable);
     }
 
     public WebDriver getDriver() {
@@ -259,5 +318,15 @@ public class InstagramDao {
 
     public List<WebElement> getWebElements(int timeOutlnSeconds, String xpathExpression) {
         return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
+    }
+
+    public void timeOut(int timeOutlnSeconds, int dispersionTimeOutlnSeconds) {
+        try {
+            Random random = new Random();
+            int num = dispersionTimeOutlnSeconds + random.nextInt(timeOutlnSeconds - dispersionTimeOutlnSeconds);
+            Thread.sleep(num);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 }

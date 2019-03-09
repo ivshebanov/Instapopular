@@ -1,6 +1,5 @@
 package com.instapopulars.instapopular.groups;
 
-import java.io.IOException;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

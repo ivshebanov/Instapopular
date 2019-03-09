@@ -1,14 +1,14 @@
 package com.instapopulars.instapopular.groups;
 
-import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.REQUEST_SENT;
+import static com.instapopulars.instapopular.Constant.Attribute.HREF;
+import static com.instapopulars.instapopular.Constant.Attribute.REQUEST_SENT;
+import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Link.HOME_PAGE;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.HREF;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
@@ -16,7 +16,6 @@ import com.instapopulars.instapopular.DAO.InstagramDao;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,9 +83,7 @@ public class GroupsDao {
                 logger.info(format(SUBSCRIBE_TO_GROUP, i));
                 instagramDao.closeTab(userWindowHandle);
                 instagramDao.selectTab(baseWindowHandle);
-                Random random = new Random();
-                int num = 50000 + random.nextInt(150000 - 50000);
-                Thread.sleep(num);
+                instagramDao.timeOut(150000, 50000);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramDao.selectTab(baseWindowHandle);

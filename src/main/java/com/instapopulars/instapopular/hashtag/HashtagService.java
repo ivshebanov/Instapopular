@@ -14,11 +14,11 @@ public class HashtagService {
         this.hashtagDao = hashtagDao;
     }
 
-    public void run() {
+    public void topPublicationsByHashtag(Action action) {
         try {
             Set<String> hashtags = hashtagDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
-
+                hashtagDao.topPublicationsByHashtag(hashtag, action);
             }
         } catch (Exception e) {
             e.printStackTrace();
