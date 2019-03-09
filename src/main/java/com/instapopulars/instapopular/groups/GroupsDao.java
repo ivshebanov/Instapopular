@@ -83,7 +83,7 @@ public class GroupsDao {
                 logger.info(format(SUBSCRIBE_TO_GROUP, i));
                 instagramDao.closeTab(userWindowHandle);
                 instagramDao.selectTab(baseWindowHandle);
-                instagramDao.timeOut(150000, 50000);
+                instagramDao.timeOut(150, 50);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramDao.selectTab(baseWindowHandle);

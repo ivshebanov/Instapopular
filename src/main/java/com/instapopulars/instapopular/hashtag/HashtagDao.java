@@ -41,7 +41,7 @@ public class HashtagDao {
         choiceOfAction(action, linkTopPublications);
     }
 
-    public void subscribeNewPublicationsByHashtag(String hashtag, Action action, int countPhoto) {
+    public void subscribeNewPublicationsByHashtag(Action action, int countPhoto, String hashtag) {
         logger.info(format(SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG, hashtag, countPhoto));
         if (hashtag == null || hashtag.length() == 0 || action == null || countPhoto == 0) {
             return;
@@ -54,7 +54,7 @@ public class HashtagDao {
         choiceOfAction(action, linkTopPublications);
     }
 
-    private List<WebElement> getNewPublication(int countPhoto){
+    private List<WebElement> getNewPublication(int countPhoto) {
         List<WebElement> newPublication = new ArrayList<>();
         //
 
@@ -65,17 +65,20 @@ public class HashtagDao {
         switch (action) {
             case LIKE:
                 like(linkToPublications);
+                break;
             case SUBSCRIBE:
                 subscribe(linkToPublications);
+                break;
             case SUBSCRIBE_AND_LIKE:
                 subscribeAndLike(linkToPublications);
+                break;
         }
     }
 
     private void subscribeAndLike(List<String> urls) {
         for (String url : urls) {
             if (instagramDao.setLikeAndSubscribe(url)) {
-                instagramDao.timeOut(150000, 50000);
+                instagramDao.timeOut(150, 50);
             }
         }
     }
@@ -83,7 +86,7 @@ public class HashtagDao {
     private void subscribe(List<String> urls) {
         for (String url : urls) {
             if (instagramDao.subscribe(url)) {
-                instagramDao.timeOut(150000, 50000);
+                instagramDao.timeOut(150, 50);
             }
         }
     }
@@ -91,7 +94,7 @@ public class HashtagDao {
     private void like(List<String> urls) {
         for (String url : urls) {
             if (instagramDao.setLike(url)) {
-                instagramDao.timeOut(20000, 5000);
+                instagramDao.timeOut(20, 5);
             }
         }
     }

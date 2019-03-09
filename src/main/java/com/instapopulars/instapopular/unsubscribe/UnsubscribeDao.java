@@ -47,7 +47,7 @@ public class UnsubscribeDao {
                     i++;
                     continue;
                 }
-                instagramDao.timeOut(150000, 50000);
+                instagramDao.timeOut(150, 50);
                 instagramDao.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
                 instagramDao.getWebElement(60, UNSUBSCRIBE_BTN).click();
                 logger.info(format(UNSUBSCRIBED_FROM, i));

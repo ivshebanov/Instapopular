@@ -97,7 +97,7 @@ public interface Constant {
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
             String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
-            //            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
+//            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";
@@ -108,12 +108,13 @@ public interface Constant {
     interface HashtagConstant {
 
         interface MessageConstants {
-            String SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG = "topPublicationsByHashtag(hashtag = %s)";
+            String SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG = "topPublications(hashtag = %s)";
             String SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG = "subscribeNewPublicationsByHashtag(%s, %d)";
         }
 
         interface Xpath {
             String PATH_SEARCH_TOP_PUBLICATIONS_WEB_ELEMENT = "//*[@id=\"react-root\"]//article/div[1]/div/div/div/div/a";
+            String cfd = "//*[@id=\"react-root\"]//div[2]/div/div[%d]/div[%d]/a";
         }
     }
 }

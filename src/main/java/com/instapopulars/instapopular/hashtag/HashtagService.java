@@ -14,11 +14,24 @@ public class HashtagService {
         this.hashtagDao = hashtagDao;
     }
 
-    public void topPublicationsByHashtag(Action action) {
+    public void topPublications(Action action) {
         try {
             Set<String> hashtags = hashtagDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
                 hashtagDao.topPublicationsByHashtag(hashtag, action);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            hashtagDao.quitDriver();
+        }
+    }
+
+    public void newPublications(Action action, int countPhoto) {
+        try {
+            Set<String> hashtags = hashtagDao.getHestagFromProperties();
+            for (String hashtag : hashtags) {
+                hashtagDao.subscribeNewPublicationsByHashtag(action, countPhoto, hashtag);
             }
         } catch (Exception e) {
             e.printStackTrace();

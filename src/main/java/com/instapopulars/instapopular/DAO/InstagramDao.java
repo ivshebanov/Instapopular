@@ -35,9 +35,6 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -84,24 +81,16 @@ public class InstagramDao {
 
     public Set<String> getHestagFromProperties() throws IOException {
         logger.info(GET_HESTAG_FROM_PROPERTIES);
-        Set<String> resultHeshtegs = new HashSet<>();
         Properties properties = new Properties();
         properties.load(new FileReader(new File(HESHTEG_PATH)));
-        for (String key : properties.stringPropertyNames()) {
-            resultHeshtegs.add(properties.getProperty(key));
-        }
-        return resultHeshtegs;
+        return properties.stringPropertyNames();
     }
 
     public Set<String> getGroupsFromProperties() throws IOException {
         logger.info(GET_GROUPS);
-        Set<String> resultGroups = new HashSet<>();
         Properties properties = new Properties();
         properties.load(new FileReader(new File(GROUPS_PATH)));
-        for (String key : properties.stringPropertyNames()) {
-            resultGroups.add(properties.getProperty(key));
-        }
-        return resultGroups;
+        return properties.stringPropertyNames();
     }
 
     public WebDriver initDriver() {
@@ -257,7 +246,7 @@ public class InstagramDao {
                 getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
-            Thread.sleep(2000);
+            timeOut(2, 0);
         } catch (Exception ignored) {
 
         } finally {
@@ -280,7 +269,7 @@ public class InstagramDao {
                 getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
-            Thread.sleep(2000);
+            timeOut(2, 0);
         } catch (Exception ignored) {
 
         } finally {
@@ -312,18 +301,20 @@ public class InstagramDao {
         return login;
     }
 
-    public WebElement getWebElement(int timeOutlnSeconds, String xpathExpression) {
-        return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpression)));
+    public WebElement getWebElement(int timeOutInSeconds, String xpathExpression) {
+        return (new WebDriverWait(driver, timeOutInSeconds)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpression)));
     }
 
-    public List<WebElement> getWebElements(int timeOutlnSeconds, String xpathExpression) {
-        return (new WebDriverWait(driver, timeOutlnSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
+    public List<WebElement> getWebElements(int timeOutInSeconds, String xpathExpression) {
+        return (new WebDriverWait(driver, timeOutInSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
     }
 
-    public void timeOut(int timeOutlnSeconds, int dispersionTimeOutlnSeconds) {
+    public void timeOut(int timeOutInSeconds, int dispersionInSeconds) {
+        timeOutInSeconds *= 1000;
+        dispersionInSeconds *= 1000;
         try {
             Random random = new Random();
-            int num = dispersionTimeOutlnSeconds + random.nextInt(timeOutlnSeconds - dispersionTimeOutlnSeconds);
+            int num = dispersionInSeconds + random.nextInt(timeOutInSeconds - dispersionInSeconds);
             Thread.sleep(num);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
