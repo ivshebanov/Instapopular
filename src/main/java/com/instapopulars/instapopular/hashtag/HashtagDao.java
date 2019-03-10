@@ -3,7 +3,9 @@ package com.instapopulars.instapopular.hashtag;
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
 import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG;
 import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_TOP_PUBLICATIONS_WEB_ELEMENT;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_NEW_PUBLICATIONS;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_TOP_PUBLICATIONS;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HASHTAG_PAGE;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class HashtagDao {
         this.instagramDao = instagramDao;
     }
 
-    public void topPublicationsByHashtag(String hashtag, Action action) {
+    public void topPublications(String hashtag, Action action) {
         logger.info(format(SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
         if (hashtag == null || hashtag.length() == 0 || action == null) {
             return;
@@ -36,12 +38,12 @@ public class HashtagDao {
         if (!format(HASHTAG_PAGE, hashtag).equalsIgnoreCase(instagramDao.getCurrentUrl())) {
             instagramDao.openUrl(format(HASHTAG_PAGE, hashtag));
         }
-        List<WebElement> weLinkTopPublications = instagramDao.getWebElements(60, PATH_SEARCH_TOP_PUBLICATIONS_WEB_ELEMENT);
+        List<WebElement> weLinkTopPublications = instagramDao.getWebElements(60, PATH_SEARCH_TOP_PUBLICATIONS);
         List<String> linkTopPublications = getUrlsPhoto(weLinkTopPublications);
         choiceOfAction(action, linkTopPublications);
     }
 
-    public void subscribeNewPublicationsByHashtag(Action action, int countPhoto, String hashtag) {
+    public void newPublications(Action action, int countPhoto, String hashtag) {
         logger.info(format(SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG, hashtag, countPhoto));
         if (hashtag == null || hashtag.length() == 0 || action == null || countPhoto == 0) {
             return;
@@ -56,9 +58,22 @@ public class HashtagDao {
 
     private List<WebElement> getNewPublication(int countPhoto) {
         List<WebElement> newPublication = new ArrayList<>();
-        //
-
+        int countRow = countPhoto / 3 + 1;
+        for (int i = 1; i <= 15; i++) {
+            newPublication.addAll(instagramDao.getWebElements(60, format(PATH_SEARCH_NEW_PUBLICATIONS, i)));
+            scrollElement(i);
+        }
         return newPublication;
+    }
+
+    private void scrollElement(int i){
+        if (i > 14){
+            for (int t = 10; t < 15; t ++){
+                instagramDao.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, t));
+            }
+        }
+        instagramDao.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, i));
+        instagramDao.timeOut(2, 0);
     }
 
     private void choiceOfAction(Action action, List<String> linkToPublications) {

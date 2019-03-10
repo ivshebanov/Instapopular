@@ -18,7 +18,7 @@ public class HashtagService {
         try {
             Set<String> hashtags = hashtagDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
-                hashtagDao.topPublicationsByHashtag(hashtag, action);
+                hashtagDao.topPublications(hashtag, action);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class HashtagService {
         try {
             Set<String> hashtags = hashtagDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
-                hashtagDao.subscribeNewPublicationsByHashtag(action, countPhoto, hashtag);
+                hashtagDao.newPublications(action, countPhoto, hashtag);
             }
         } catch (Exception e) {
             e.printStackTrace();

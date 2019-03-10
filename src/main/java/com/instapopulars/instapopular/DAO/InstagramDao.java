@@ -11,9 +11,9 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.MessageCons
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
-import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.ACCOUNT;
-import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.GROUPS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.propertiesName.HASHTAGS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.ACCOUNT;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;

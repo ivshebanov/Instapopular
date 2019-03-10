@@ -3,8 +3,11 @@ package com.instapopulars.instapopular;
 public interface Constant {
 
     interface User {
-        String LOGIN = "lilka.lily.1";
-        String PASSWORD = "Sxsblpwiwn";
+//        String LOGIN = "lilka.lily.1";
+//        String PASSWORD = "Sxsblpwiwn";
+
+        String LOGIN = "kj2a";
+        String PASSWORD = "U3fony6c";
     }
 
     interface LinkToInstagram {
@@ -36,12 +39,12 @@ public interface Constant {
 
             interface Chrome {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-                String CHROME_DRIVER = "chromedriver";//mac
-//                String CHROME_DRIVER="chromedriver.exe";//windows
+//                String CHROME_DRIVER = "chromedriver";//mac
+                String CHROME_DRIVER="chromedriver.exe";//windows
             }
         }
 
-        interface propertiesName {
+        interface PropertiesName {
             String HASHTAGS = "hashtags.properties";
             String ACCOUNT = "account.properties";
             String GROUPS = "groups.properties";
@@ -96,8 +99,8 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
-//            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
+//            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
+            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";
@@ -109,12 +112,13 @@ public interface Constant {
 
         interface MessageConstants {
             String SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG = "topPublications(hashtag = %s)";
-            String SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG = "subscribeNewPublicationsByHashtag(%s, %d)";
+            String SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG = "newPublications(%s, %d)";
         }
 
         interface Xpath {
-            String PATH_SEARCH_TOP_PUBLICATIONS_WEB_ELEMENT = "//*[@id=\"react-root\"]//article/div[1]/div/div/div/div/a";
-            String cfd = "//*[@id=\"react-root\"]//div[2]/div/div[%d]/div[%d]/a";
+            String PATH_SEARCH_TOP_PUBLICATIONS = "//article/div[1]/div/div/div/div/a";
+            String PATH_SEARCH_NEW_PUBLICATIONS = "//article/div[2]/div/div[%d]/div/a";
+            String SCROLL_NEW_PUBLICATIONS = "//article/div[2]/div/div[%d]";
         }
     }
 }
