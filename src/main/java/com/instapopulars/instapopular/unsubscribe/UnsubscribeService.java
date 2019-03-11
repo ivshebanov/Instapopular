@@ -15,7 +15,7 @@ public class UnsubscribeService {
 
     public void unsubscribe(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, null);
+            unsubscribeDao.unsubscribeFromUsers(count, unsubscribeDao.getDoNotUnsubscribe());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -23,7 +23,7 @@ public class UnsubscribeService {
         }
     }
 
-    public void unsubscribeFromUnsigned(int count){
+    public void unsubscribeFromUnsigned(int count) {
         try {
             unsubscribeDao.unsubscribeFromUsers(count, unsubscribeDao.getAllSubscribers());
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class UnsubscribeService {
         try {
             unsubscribeDao.initDriver();
             return unsubscribeDao.loginOnWebSite(login, password);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             unsubscribeDao.quitDriver();
         }

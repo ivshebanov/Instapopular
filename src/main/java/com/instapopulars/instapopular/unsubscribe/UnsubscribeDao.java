@@ -1,7 +1,6 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
-import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.GET_ALL_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBED_FROM;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS;
@@ -14,9 +13,10 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import com.instapopulars.instapopular.model.User;
+import java.io.IOException;
 import static java.lang.String.format;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class UnsubscribeDao {
         this.instagramDao = instagramDao;
     }
 
-    public void unsubscribeFromUsers(int countSubscribers, List<User> subscribers) {
+    public void unsubscribeFromUsers(int countSubscribers, Set<User> subscribers) {
         logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
         if (!instagramDao.openHomePage()) {
             return;
@@ -43,7 +43,9 @@ public class UnsubscribeDao {
         for (int i = 1; i < countSubscribers; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                if (subscribers != null && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
+                if (subscribers != null
+                        && subscribers.size() != 0
+                        && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
                     i++;
                     continue;
                 }
@@ -59,15 +61,15 @@ public class UnsubscribeDao {
 
     }
 
-    private boolean isSubscribed(List<User> subscribers, String xpath) {
+    private boolean isSubscribed(Set<User> subscribers, String xpath) {
         String url = instagramDao.getWebElement(60, xpath).getAttribute(HREF);
         User user = instagramDao.getUserByUrl(url);
         return subscribers.contains(user);
     }
 
-    public List<User> getAllSubscribers() {
+    public Set<User> getAllSubscribers() {
         logger.info(GET_ALL_SUBSCRIBERS);
-        List<User> resultUser = new ArrayList<>();
+        Set<User> resultUser = new HashSet<>();
         if (!instagramDao.openHomePage()) {
             return resultUser;
         }
@@ -83,8 +85,8 @@ public class UnsubscribeDao {
         return resultUser;
     }
 
-    private List<User> getUserLinks(int count) {
-        List<User> resultUrls = new ArrayList<>();
+    private Set<User> getUserLinks(int count) {
+        Set<User> resultUrls = new HashSet<>();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i < count; i++) {
             try {
@@ -97,6 +99,10 @@ public class UnsubscribeDao {
             }
         }
         return resultUrls;
+    }
+
+    public Set<User> getDoNotUnsubscribe() throws IOException {
+        return instagramDao.getDoNotUnsubscribe();
     }
 
     public void initDriver() {

@@ -28,6 +28,7 @@ public interface Constant {
 
         interface MessageConstants {
             String GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES = "getLoginAndPasswordFromProperties()";
+            String DO_NOT_UNSUBSCRIBE_MESSAGE = "doNotUnsubscribe()";
             String GET_HESTAG_FROM_PROPERTIES = "getHestagFromProperties()";
             String GET_GROUPS = "getGroupsFromProperties()";
             String GET_DRIVER = "getDriver() Local time: %tT";
@@ -45,6 +46,7 @@ public interface Constant {
         }
 
         interface PropertiesName {
+            String DO_NOT_UNSUBSCRIBE = "doNotUnsubscribe.properties";
             String HASHTAGS = "hashtags.properties";
             String ACCOUNT = "account.properties";
             String GROUPS = "groups.properties";

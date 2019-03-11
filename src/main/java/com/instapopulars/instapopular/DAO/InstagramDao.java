@@ -5,6 +5,7 @@ import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.DO_NOT_UNSUBSCRIBE_MESSAGE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
@@ -12,6 +13,7 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.MessageCons
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.ACCOUNT;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
@@ -35,6 +37,7 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -64,6 +67,7 @@ public class InstagramDao {
     private static final String ACCOUNT_PATH = requireNonNull(classloader.getResource(ACCOUNT)).getPath();
     private static final String GROUPS_PATH = requireNonNull(classloader.getResource(GROUPS)).getPath();
     private static final String CHROME_DRIVER_PATH = requireNonNull(classloader.getResource(CHROME_DRIVER)).getPath();
+    private static final String DO_NOT_UNSUBSCRIBE_PATH = requireNonNull(classloader.getResource(DO_NOT_UNSUBSCRIBE)).getPath();
 
     private WebDriver driver;
     private String login;
@@ -91,6 +95,13 @@ public class InstagramDao {
         Properties properties = new Properties();
         properties.load(new FileReader(new File(GROUPS_PATH)));
         return properties.stringPropertyNames();
+    }
+
+    public Set<User> getDoNotUnsubscribe() throws IOException {
+        logger.info(DO_NOT_UNSUBSCRIBE_MESSAGE);
+        Properties properties = new Properties();
+        properties.load(new FileReader(new File(DO_NOT_UNSUBSCRIBE_PATH)));
+        return getUsersByUrls(properties.stringPropertyNames());
     }
 
     public WebDriver initDriver() {
@@ -171,6 +182,14 @@ public class InstagramDao {
 
     private static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
+    }
+
+    public Set<User> getUsersByUrls(Set<String> logins) {
+        Set<User> resultUsers = new HashSet<>();
+        for (String login : logins) {
+            resultUsers.add(getUserByUrl(format(HOME_PAGE, login)));
+        }
+        return resultUsers;
     }
 
     public User getUserByUrl(String url) {
