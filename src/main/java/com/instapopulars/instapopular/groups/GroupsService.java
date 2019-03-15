@@ -18,11 +18,11 @@ public class GroupsService {
         groupsDao.initDriver();
     }
 
-    public void run(int countSubscriptions) {
+    public void subscribeToUsersInGroup(int countSubscriptions) {
         try {
             Set<String> groups = groupsDao.getGroupsFromProperties();
             for (String urlGroup : groups) {
-                groupsDao.subscribeToGroupMembers(urlGroup, countSubscriptions);
+                groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions);
             }
             System.out.println();
         } catch (Exception e) {

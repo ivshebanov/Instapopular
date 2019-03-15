@@ -34,7 +34,7 @@ public class GroupsDao {
         this.instagramDao = instagramDao;
     }
 
-    public void subscribeToGroupMembers(String channelName, int countSubscriptions) {
+    public void subscribeToUsersInGroup(String channelName, int countSubscriptions) {
         logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
         if (channelName == null || countSubscriptions == 0) {
             return;
