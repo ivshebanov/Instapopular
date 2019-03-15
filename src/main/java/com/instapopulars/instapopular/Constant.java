@@ -8,6 +8,9 @@ public interface Constant {
 
         String LOGIN = "kj2a";
         String PASSWORD = "U3fony6c";
+        String COUNT_UNSUBSCRIBE = "400";
+        String COUNT_SUBSCRIPTIONS_NUMBER = "350";
+
     }
 
     interface LinkToInstagram {
@@ -56,7 +59,7 @@ public interface Constant {
     interface GroupsConstant {
 
         interface MessageConstants {
-            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToGroupMembers(%s, %d)";
+            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToUsersInGroup(%s, %d)";
             String SUBSCRIBE_TO_GROUP = "subscribe from %d";
         }
 

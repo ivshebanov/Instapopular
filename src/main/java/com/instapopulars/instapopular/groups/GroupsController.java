@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
+import static com.instapopulars.instapopular.Constant.User.COUNT_SUBSCRIPTIONS_NUMBER;
 import static com.instapopulars.instapopular.Constant.User.LOGIN;
 import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,6 @@ public class GroupsController {
     @RequestMapping(value = "/group", method = {GET})
     private void groups() {
         groupsService.loginOnWebSite(LOGIN, PASSWORD);
-        groupsService.subscribeToUsersInGroup(350);
+        groupsService.subscribeToUsersInGroup(Integer.parseInt(COUNT_SUBSCRIPTIONS_NUMBER));
     }
 }

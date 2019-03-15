@@ -28,7 +28,7 @@ public class HashtagController {
 
     @RequestMapping(value = "/new", method = {GET})
     private void newPublications() {
-        hashtagService.loginOnWebSite(LOGIN, PASSWORD);
-        hashtagService.newPublications(SUBSCRIBE_AND_LIKE, 50);
+//        hashtagService.loginOnWebSite(LOGIN, PASSWORD);
+//        hashtagService.newPublications(SUBSCRIBE_AND_LIKE, 50);
     }
 }

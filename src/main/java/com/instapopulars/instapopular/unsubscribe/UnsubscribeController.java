@@ -1,11 +1,10 @@
 package com.instapopulars.instapopular.unsubscribe;
 
+import static com.instapopulars.instapopular.Constant.User.COUNT_UNSUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.User.LOGIN;
 import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -23,6 +22,6 @@ public class UnsubscribeController {
     @RequestMapping(value = "/unsub", method = {GET})
     private void unsubscribe() {
         unsubscribeService.loginOnWebSite(LOGIN, PASSWORD);
-        unsubscribeService.unsubscribe(400);
+        unsubscribeService.unsubscribe(Integer.parseInt(COUNT_UNSUBSCRIBE));
     }
 }
