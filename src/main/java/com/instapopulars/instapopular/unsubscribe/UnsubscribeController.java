@@ -18,15 +18,14 @@ public class UnsubscribeController {
     }
 
     @PostMapping("/unsub")
-    private String unsub(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
-                         @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
-                         @RequestParam(name = "countUnsubscribe", defaultValue = "400") int countUnsubscribe) {
+    private void unsub(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
+                       @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
+                       @RequestParam(name = "countUnsubscribe", defaultValue = "400") int countUnsubscribe) {
 
         if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countUnsubscribe < 0) {
-            return "unsubscribe";
+            return;
         }
         unsubscribeService.loginOnWebSite(login, password);
         unsubscribeService.unsubscribe(countUnsubscribe);
-        return "unsubscribe";
     }
 }

@@ -45,7 +45,7 @@ public class GroupsDao {
         }
         instagramDao.getWebElement(60, OPEN_SUBSCRIBERS).click();
         instagramDao.scrollSubscriptions(20);
-        for (int i = 1; i < countSubscriptions; i++) {
+        for (int i = 1; i <= countSubscriptions; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
                 if (isSubscribed(format(IS_SUBSCRIBED, i))) {

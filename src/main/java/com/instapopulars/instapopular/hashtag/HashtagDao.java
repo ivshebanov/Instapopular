@@ -66,9 +66,9 @@ public class HashtagDao {
         return newPublication;
     }
 
-    private void scrollElement(int i){
-        if (i > 14){
-            for (int t = 10; t < 15; t ++){
+    private void scrollElement(int i) {
+        if (i > 14) {
+            for (int t = 10; t < 15; t++) {
                 instagramDao.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, t));
             }
         }

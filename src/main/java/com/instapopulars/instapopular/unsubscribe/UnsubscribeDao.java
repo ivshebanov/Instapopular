@@ -40,7 +40,7 @@ public class UnsubscribeDao {
         }
         instagramDao.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramDao.scrollSubscriptions(20);
-        for (int i = 1; i < countSubscribers; i++) {
+        for (int i = 1; i <= countSubscribers; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
                 if (subscribers != null
