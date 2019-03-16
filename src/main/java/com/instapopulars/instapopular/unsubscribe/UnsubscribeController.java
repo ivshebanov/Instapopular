@@ -1,27 +1,32 @@
 package com.instapopulars.instapopular.unsubscribe;
 
-import static com.instapopulars.instapopular.Constant.User.COUNT_UNSUBSCRIBE;
-import static com.instapopulars.instapopular.Constant.User.LOGIN;
-import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("unsubscribe")
 public class UnsubscribeController {
 
-    private final UnsubscribeService unsubscribeService;
-
     @Autowired
-    public UnsubscribeController(UnsubscribeService unsubscribeService) {
-        this.unsubscribeService = unsubscribeService;
+    private UnsubscribeService unsubscribeService;
+
+    @GetMapping("/unsubscribe")
+    public String unsubscribe() {
+        return "unsubscribe";
     }
 
-    @RequestMapping(value = "/unsub", method = {GET})
-    private void unsubscribe() {
-        unsubscribeService.loginOnWebSite(LOGIN, PASSWORD);
-        unsubscribeService.unsubscribe(Integer.parseInt(COUNT_UNSUBSCRIBE));
+    @PostMapping("/unsub")
+    private String unsub(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
+                         @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
+                         @RequestParam(name = "countUnsubscribe", defaultValue = "400") int countUnsubscribe) {
+
+        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countUnsubscribe < 0) {
+            return "unsubscribe";
+        }
+        unsubscribeService.loginOnWebSite(login, password);
+        unsubscribeService.unsubscribe(countUnsubscribe);
+        return "unsubscribe";
     }
 }

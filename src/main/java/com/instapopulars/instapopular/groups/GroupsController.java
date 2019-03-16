@@ -1,27 +1,32 @@
 package com.instapopulars.instapopular.groups;
 
-import static com.instapopulars.instapopular.Constant.User.COUNT_SUBSCRIPTIONS_NUMBER;
-import static com.instapopulars.instapopular.Constant.User.LOGIN;
-import static com.instapopulars.instapopular.Constant.User.PASSWORD;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
-@RequestMapping(value = "groups")
+@Controller
 public class GroupsController {
 
-    private final GroupsService groupsService;
-
     @Autowired
-    public GroupsController(GroupsService groupsService) {
-        this.groupsService = groupsService;
+    private GroupsService groupsService;
+
+    @GetMapping("/groups")
+    public String groups() {
+        return "groups";
     }
 
-    @RequestMapping(value = "/group", method = {GET})
-    private void groups() {
-        groupsService.loginOnWebSite(LOGIN, PASSWORD);
-        groupsService.subscribeToUsersInGroup(Integer.parseInt(COUNT_SUBSCRIPTIONS_NUMBER));
+    @PostMapping("/group")
+    public String group(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
+                        @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
+                        @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions) {
+
+        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countSubscriptions < 0) {
+            return "groups";
+        }
+        groupsService.loginOnWebSite(login, password);
+        groupsService.subscribeToUsersInGroup(countSubscriptions);
+        return "groups";
     }
 }

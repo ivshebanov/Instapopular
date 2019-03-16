@@ -9,10 +9,8 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.MessageCons
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.ACCOUNT;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
@@ -36,10 +34,8 @@ import java.io.IOException;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
 import java.util.Random;
@@ -64,24 +60,12 @@ public class InstagramDao {
     private static final Logger logger = LoggerFactory.getLogger(InstagramDao.class);
     private static ClassLoader classloader = Thread.currentThread().getContextClassLoader();
     private static final String HESHTEG_PATH = requireNonNull(classloader.getResource(HASHTAGS)).getPath();
-    private static final String ACCOUNT_PATH = requireNonNull(classloader.getResource(ACCOUNT)).getPath();
     private static final String GROUPS_PATH = requireNonNull(classloader.getResource(GROUPS)).getPath();
     private static final String CHROME_DRIVER_PATH = requireNonNull(classloader.getResource(CHROME_DRIVER)).getPath();
     private static final String DO_NOT_UNSUBSCRIBE_PATH = requireNonNull(classloader.getResource(DO_NOT_UNSUBSCRIBE)).getPath();
 
     private WebDriver driver;
     private String login;
-
-    public Map<String, String> getLoginAndPasswordFromProperties() throws IOException {
-        logger.info(GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES);
-        Map<String, String> resultLoginAndPassword = new HashMap<>();
-        Properties properties = new Properties();
-        properties.load(new FileReader(new File(ACCOUNT_PATH)));
-        for (String key : properties.stringPropertyNames()) {
-            resultLoginAndPassword.put(key, properties.getProperty(key));
-        }
-        return resultLoginAndPassword;
-    }
 
     public Set<String> getHestagFromProperties() throws IOException {
         logger.info(GET_HESTAG_FROM_PROPERTIES);

@@ -1,32 +1,36 @@
 package com.instapopulars.instapopular.hashtag;
 
-import static com.instapopulars.instapopular.Constant.User.LOGIN;
-import static com.instapopulars.instapopular.Constant.User.PASSWORD;
-import static com.instapopulars.instapopular.hashtag.Action.LIKE;
-import static com.instapopulars.instapopular.hashtag.Action.SUBSCRIBE_AND_LIKE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("hashtags")
 public class HashtagController {
 
-    private final HashtagService hashtagService;
-
     @Autowired
-    public HashtagController(HashtagService hashtagService) {
-        this.hashtagService = hashtagService;
+    private HashtagService hashtagService;
+
+    @GetMapping("/hashtags")
+    public String hashtags() {
+        return "hashtags";
     }
 
-    @RequestMapping(value = "/top", method = {GET})
-    private void topPublications() {
-        hashtagService.loginOnWebSite(LOGIN, PASSWORD);
-        hashtagService.topPublications(LIKE);
+    @PostMapping("/top")
+    private String topPublications(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
+                                   @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
+                                   @RequestParam(name = "action", defaultValue = "LIKE") Action action) {
+
+        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || action == null) {
+            return "hashtags";
+        }
+        hashtagService.loginOnWebSite(login, password);
+        hashtagService.topPublications(action);
+        return "hashtags";
     }
 
-    @RequestMapping(value = "/new", method = {GET})
+    @PostMapping("/new")
     private void newPublications() {
 //        hashtagService.loginOnWebSite(LOGIN, PASSWORD);
 //        hashtagService.newPublications(SUBSCRIBE_AND_LIKE, 50);
