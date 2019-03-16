@@ -119,7 +119,7 @@ public class InstagramDao {
         getWebElement(60, LOGIN_USERNAME_INPUT).sendKeys(login);
         getWebElement(60, LOGIN_PASSWORD_INPUT).sendKeys(password);
         getWebElement(60, LOGIN_BUTTON).click();
-        String accountName = getWebElement(60, CHECK_LOGIN_BY_NAME).getText();
+        String accountName = getWebElement(120, CHECK_LOGIN_BY_NAME).getText();
         return login.equalsIgnoreCase(accountName);
     }
 

@@ -6,14 +6,28 @@
 <body>
 <div>
     <form method="post" action="top">
-        <input type="text" name="login" placeholder="Введите логин от инстаграма"/>
-        <br>
-        <input type="text" name="password" placeholder="Введите пароль от инстаграма">
-        <br>
-        <input type="text" name="action" placeholder="ДДведите действие">
-        <br>
-        <button type="submit">Начать</button>
+        <table>
+            <tr>
+                <td><label for="loginField">Введите логин от инстаграма</label></td>
+                <td><input id="loginField" type="text" name="login" placeholder="lilka.lily.1"></td>
+            </tr>
+            <tr>
+                <td><label for="passwordField">Введите пароль от инстаграма</label></td>
+                <td><input id="passwordField" type="password" name="password"></td>
+            </tr>
+            <tr>
+                <td><label for="actionField">Введите действие</label></td>
+                <td><input id="actionField" type="password" name="action" placeholder="LIKE"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center"><input type="submit" value="Начать"></td>
+            </tr>
+        </table>
     </form>
+</div>
+<hr>
+<div>
+    <h4>Возможные экшены для работы: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h4>
 </div>
 </body>
 </html>
