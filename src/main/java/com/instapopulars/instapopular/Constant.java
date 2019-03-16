@@ -2,14 +2,6 @@ package com.instapopulars.instapopular;
 
 public interface Constant {
 
-    interface User {
-        String LOGIN = "lilka.lily.1";
-        String PASSWORD = "Sxsblpwiwn";
-
-//        String LOGIN = "kj2a";
-//        String PASSWORD = "U3fony6c";
-    }
-
     interface LinkToInstagram {
         String LOGIN_PAGE = "https://www.instagram.com/accounts/login/";
         String HOME_PAGE = "https://www.instagram.com/%s/";
@@ -27,7 +19,6 @@ public interface Constant {
     interface DriverConstant {
 
         interface MessageConstants {
-            String GET_LOGIN_AND_PASSWORD_FROM_PROPERTIES = "getLoginAndPasswordFromProperties()";
             String DO_NOT_UNSUBSCRIBE_MESSAGE = "doNotUnsubscribe()";
             String GET_HESTAG_FROM_PROPERTIES = "getHestagFromProperties()";
             String GET_GROUPS = "getGroupsFromProperties()";
@@ -40,8 +31,8 @@ public interface Constant {
 
             interface Chrome {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-                String CHROME_DRIVER = "chromedriver";//mac
-//                String CHROME_DRIVER="chromedriver.exe";//windows
+//                String CHROME_DRIVER = "chromedriver";//mac
+                String CHROME_DRIVER="chromedriver.exe";//windows
             }
         }
 
@@ -100,8 +91,8 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
-//            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
+//            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
+            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";
