@@ -2,28 +2,26 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    <form method="post" action="group">
-        <table>
-            <tr>
-                <td><label for="loginField">Введите логин от инстаграма</label></td>
-                <td><input id="loginField" type="text" name="login" placeholder="lilka.lily.1"></td>
-            </tr>
-            <tr>
-                <td><label for="passwordField">Введите пароль от инстаграма</label></td>
-                <td><input id="passwordField" type="password" name="password"></td>
-            </tr>
-            <tr>
-                <td><label for="countSubscriptionsField">На сколько подписываться?</label></td>
-                <td><input id="countSubscriptionsField" type="number" name="countSubscriptions" placeholder="350"></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: center"><input type="submit" value="Начать"></td>
-            </tr>
-        </table>
-    </form>
+
+<div class="login-page">
+    <div class="form">
+        <form class="login-form" method="post" action="group">
+            <label for="loginField">Введите логин от инстаграма</label>
+            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
+
+            <label for="passwordField">Введите пароль от инстаграма</label>
+            <input id="passwordField" type="password" name="password" placeholder="password"/>
+
+            <label for="countSubscriptionsField">На сколько подписываться?</label>
+            <input id="countSubscriptionsField" type="number" name="countSubscriptions" placeholder="350"/>
+
+            <button>Начать</button>
+        </form>
+    </div>
 </div>
+
 </body>
 </html>

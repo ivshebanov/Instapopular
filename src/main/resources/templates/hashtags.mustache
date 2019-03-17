@@ -2,32 +2,28 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    <form method="post" action="top">
-        <table>
-            <tr>
-                <td><label for="loginField">Введите логин от инстаграма</label></td>
-                <td><input id="loginField" type="text" name="login" placeholder="lilka.lily.1"></td>
-            </tr>
-            <tr>
-                <td><label for="passwordField">Введите пароль от инстаграма</label></td>
-                <td><input id="passwordField" type="password" name="password"></td>
-            </tr>
-            <tr>
-                <td><label for="actionField">Введите действие</label></td>
-                <td><input id="actionField" type="text" name="action" placeholder="LIKE"></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: center"><input type="submit" value="Начать"></td>
-            </tr>
-        </table>
-    </form>
+
+<div class="login-page">
+    <div class="form">
+        <form class="login-form" method="post" action="top">
+            <label for="loginField">Введите логин от инстаграма</label>
+            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
+
+            <label for="passwordField">Введите пароль от инстаграма</label>
+            <input id="passwordField" type="password" name="password" placeholder="password"/>
+
+            <label for="actionField">Введите действие</label>
+            <input id="actionField" type="text" name="action" placeholder="LIKE"/>
+            <h6>Возможные действия: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h6>
+
+            <button>Начать</button>
+        </form>
+
+    </div>
 </div>
-<hr>
-<div>
-    <h4>Возможные экшены для работы: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h4>
-</div>
+
 </body>
 </html>

@@ -18,14 +18,15 @@ public class GroupsController {
     }
 
     @PostMapping("/group")
-    public void group(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
-                        @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
+    public String group(@RequestParam(name = "login") String login,
+                        @RequestParam(name = "password") String password,
                         @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions) {
 
         if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countSubscriptions < 0) {
-            return;
+            return "groups";
         }
         groupsService.loginOnWebSite(login, password);
         groupsService.subscribeToUsersInGroup(countSubscriptions);
+        return "groups";
     }
 }

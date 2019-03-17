@@ -18,15 +18,16 @@ public class HashtagController {
     }
 
     @PostMapping("/top")
-    private void topPublications(@RequestParam(name = "login", defaultValue = "lilka.lily.1") String login,
-                                 @RequestParam(name = "password", defaultValue = "Sxsblpwiwn") String password,
-                                 @RequestParam(name = "action", defaultValue = "LIKE") Action action) {
+    private String topPublications(@RequestParam(name = "login") String login,
+                                   @RequestParam(name = "password") String password,
+                                   @RequestParam(name = "action", defaultValue = "LIKE") Action action) {
 
         if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || action == null) {
-            return;
+            return "hashtags";
         }
         hashtagService.loginOnWebSite(login, password);
         hashtagService.topPublications(action);
+        return "hashtags";
     }
 
     @PostMapping("/new")
