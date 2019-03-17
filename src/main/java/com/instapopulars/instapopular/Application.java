@@ -7,6 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan("com.instapopulars.instapopular")
 public class Application {
+
+    /**
+     * http://localhost:8080/
+     */
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

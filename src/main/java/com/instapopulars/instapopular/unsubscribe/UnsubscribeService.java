@@ -1,21 +1,21 @@
 package com.instapopulars.instapopular.unsubscribe;
 
+import com.instapopulars.instapopular.DAO.PropertiesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UnsubscribeService {
 
-    private final UnsubscribeDao unsubscribeDao;
+    @Autowired
+    private UnsubscribeDao unsubscribeDao;
 
     @Autowired
-    public UnsubscribeService(UnsubscribeDao unsubscribeDao) {
-        this.unsubscribeDao = unsubscribeDao;
-    }
+    private PropertiesDao propertiesDao;
 
     public void unsubscribe(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, unsubscribeDao.getDoNotUnsubscribe());
+            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

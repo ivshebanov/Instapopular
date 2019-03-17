@@ -5,15 +5,9 @@ import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.DO_NOT_UNSUBSCRIBE_MESSAGE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;
@@ -28,16 +22,12 @@ import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import com.instapopulars.instapopular.model.User;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -57,36 +47,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class InstagramDao {
+
     private static final Logger logger = LoggerFactory.getLogger(InstagramDao.class);
-    private static ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    private static final String HESHTEG_PATH = requireNonNull(classloader.getResource(HASHTAGS)).getPath();
-    private static final String GROUPS_PATH = requireNonNull(classloader.getResource(GROUPS)).getPath();
-    private static final String CHROME_DRIVER_PATH = requireNonNull(classloader.getResource(CHROME_DRIVER)).getPath();
-    private static final String DO_NOT_UNSUBSCRIBE_PATH = requireNonNull(classloader.getResource(DO_NOT_UNSUBSCRIBE)).getPath();
+    private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(CHROME_DRIVER)).getPath();
 
     private WebDriver driver;
     private String login;
-
-    public Set<String> getHestagFromProperties() throws IOException {
-        logger.info(GET_HESTAG_FROM_PROPERTIES);
-        Properties properties = new Properties();
-        properties.load(new FileReader(new File(HESHTEG_PATH)));
-        return properties.stringPropertyNames();
-    }
-
-    public Set<String> getGroupsFromProperties() throws IOException {
-        logger.info(GET_GROUPS);
-        Properties properties = new Properties();
-        properties.load(new FileReader(new File(GROUPS_PATH)));
-        return properties.stringPropertyNames();
-    }
-
-    public Set<User> getDoNotUnsubscribe() throws IOException {
-        logger.info(DO_NOT_UNSUBSCRIBE_MESSAGE);
-        Properties properties = new Properties();
-        properties.load(new FileReader(new File(DO_NOT_UNSUBSCRIBE_PATH)));
-        return getUsersByUrls(properties.stringPropertyNames());
-    }
 
     public WebDriver initDriver() {
         logger.info(format(GET_DRIVER, Calendar.getInstance()));
@@ -164,7 +130,7 @@ public class InstagramDao {
         coordinate.inViewPort();
     }
 
-    private static String removeCharAt(String s, int pos) {
+    private String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
 

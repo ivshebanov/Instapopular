@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.hashtag;
 
+import com.instapopulars.instapopular.DAO.PropertiesDao;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,16 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class HashtagService {
 
-    private final HashtagDao hashtagDao;
+    @Autowired
+    private HashtagDao hashtagDao;
 
     @Autowired
-    public HashtagService(HashtagDao hashtagDao) {
-        this.hashtagDao = hashtagDao;
-    }
+    private PropertiesDao propertiesDao;
 
     public void topPublications(Action action) {
         try {
-            Set<String> hashtags = hashtagDao.getHestagFromProperties();
+            Set<String> hashtags = propertiesDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
                 hashtagDao.topPublications(hashtag, action);
             }
@@ -29,7 +29,7 @@ public class HashtagService {
 
     public void newPublications(Action action, int countPhoto) {
         try {
-            Set<String> hashtags = hashtagDao.getHestagFromProperties();
+            Set<String> hashtags = propertiesDao.getHestagFromProperties();
             for (String hashtag : hashtags) {
                 hashtagDao.newPublications(action, countPhoto, hashtag);
             }

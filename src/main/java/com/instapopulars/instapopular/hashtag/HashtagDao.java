@@ -8,11 +8,9 @@ import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH
 import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HASHTAG_PAGE;
 import com.instapopulars.instapopular.DAO.InstagramDao;
-import java.io.IOException;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
@@ -23,12 +21,9 @@ import org.springframework.stereotype.Repository;
 public class HashtagDao {
 
     private static final Logger logger = LogManager.getLogger(HashtagDao.class);
-    private final InstagramDao instagramDao;
 
     @Autowired
-    public HashtagDao(InstagramDao instagramDao) {
-        this.instagramDao = instagramDao;
-    }
+    private InstagramDao instagramDao;
 
     public void topPublications(String hashtag, Action action) {
         logger.info(format(SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
@@ -132,9 +127,5 @@ public class HashtagDao {
 
     public boolean loginOnWebSite(String login, String password) {
         return instagramDao.loginOnWebSite(login, password);
-    }
-
-    public Set<String> getHestagFromProperties() throws IOException {
-        return instagramDao.getHestagFromProperties();
     }
 }

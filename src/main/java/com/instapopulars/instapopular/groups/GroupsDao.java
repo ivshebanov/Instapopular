@@ -13,10 +13,8 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 import com.instapopulars.instapopular.DAO.InstagramDao;
-import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
-import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
@@ -27,12 +25,9 @@ import org.springframework.stereotype.Repository;
 public class GroupsDao {
 
     private static final Logger logger = LogManager.getLogger(GroupsDao.class);
-    private final InstagramDao instagramDao;
 
     @Autowired
-    public GroupsDao(InstagramDao instagramDao) {
-        this.instagramDao = instagramDao;
-    }
+    private InstagramDao instagramDao;
 
     public void subscribeToUsersInGroup(String channelName, int countSubscriptions) {
         logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
@@ -108,10 +103,6 @@ public class GroupsDao {
 
     public void initDriver() {
         instagramDao.initDriver();
-    }
-
-    public Set<String> getGroupsFromProperties() throws IOException {
-        return instagramDao.getGroupsFromProperties();
     }
 
     public void quitDriver() {

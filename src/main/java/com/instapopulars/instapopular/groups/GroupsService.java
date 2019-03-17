@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
+import com.instapopulars.instapopular.DAO.PropertiesDao;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,12 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroupsService {
 
-    private final GroupsDao groupsDao;
+    @Autowired
+    private GroupsDao groupsDao;
 
     @Autowired
-    public GroupsService(GroupsDao groupsDao) {
-        this.groupsDao = groupsDao;
-    }
+    private PropertiesDao propertiesDao;
 
     public void initDriver() {
         groupsDao.initDriver();
@@ -20,7 +20,7 @@ public class GroupsService {
 
     public void subscribeToUsersInGroup(int countSubscriptions) {
         try {
-            Set<String> groups = groupsDao.getGroupsFromProperties();
+            Set<String> groups = propertiesDao.getGroupsFromProperties();
             for (String urlGroup : groups) {
                 groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions);
             }

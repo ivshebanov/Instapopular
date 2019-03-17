@@ -13,7 +13,6 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import com.instapopulars.instapopular.model.User;
-import java.io.IOException;
 import static java.lang.String.format;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,12 +25,9 @@ import org.springframework.stereotype.Repository;
 public class UnsubscribeDao {
 
     private static final Logger logger = LogManager.getLogger(UnsubscribeDao.class);
-    private final InstagramDao instagramDao;
 
     @Autowired
-    public UnsubscribeDao(InstagramDao instagramDao) {
-        this.instagramDao = instagramDao;
-    }
+    private InstagramDao instagramDao;
 
     public void unsubscribeFromUsers(int countSubscribers, Set<User> subscribers) {
         logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
@@ -99,10 +95,6 @@ public class UnsubscribeDao {
             }
         }
         return resultUrls;
-    }
-
-    public Set<User> getDoNotUnsubscribe() throws IOException {
-        return instagramDao.getDoNotUnsubscribe();
     }
 
     public void initDriver() {
