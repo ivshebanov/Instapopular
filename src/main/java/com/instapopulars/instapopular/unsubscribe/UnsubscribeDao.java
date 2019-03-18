@@ -29,19 +29,20 @@ public class UnsubscribeDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void unsubscribeFromUsers(int countSubscribers, Set<User> subscribers) {
+    public void unsubscribeFromUsers(int countSubscribers, Set<String> subscribers) {
         logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
         if (!instagramDao.openHomePage()) {
             return;
         }
+        Set<User> users = instagramDao.getUsersByUrls(subscribers);
         instagramDao.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i <= countSubscribers; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                if (subscribers != null
-                        && subscribers.size() != 0
-                        && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
+                if (users != null
+                        && users.size() != 0
+                        && isSubscribed(users, format(USER_LINK_TO_SUBSCRIBERS, i))) {
                     i++;
                     continue;
                 }
@@ -63,9 +64,9 @@ public class UnsubscribeDao {
         return subscribers.contains(user);
     }
 
-    public Set<User> getAllSubscribers() {
+    public Set<String> getAllSubscribers() {
         logger.info(GET_ALL_SUBSCRIBERS);
-        Set<User> resultUser = new HashSet<>();
+        Set<String> resultUser = new HashSet<>();
         if (!instagramDao.openHomePage()) {
             return resultUser;
         }
@@ -81,14 +82,14 @@ public class UnsubscribeDao {
         return resultUser;
     }
 
-    private Set<User> getUserLinks(int count) {
-        Set<User> resultUrls = new HashSet<>();
+    private Set<String> getUserLinks(int count) {
+        Set<String> resultUrls = new HashSet<>();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i < count; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
                 String url = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
-                resultUrls.add(instagramDao.getUserByUrl(url));
+                resultUrls.add(url);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramDao.scrollSubscriptions(i);

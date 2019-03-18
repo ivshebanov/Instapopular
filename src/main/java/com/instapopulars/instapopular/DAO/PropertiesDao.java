@@ -1,28 +1,22 @@
 package com.instapopulars.instapopular.DAO;
 
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.DO_NOT_UNSUBSCRIBE_MESSAGE;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_GROUPS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_HESTAG_FROM_PROPERTIES;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
-import com.instapopulars.instapopular.model.User;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class PropertiesDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(PropertiesDao.class);
-    private static final String HESHTEG_PATH = requireNonNull(ClassLoader.getSystemResource(HASHTAGS)).getPath();
+    private static final String HESHTEG_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(HASHTAGS)).getPath());
     private static final String GROUPS_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(GROUPS)).getPath());
     private static final String DO_NOT_UNSUBSCRIBE_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(DO_NOT_UNSUBSCRIBE)).getPath());
 
@@ -35,47 +29,62 @@ public class PropertiesDao {
     }
 
     public Set<String> getHestagFromProperties() throws IOException {
-        logger.info(GET_HESTAG_FROM_PROPERTIES);
-        Properties properties = new Properties();
-        properties.load(new FileReader(new File(HESHTEG_PATH)));
-        return properties.stringPropertyNames();
+        return getProperties(HESHTEG_PATH);
     }
 
     public Set<String> getGroupsFromProperties() throws IOException {
-        logger.info(GET_GROUPS);
+        return getProperties(GROUPS_PATH);
+    }
+
+    public Set<String> getDoNotUnsubscribe() throws IOException {
+        return getProperties(DO_NOT_UNSUBSCRIBE_PATH);
+    }
+
+    public Set<String> addHestagInProperties(String hastag) throws IOException {
+        return addProperties(HESHTEG_PATH, hastag);
+    }
+
+    public Set<String> addGroupsInProperties(String group) throws IOException {
+        return addProperties(GROUPS_PATH, group);
+    }
+
+    public Set<String> addDoNotUnsubscribe(String userName) throws IOException {
+        return addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
+    }
+
+    public Set<String> removeHestagFromProperties(String hastag) throws IOException {
+        return removeProperties(HESHTEG_PATH, hastag);
+    }
+
+    public Set<String> removeGroupsFromProperties(String hastag) throws IOException {
+        return removeProperties(GROUPS_PATH, hastag);
+    }
+
+    public Set<String> removeDoNotUnsubscribe(String hastag) throws IOException {
+        return removeProperties(DO_NOT_UNSUBSCRIBE_PATH, hastag);
+    }
+
+    private Set<String> getProperties(String path) throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileReader(new File(GROUPS_PATH)));
+        properties.load(new FileReader(new File(path)));
         return properties.stringPropertyNames();
     }
 
-    public Set<User> getDoNotUnsubscribe() throws IOException {
-        logger.info(DO_NOT_UNSUBSCRIBE_MESSAGE);
+    private Set<String> addProperties(String path, String prop) throws IOException {
+        File file = new File(path);
         Properties properties = new Properties();
-        properties.load(new FileReader(new File(DO_NOT_UNSUBSCRIBE_PATH)));
-        return instagramDao.getUsersByUrls(properties.stringPropertyNames());
+        properties.load(new FileReader(file));
+        properties.put(prop, "");
+        properties.store(new FileWriter(file), null);
+        return properties.stringPropertyNames();
     }
 
-    public Set<String> addHestagInProperties(String hastag){
-        return null;
-    }
-
-    public Set<String> addGroupsInProperties(String hastag){
-        return null;
-    }
-
-    public Set<String> addDoNotUnsubscribe(String hastag){
-        return null;
-    }
-
-    public Set<String> removeHestagFromProperties(String hastag){
-        return null;
-    }
-
-    public Set<String> removeGroupsFromProperties(String hastag){
-        return null;
-    }
-
-    public Set<String> removeDoNotUnsubscribe(String hastag){
-        return null;
+    private Set<String> removeProperties(String path, String prop) throws IOException {
+        File file = new File(path);
+        Properties properties = new Properties();
+        properties.load(new FileReader(file));
+        properties.remove(prop);
+        properties.store(new FileWriter(file), null);
+        return properties.stringPropertyNames();
     }
 }
