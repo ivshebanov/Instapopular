@@ -1,6 +1,8 @@
 package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
+import java.io.IOException;
+import static java.util.Collections.emptySet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,21 @@ public class HashtagService {
             hashtagDao.quitDriver();
         }
         return false;
+    }
+
+    public Set<String> addHestag(String userName) {
+        try {
+            return propertiesDao.addHestagInProperties(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
+    }
+
+    public Set<String> removeHestag(String userName) {
+        try {
+            return propertiesDao.removeHestagFromProperties(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
     }
 }

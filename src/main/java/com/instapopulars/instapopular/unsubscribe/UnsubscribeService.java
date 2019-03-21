@@ -1,6 +1,9 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
+import java.io.IOException;
+import static java.util.Collections.emptySet;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +45,21 @@ public class UnsubscribeService {
             unsubscribeDao.quitDriver();
         }
         return false;
+    }
+
+    public Set<String> addDoNotUnsubscribeUser(String userName) {
+        try {
+            return propertiesDao.addDoNotUnsubscribe(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
+    }
+
+    public Set<String> removeDoNotUnsubscribeUser(String userName) {
+        try {
+            return propertiesDao.removeDoNotUnsubscribe(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
     }
 }

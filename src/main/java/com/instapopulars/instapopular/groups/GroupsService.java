@@ -1,6 +1,8 @@
 package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
+import java.io.IOException;
+import static java.util.Collections.emptySet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +43,21 @@ public class GroupsService {
             groupsDao.quitDriver();
         }
         return false;
+    }
+
+    public Set<String> addGroups(String userName){
+        try {
+            return propertiesDao.addGroupsInProperties(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
+    }
+
+    public Set<String> removeGroups(String userName){
+        try {
+            return propertiesDao.removeGroupsFromProperties(userName);
+        } catch (IOException e) {
+            return emptySet();
+        }
     }
 }
