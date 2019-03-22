@@ -1,8 +1,10 @@
 package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
+import com.instapopulars.instapopular.model.View;
 import java.io.IOException;
 import static java.util.Collections.emptySet;
+import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,19 +47,35 @@ public class GroupsService {
         return false;
     }
 
-    public Set<String> addGroups(String userName){
+    public Set<View> addGroup(String userName){
         try {
-            return propertiesDao.addGroupsInProperties(userName);
+            return revertView(propertiesDao.addGroupsInProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<String> removeGroups(String userName){
+    public Set<View> removeGroup(String userName){
         try {
-            return propertiesDao.removeGroupsFromProperties(userName);
+            return revertView(propertiesDao.removeGroupsFromProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
+    }
+
+    public Set<View> getGroup(){
+        try {
+            return revertView(propertiesDao.getGroupsFromProperties());
+        } catch (IOException e) {
+            return emptySet();
+        }
+    }
+
+    private Set<View> revertView(Set<String> set){
+        Set<View> resultSet = new HashSet<>();
+        for (String str : set){
+            resultSet.add(new View(str));
+        }
+        return resultSet;
     }
 }
