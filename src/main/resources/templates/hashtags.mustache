@@ -3,6 +3,8 @@
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="style.css" rel="stylesheet">
+    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
 
@@ -20,10 +22,39 @@
             <h6>Возможные действия: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h6>
 
             <button>Начать</button>
+
+            <br><br>
+            <p class="message"><a href="#">Редактирование хештегов.</a></p>
         </form>
 
+        <form class="register-form" method="post" action="addRemoveHashtag">
+            <label for="add">Добавить хештег?</label>
+            <input id="add" type="text" name="addHashtag" placeholder="Хештег"/>
+
+            <label for="remove">Удалить группу?</label>
+            <input id="remove" type="text" name="removeHashtag" placeholder="Хештег"/>
+
+            <button type="submit">Выполнить</button>
+            <br><br>
+            <p class="message"><a href="#">Начать работу?</a></p>
+        </form>
+
+        <br>
+        <hr>
+        <div><b><h3>Список хештегов</h3></b></div>
+        {{#hashtagView}}
+            <div>
+                <a href="https://www.instagram.com/explore/tags/{{name}}">{{name}}</a>
+                <br>
+            </div>
+        {{/hashtagView}}
     </div>
 </div>
 
+<script type="text/javascript">
+$('.message a').click(function(){
+$('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
+</script>
 </body>
 </html>
