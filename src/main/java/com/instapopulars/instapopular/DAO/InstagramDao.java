@@ -3,7 +3,6 @@ package com.instapopulars.instapopular.DAO;
 import static com.instapopulars.instapopular.Constant.Attribute.ARIA_LABEL;
 import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
@@ -21,6 +20,8 @@ import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
+import static com.instapopulars.instapopular.Constant.Utils.OS_NAME;
+import static com.instapopulars.instapopular.Utils.getChromeDriver;
 import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.ArrayList;
@@ -49,12 +50,13 @@ import org.springframework.stereotype.Repository;
 public class InstagramDao {
 
     private static final Logger logger = LoggerFactory.getLogger(InstagramDao.class);
-    private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(CHROME_DRIVER)).getPath();
+    private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(getChromeDriver())).getPath();
 
     private WebDriver driver;
     private String login;
 
     public WebDriver initDriver() {
+        logger.info(System.getProperty(OS_NAME));
         logger.info(format(GET_DRIVER, Calendar.getInstance()));
         initChromeDriver();
         return driver;

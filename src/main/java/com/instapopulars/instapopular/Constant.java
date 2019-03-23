@@ -16,12 +16,16 @@ public interface Constant {
         String SUBSCRIPTIONS = "Подписки";
     }
 
+    interface Utils {
+
+        String OS_NAME = "os.name";
+        String MAC = "Mac";
+        String WINDOWS = "Windows";
+    }
+
     interface DriverConstant {
 
         interface MessageConstants {
-            String DO_NOT_UNSUBSCRIBE_MESSAGE = "doNotUnsubscribe()";
-            String GET_HESTAG_FROM_PROPERTIES = "getHestagFromProperties()";
-            String GET_GROUPS = "getGroupsFromProperties()";
             String GET_DRIVER = "getDriver() Local time: %tT";
             String QUIT_DRIVER = "quitDriver() Local time: %tT";
             String SET_PROPERTY = "initDriver(%s, %s)";
@@ -31,8 +35,8 @@ public interface Constant {
 
             interface Chrome {
                 String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
-//                String CHROME_DRIVER = "chromedriver";//mac
-                String CHROME_DRIVER="chromedriver.exe";//windows
+                String CHROME_DRIVER_MAC = "chromedriver";
+                String CHROME_DRIVER_WINDOWS = "chromedriver.exe";
             }
         }
 
@@ -91,8 +95,8 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-//            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";//mac
-            String UNSUBSCRIBE_BTN = "/html/body/div[3]/div/div/div[3]/button[1]";//windows
+            String UNSUBSCRIBE_BTN_MAC = "/html/body/div[4]/div/div/div[3]/button[1]";
+            String UNSUBSCRIBE_BTN_WINDOWS = "/html/body/div[3]/div/div/div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";
