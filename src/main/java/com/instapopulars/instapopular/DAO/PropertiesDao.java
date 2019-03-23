@@ -3,10 +3,12 @@ package com.instapopulars.instapopular.DAO;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
+import com.instapopulars.instapopular.model.View;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import static java.util.Objects.requireNonNull;
 import java.util.Properties;
 import java.util.Set;
@@ -62,6 +64,14 @@ public class PropertiesDao {
 
     public Set<String> removeDoNotUnsubscribe(String hastag) throws IOException {
         return removeProperties(DO_NOT_UNSUBSCRIBE_PATH, hastag);
+    }
+
+    public Set<View> revertView(Set<String> set){
+        Set<View> resultSet = new HashSet<>();
+        for (String str : set){
+            resultSet.add(new View(str));
+        }
+        return resultSet;
     }
 
     private Set<String> getProperties(String path) throws IOException {

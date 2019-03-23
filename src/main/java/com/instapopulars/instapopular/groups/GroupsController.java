@@ -26,6 +26,7 @@ public class GroupsController {
                         Map<String, Object> view) {
 
         if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countSubscriptions < 0) {
+            view.put("groupView", groupsService.getGroup());
             return "groups";
         }
         groupsService.loginOnWebSite(login, password);
@@ -51,6 +52,7 @@ public class GroupsController {
             view.put("groupView", groupsService.removeGroup(remove));
             return "groups";
         }
+        view.put("groupView", groupsService.getGroup());
         return "groups";
     }
 }

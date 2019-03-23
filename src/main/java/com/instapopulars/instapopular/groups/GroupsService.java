@@ -47,35 +47,27 @@ public class GroupsService {
         return false;
     }
 
-    public Set<View> addGroup(String userName){
+    public Set<View> addGroup(String userName) {
         try {
-            return revertView(propertiesDao.addGroupsInProperties(userName));
+            return propertiesDao.revertView(propertiesDao.addGroupsInProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> removeGroup(String userName){
+    public Set<View> removeGroup(String userName) {
         try {
-            return revertView(propertiesDao.removeGroupsFromProperties(userName));
+            return propertiesDao.revertView(propertiesDao.removeGroupsFromProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> getGroup(){
+    public Set<View> getGroup() {
         try {
-            return revertView(propertiesDao.getGroupsFromProperties());
+            return propertiesDao.revertView(propertiesDao.getGroupsFromProperties());
         } catch (IOException e) {
             return emptySet();
         }
-    }
-
-    private Set<View> revertView(Set<String> set){
-        Set<View> resultSet = new HashSet<>();
-        for (String str : set){
-            resultSet.add(new View(str));
-        }
-        return resultSet;
     }
 }
