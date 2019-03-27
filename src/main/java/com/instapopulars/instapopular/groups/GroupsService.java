@@ -4,7 +4,6 @@ import com.instapopulars.instapopular.DAO.PropertiesDao;
 import com.instapopulars.instapopular.model.View;
 import java.io.IOException;
 import static java.util.Collections.emptySet;
-import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

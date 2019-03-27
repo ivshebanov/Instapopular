@@ -75,7 +75,7 @@ public interface Constant {
             String LOGIN_USERNAME_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='username']";
             String LOGIN_PASSWORD_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='password']";
             String CHECK_LOGIN_BY_NAME = "//*[@id=\"react-root\"]//div[1]/div/div[2]/div[1]/a";
-            String LOGIN_BUTTON = "//*[@id=\"react-root\"]//form/div[3]/button";
+            String LOGIN_BUTTON = "//form/div[4]/button";
             String IS_ACTIVE_LIKE = "//div[2]/section[1]/span[1]/button/span";
             String SET_LIKE = "//div[2]/section[1]/span[1]/button";
             String SUBSCRIBE = "//*[@id=\"react-root\"]//div[2]/div[1]/div[2]/button";
