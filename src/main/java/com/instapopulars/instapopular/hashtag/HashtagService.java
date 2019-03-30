@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.hashtag;
 
+import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
 import com.instapopulars.instapopular.model.View;
 import java.io.IOException;

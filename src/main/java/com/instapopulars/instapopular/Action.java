@@ -1,4 +1,4 @@
-package com.instapopulars.instapopular.hashtag;
+package com.instapopulars.instapopular;
 
 public enum Action {
     SUBSCRIBE,

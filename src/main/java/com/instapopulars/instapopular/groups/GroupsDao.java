@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
+import com.instapopulars.instapopular.Action;
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
 import static com.instapopulars.instapopular.Constant.Attribute.REQUEST_SENT;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
@@ -29,9 +30,9 @@ public class GroupsDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void subscribeToUsersInGroup(String channelName, int countSubscriptions) {
+    public void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
         logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
-        if (channelName == null || countSubscriptions == 0) {
+        if (channelName == null || countSubscriptions <= 0 || action == null) {
             return;
         }
         String baseWindowHandle = null;
@@ -43,47 +44,55 @@ public class GroupsDao {
         for (int i = 1; i <= countSubscriptions; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                if (isSubscribed(format(IS_SUBSCRIBED, i))) {
-                    countSubscriptions++;
-                    continue;
+                subscribed(action, i);
+                if (action == Action.SUBSCRIBE || action == Action.SUBSCRIBE_AND_LIKE) {
+                    if (isSubscribed(format(IS_SUBSCRIBED, i))) {
+                        countSubscriptions++;
+                        continue;
+                    }
+                    instagramDao.getWebElement(60, format(IS_SUBSCRIBED, i)).click();
+                    Thread.sleep(2000);
                 }
-                instagramDao.getWebElement(60, format(IS_SUBSCRIBED, i)).click();
-                Thread.sleep(2000);
                 if (requestSent(format(IS_SUBSCRIBED, i))) {
                     continue;
                 }
+                if (action == Action.LIKE || action == Action.SUBSCRIBE_AND_LIKE) {
+                    String urlUser = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
+                    String userWindowHandle = instagramDao.openUrlNewTab(urlUser);
+                    int countPhoto;
+                    try {
+                        countPhoto = checkPhoto();
+                    } catch (Exception e) {
+                        instagramDao.closeTab(userWindowHandle);
+                        instagramDao.selectTab(baseWindowHandle);
+                        continue;
+                    }
 
-                String urlUser = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
-                String userWindowHandle = instagramDao.openUrlNewTab(urlUser);
-                int countPhoto;
-                try {
-                    countPhoto = checkPhoto();
-                } catch (Exception e) {
-                    instagramDao.closeTab(userWindowHandle);
-                    instagramDao.selectTab(baseWindowHandle);
-                    continue;
-                }
-
-                if (countPhoto != 0) {
-                    for (int j = 1; j <= countPhoto; j++) {
-                        try {
-                            String urlPhoto = instagramDao.getWebElement(10, format(URL_PHOTO, j)).getAttribute(HREF);
-                            instagramDao.setLike(urlPhoto);
-                        } catch (Exception e) {
-                            instagramDao.selectTab(userWindowHandle);
-                            break;
+                    if (countPhoto != 0) {
+                        for (int j = 1; j <= countPhoto; j++) {
+                            try {
+                                String urlPhoto = instagramDao.getWebElement(10, format(URL_PHOTO, j)).getAttribute(HREF);
+                                instagramDao.setLike(urlPhoto);
+                            } catch (Exception e) {
+                                instagramDao.selectTab(userWindowHandle);
+                                break;
+                            }
                         }
                     }
+                    logger.info(format(SUBSCRIBE_TO_GROUP, i));
+                    instagramDao.closeTab(userWindowHandle);
+                    instagramDao.selectTab(baseWindowHandle);
                 }
-                logger.info(format(SUBSCRIBE_TO_GROUP, i));
-                instagramDao.closeTab(userWindowHandle);
-                instagramDao.selectTab(baseWindowHandle);
                 instagramDao.timeOut(150, 50);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramDao.selectTab(baseWindowHandle);
             }
         }
+    }
+
+    private void subscribed(Action action, int i) throws InterruptedException {
+
     }
 
     private boolean isSubscribed(String xpath) {

@@ -17,8 +17,12 @@
             <label for="passwordField">Введите пароль от инстаграма</label>
             <input id="passwordField" type="password" name="password" placeholder="password"/>
 
-            <label for="countSubscriptionsField">На сколько подписываться?</label>
+            <label for="countSubscriptionsField">На сколько акаунтов?</label>
             <input id="countSubscriptionsField" type="number" name="countSubscriptions" placeholder="350"/>
+
+            <label for="actionField">Введите действие</label>
+            <input id="actionField" type="text" name="action" placeholder="SUBSCRIBE_AND_LIKE"/>
+            <h6>Возможные действия: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h6>
 
             <button>Начать</button>
             <br><br>
@@ -42,7 +46,7 @@
         <div><b><h3>Список групп</h3></b></div>
         {{#groupView}}
             <div>
-                <a href="https://www.instagram.com/{{name}}">{{name}}</a>
+                <a target="_blank" href="https://www.instagram.com/{{name}}">{{name}}</a>
                 <br>
             </div>
         {{/groupView}}

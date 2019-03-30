@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
+import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
 import com.instapopulars.instapopular.model.View;
 import java.io.IOException;
@@ -21,11 +22,11 @@ public class GroupsService {
         groupsDao.initDriver();
     }
 
-    public void subscribeToUsersInGroup(int countSubscriptions) {
+    public void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
             Set<String> groups = propertiesDao.getGroupsFromProperties();
             for (String urlGroup : groups) {
-                groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions);
+                groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
             System.out.println();
         } catch (Exception e) {

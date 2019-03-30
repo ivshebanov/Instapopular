@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
+import com.instapopulars.instapopular.Action;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,14 +24,17 @@ public class GroupsController {
     public String group(@RequestParam(name = "login") String login,
                         @RequestParam(name = "password") String password,
                         @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions,
+                        @RequestParam(name = "action", defaultValue = "SUBSCRIBE_AND_LIKE") Action action,
                         Map<String, Object> view) {
 
-        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countSubscriptions < 0) {
+        if (login == null || login.length() <= 0
+                || password == null || password.length() <= 0
+                || countSubscriptions < 0 || action == null) {
             view.put("groupView", groupsService.getGroup());
             return "groups";
         }
         groupsService.loginOnWebSite(login, password);
-        groupsService.subscribeToUsersInGroup(countSubscriptions);
+        groupsService.subscribeToUsersInGroup(countSubscriptions, action);
         view.put("groupView", groupsService.getGroup());
         return "groups";
     }

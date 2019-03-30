@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.hashtag;
 
+import com.instapopulars.instapopular.Action;
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
 import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG;
 import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG;

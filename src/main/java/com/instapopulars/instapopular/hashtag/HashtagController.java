@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.hashtag;
 
+import com.instapopulars.instapopular.Action;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
