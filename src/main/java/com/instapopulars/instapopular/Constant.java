@@ -41,9 +41,11 @@ public interface Constant {
         }
 
         interface PropertiesName {
-            String DO_NOT_UNSUBSCRIBE = "doNotUnsubscribe.properties";
-            String HASHTAGS = "hashtags.properties";
-            String GROUPS = "groups.properties";
+            String DO_NOT_UNSUBSCRIBE = "properties/doNotUnsubscribe.properties";
+            String HASHTAGS = "properties/hashtags.properties";
+            String GROUPS = "properties/groups.properties";
+            String MY_PHOTO = "properties/myPhoto.properties";
+            String PHOTO_ANALYSIS_RESULTS = "properties/photoAnalysisResults.properties";
         }
     }
 
