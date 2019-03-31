@@ -68,6 +68,13 @@ public class PropertiesDao {
         return addSetProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
     }
 
+    public Map<String, Integer> addMyPhotos(Map<String, Integer> photos) throws IOException {
+        for (Map.Entry<String, Integer> entry : photos.entrySet()) {
+            addMapProperties(MY_PHOTO_PATH, entry.getKey(), String.valueOf(entry.getValue()));
+        }
+        return getMyPhoto();
+    }
+
     public Map<String, Integer> addMyPhoto(String key, String value) throws IOException {
         return addMapProperties(MY_PHOTO_PATH, key, value);
     }
@@ -162,7 +169,7 @@ public class PropertiesDao {
 
     private Map<String, Integer> getMapFromProperties(Properties properties) {
         Map<String, Integer> resultMap = new HashMap<>();
-        for (final String name : properties.stringPropertyNames()) {
+        for (String name : properties.stringPropertyNames()) {
             resultMap.put(name, Integer.parseInt(properties.getProperty(name)));
         }
         return resultMap;
