@@ -2,7 +2,7 @@ package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.View;
+import com.instapopulars.instapopular.model.ViewSet;
 import java.io.IOException;
 import static java.util.Collections.emptySet;
 import java.util.Set;
@@ -55,25 +55,25 @@ public class HashtagService {
         return false;
     }
 
-    public Set<View> addHestag(String userName) {
+    public Set<ViewSet> addHestag(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.addHestagInProperties(userName));
+            return propertiesDao.revertSetView(propertiesDao.addHestagInProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> removeHestag(String userName) {
+    public Set<ViewSet> removeHestag(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.removeHestagFromProperties(userName));
+            return propertiesDao.revertSetView(propertiesDao.removeHestagFromProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> getHestags() {
+    public Set<ViewSet> getHestags() {
         try {
-            return propertiesDao.revertView(propertiesDao.getHestagFromProperties());
+            return propertiesDao.revertSetView(propertiesDao.getHestagFromProperties());
         } catch (IOException e) {
             return emptySet();
         }

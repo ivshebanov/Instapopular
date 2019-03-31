@@ -1,10 +1,10 @@
 package com.instapopulars.instapopular.model;
 
-public class View {
+public class ViewSet {
 
     private String name;
 
-    public View(String name) {
+    public ViewSet(String name) {
         this.name = name;
     }
 

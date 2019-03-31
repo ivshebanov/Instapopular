@@ -1,7 +1,7 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.View;
+import com.instapopulars.instapopular.model.ViewSet;
 import java.io.IOException;
 import static java.util.Collections.emptySet;
 import java.util.Set;
@@ -48,25 +48,25 @@ public class UnsubscribeService {
         return false;
     }
 
-    public Set<View> addDoNotUnsubscribeUser(String userName) {
+    public Set<ViewSet> addDoNotUnsubscribeUser(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.addDoNotUnsubscribe(userName));
+            return propertiesDao.revertSetView(propertiesDao.addDoNotUnsubscribe(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> removeDoNotUnsubscribeUser(String userName) {
+    public Set<ViewSet> removeDoNotUnsubscribeUser(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.removeDoNotUnsubscribe(userName));
+            return propertiesDao.revertSetView(propertiesDao.removeDoNotUnsubscribe(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> getDoNotUnsubscribeUser() {
+    public Set<ViewSet> getDoNotUnsubscribeUser() {
         try {
-            return propertiesDao.revertView(propertiesDao.getDoNotUnsubscribe());
+            return propertiesDao.revertSetView(propertiesDao.getDoNotUnsubscribe());
         } catch (IOException e) {
             return emptySet();
         }

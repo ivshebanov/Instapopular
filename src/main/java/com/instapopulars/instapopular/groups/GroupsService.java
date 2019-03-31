@@ -2,7 +2,7 @@ package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.View;
+import com.instapopulars.instapopular.model.ViewSet;
 import java.io.IOException;
 import static java.util.Collections.emptySet;
 import java.util.Set;
@@ -47,25 +47,25 @@ public class GroupsService {
         return false;
     }
 
-    public Set<View> addGroup(String userName) {
+    public Set<ViewSet> addGroup(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.addGroupsInProperties(userName));
+            return propertiesDao.revertSetView(propertiesDao.addGroupsInProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> removeGroup(String userName) {
+    public Set<ViewSet> removeGroup(String userName) {
         try {
-            return propertiesDao.revertView(propertiesDao.removeGroupsFromProperties(userName));
+            return propertiesDao.revertSetView(propertiesDao.removeGroupsFromProperties(userName));
         } catch (IOException e) {
             return emptySet();
         }
     }
 
-    public Set<View> getGroup() {
+    public Set<ViewSet> getGroup() {
         try {
-            return propertiesDao.revertView(propertiesDao.getGroupsFromProperties());
+            return propertiesDao.revertSetView(propertiesDao.getGroupsFromProperties());
         } catch (IOException e) {
             return emptySet();
         }
