@@ -125,6 +125,16 @@ public class InstagramDao {
         }
     }
 
+    public void scrollOpenLikeUser(int currentPosition){
+        for (int i = 1; i <= currentPosition; i++) {
+            try {
+                scrollElementSubscriptions(format("//div[3]/div/div[2]/div/div/div[%d]", i));
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+    }
+
     public void scrollElementSubscriptions(String xPathElement) {
         WebElement scroll = getWebElement(60, xPathElement);
         Coordinates coordinate = ((Locatable) scroll).getCoordinates();

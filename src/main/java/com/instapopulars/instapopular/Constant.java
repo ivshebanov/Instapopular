@@ -119,4 +119,9 @@ public interface Constant {
             String SCROLL_NEW_PUBLICATIONS = "//article/div[2]/div/div[%d]";
         }
     }
+
+    interface AnalysisConstant {
+        String OPEN_LIKE = "//div[2]/section[2]/div/div/a";
+        String LOGIN_USER = "//div[3]/div/div[2]/div/div/div[%d]/div[2]/div[1]";
+    }
 }
