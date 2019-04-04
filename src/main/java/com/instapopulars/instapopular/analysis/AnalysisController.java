@@ -11,6 +11,7 @@ public class AnalysisController {
     @Autowired
     public AnalysisController(AnalysisService analysisService) {
         this.analysisService = analysisService;
-        analysisService.run();
+        analysisService.loginOnWebSite("lilka.lily.1", "Sxsblpwiwn");
+        analysisService.runAnalysis();
     }
 }

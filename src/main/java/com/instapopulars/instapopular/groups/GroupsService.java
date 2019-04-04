@@ -18,10 +18,6 @@ public class GroupsService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public void initDriver() {
-        groupsDao.initDriver();
-    }
-
     public void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
             Set<String> groups = propertiesDao.getGroupsFromProperties();

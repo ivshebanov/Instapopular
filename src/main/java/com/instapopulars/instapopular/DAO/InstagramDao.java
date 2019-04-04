@@ -9,6 +9,7 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.MessageCons
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON;
@@ -115,6 +116,10 @@ public class InstagramDao {
         return 0;
     }
 
+    private String removeCharAt(String s, int pos) {
+        return s.substring(0, pos) + s.substring(pos + 1);
+    }
+
     public void scrollSubscriptions(int currentPosition) {
         for (int i = 1; i <= currentPosition; i++) {
             try {
@@ -125,13 +130,11 @@ public class InstagramDao {
         }
     }
 
-    public void scrollOpenLikeUser(int currentPosition){
-        for (int i = 1; i <= currentPosition; i++) {
-            try {
-                scrollElementSubscriptions(format("//div[3]/div/div[2]/div/div/div[%d]", i));
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
+    public void scrollOpenLikeUser(WebElement countWebElement) {
+        try {
+            ((JavascriptExecutor) driver).executeScript(SCROLL_INTO_VIEW, countWebElement);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -140,10 +143,6 @@ public class InstagramDao {
         Coordinates coordinate = ((Locatable) scroll).getCoordinates();
         coordinate.onPage();
         coordinate.inViewPort();
-    }
-
-    private String removeCharAt(String s, int pos) {
-        return s.substring(0, pos) + s.substring(pos + 1);
     }
 
     public Set<User> getUsersByUrls(Set<String> logins) {

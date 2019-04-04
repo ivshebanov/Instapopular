@@ -82,6 +82,10 @@ public interface Constant {
             String SET_LIKE = "//div[2]/section[1]/span[1]/button";
             String SUBSCRIBE = "//*[@id=\"react-root\"]//div[2]/div[1]/div[2]/button";
         }
+
+        interface Script {
+            String SCROLL_INTO_VIEW = "arguments[0].scrollIntoView(false);";
+        }
     }
 
     interface UnsubscribeConstant {
@@ -122,6 +126,8 @@ public interface Constant {
 
     interface AnalysisConstant {
         String OPEN_LIKE = "//div[2]/section[2]/div/div/a";
-        String LOGIN_USER = "//div[3]/div/div[2]/div/div/div[%d]/div[2]/div[1]";
+        String LOGIN_USER = "//div[4]/div/div[2]/div/div/div";
+        String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/a/span";
+        String LINE_BREAK = "\n";
     }
 }

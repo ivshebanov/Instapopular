@@ -70,13 +70,20 @@ public class PropertiesDao {
 
     public Map<String, Integer> addMyPhotos(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
-            addMapProperties(MY_PHOTO_PATH, entry.getKey(), String.valueOf(entry.getValue()));
+            addMyPhoto(entry.getKey(), String.valueOf(entry.getValue()));
         }
         return getMyPhoto();
     }
 
     public Map<String, Integer> addMyPhoto(String key, String value) throws IOException {
         return addMapProperties(MY_PHOTO_PATH, key, value);
+    }
+
+    public Map<String, Integer> addPhotoAnalysisResults(Map<String, Integer> photos) throws IOException {
+        for (Map.Entry<String, Integer> entry : photos.entrySet()) {
+            addPhotoAnalysisResults(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+        return getMyPhoto();
     }
 
     public Map<String, Integer> addPhotoAnalysisResults(String key, String value) throws IOException {
