@@ -5,6 +5,7 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesN
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.MY_PHOTO;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.PHOTO_ANALYSIS_RESULTS;
+import com.instapopulars.instapopular.model.ViewMap;
 import com.instapopulars.instapopular.model.ViewSet;
 import java.io.File;
 import java.io.FileReader;
@@ -118,12 +119,12 @@ public class PropertiesDao {
         return resultSet;
     }
 
-    public Map<String, String> revertMapView(Map<String, Integer> map) {
-        Map<String, String> resultMap = new HashMap<>();
+    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
+        HashSet<ViewMap> resultSet = new HashSet<>();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            resultMap.put(entry.getKey(), String.valueOf(entry.getValue()));
+            resultSet.add(new ViewMap(entry.getKey(), entry.getValue()));
         }
-        return resultMap;
+        return resultSet;
     }
 
     private Map<String, Integer> getMapProperties(String path) throws IOException {

@@ -1,11 +1,11 @@
 package com.instapopulars.instapopular.model;
 
-public class ViewMap {
+public class ViewMap implements Comparable<ViewMap>{
 
     private String key;
-    private String value;
+    private Integer value;
 
-    public ViewMap(String key, String value) {
+    public ViewMap(String key, Integer value) {
         this.key = key;
         this.value = value;
     }
@@ -18,11 +18,16 @@ public class ViewMap {
         this.key = key;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(ViewMap o) {
+        return o.value.compareTo(value);
     }
 }

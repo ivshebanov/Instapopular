@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="login-page">
+    <div class="form">
+        <form class="login-form" method="post" action="analysis">
+            <label for="loginField">Введите логин от инстаграма</label>
+            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
+
+            <label for="passwordField">Введите пароль от инстаграма</label>
+            <input id="passwordField" type="password" name="password" placeholder="password"/>
+
+            <label for="doNotUnsubscribeField">Не отписываться от первых:</label>
+            <input id="doNotUnsubscribeField" type="number" name="doNotUnsubscribe"/>
+
+            <button>Запустить сканирование</button>
+            <br><br>
+            <p class="message"><a href="#">Добавление/удаление фото.</a></p>
+
+            <br><hr>
+            <div><b><h3>Активности</h3></b></div>
+            {{#analysisView}}
+                <div>
+                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
+                    <b> = {{value}}</b>
+                    <br>
+                </div>
+            {{/analysisView}}
+        </form>
+
+        <form class="register-form" method="post" action="addRemove">
+            <label for="add">Добавить фото?</label>
+            <input id="add" type="text" name="addGroup" placeholder="Ссылка на фото"/>
+
+            <label for="remove">Удалить фото?</label>
+            <input id="remove" type="text" name="removeGroup" placeholder="Ссылка на фото"/>
+
+            <button type="submit">Выполнить</button>
+            <br><br>
+            <p class="message"><a href="#">К запуску.</a></p>
+
+            <br><hr>
+            <div><b><h3>Список моих фото</h3></b></div>
+            {{#photoView}}
+                <div>
+                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
+                    <b> = {{value}}</b>
+                    <br>
+                </div>
+            {{/photoView}}
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+$('.message a').click(function(){
+$('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
+</script>
+</body>
+</html>

@@ -3,12 +3,14 @@ package com.instapopulars.instapopular;
 public interface Constant {
 
     interface LinkToInstagram {
+
         String LOGIN_PAGE = "https://www.instagram.com/accounts/login/";
         String HOME_PAGE = "https://www.instagram.com/%s/";
         String HASHTAG_PAGE = "https://www.instagram.com/explore/tags/%s/";
     }
 
     interface Attribute {
+
         String HREF = "href";
         String ARIA_LABEL = "aria-label";
         String REQUEST_SENT = "Запрос отправлен";
