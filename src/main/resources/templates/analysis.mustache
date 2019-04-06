@@ -10,21 +10,27 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form" method="post" action="analysis">
+        <form class="login-form" method="post" action="login">
             <label for="loginField">Введите логин от инстаграма</label>
             <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
 
             <label for="passwordField">Введите пароль от инстаграма</label>
             <input id="passwordField" type="password" name="password" placeholder="password"/>
 
+            <button>Запустить сканирование</button>
+            <br><br>
+        </form>
+
+        <form class="login-form" method="post" action="analysis">
             <label for="doNotUnsubscribeField">Не отписываться от первых:</label>
             <input id="doNotUnsubscribeField" type="number" name="doNotUnsubscribe"/>
 
-            <button>Запустить сканирование</button>
+            <button>Добавить</button>
             <br><br>
             <p class="message"><a href="#">Добавление/удаление фото.</a></p>
 
-            <br><hr>
+            <br>
+            <hr>
             <div><b><h3>Активности</h3></b></div>
             {{#analysisView}}
                 <div>
@@ -35,18 +41,19 @@
             {{/analysisView}}
         </form>
 
-        <form class="register-form" method="post" action="addRemove">
+        <form class="register-form" method="post" action="addRemoveInAnalysis">
             <label for="add">Добавить фото?</label>
-            <input id="add" type="text" name="addGroup" placeholder="Ссылка на фото"/>
+            <input id="add" type="text" name="addPhoto" placeholder="Ссылка на фото"/>
 
             <label for="remove">Удалить фото?</label>
-            <input id="remove" type="text" name="removeGroup" placeholder="Ссылка на фото"/>
+            <input id="remove" type="text" name="removePhoto" placeholder="Ссылка на фото"/>
 
             <button type="submit">Выполнить</button>
             <br><br>
             <p class="message"><a href="#">К запуску.</a></p>
 
-            <br><hr>
+            <br>
+            <hr>
             <div><b><h3>Список моих фото</h3></b></div>
             {{#photoView}}
                 <div>

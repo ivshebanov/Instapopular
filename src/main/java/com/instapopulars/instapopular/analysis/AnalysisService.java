@@ -6,11 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +26,6 @@ public class AnalysisService {
             return analysisDao.loginOnWebSite(login, password);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            analysisDao.quitDriver();
         }
         return false;
     }
@@ -41,6 +36,28 @@ public class AnalysisService {
             propertiesDao.addPhotoAnalysisResults(analysisDao.addNewUser(propertiesDao.getPhotoAnalysisResults(), user));
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            analysisDao.quitDriver();
+        }
+    }
+
+    public List<ViewMap> addMyPhoto(String userName) {
+        try {
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addMyPhoto(userName, String.valueOf(0))));
+            Collections.sort(resultView);
+            return resultView;
+        } catch (IOException e) {
+            return emptyList();
+        }
+    }
+
+    public List<ViewMap> removeMyPhoto(String userName) {
+        try {
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeMyPhoto(userName)));
+            Collections.sort(resultView);
+            return resultView;
+        } catch (IOException e) {
+            return emptyList();
         }
     }
 

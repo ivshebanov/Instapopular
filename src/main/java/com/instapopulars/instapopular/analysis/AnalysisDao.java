@@ -67,6 +67,7 @@ public class AnalysisDao {
         }
         Set<String> resultActiveUser = new HashSet<>();
         instagramDao.openUrl(format(HOME_PAGE, urlPhoto));
+        instagramDao.timeOut(2, 0);
         try {
             instagramDao.getWebElement(60, OPEN_LIKE).click();
             String countUserLike = instagramDao.getWebElement(15, COUNT_USER_LIKE).getText();
