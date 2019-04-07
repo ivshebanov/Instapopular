@@ -101,11 +101,12 @@ public class AnalysisService {
         try {
             List<ViewMap> photoAnalysisResults = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
             Collections.sort(photoAnalysisResults);
-            if (photoAnalysisResults.size() >= count){
-                for (int i = 0; i < count; i++){
-                    propertiesDao.addDoNotUnsubscribe(photoAnalysisResults.get(i).getKey());
+            for (ViewMap entry : photoAnalysisResults){
+                if (entry.getValue() >= count){
+                    propertiesDao.addDoNotUnsubscribe(entry.getKey());
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

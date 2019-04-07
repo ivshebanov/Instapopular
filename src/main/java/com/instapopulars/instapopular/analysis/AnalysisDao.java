@@ -85,10 +85,8 @@ public class AnalysisDao {
                 }
                 resultActiveUser.addAll(set);
                 instagramDao.scrollOpenLikeUser(elements.get(elements.size() - 1));
-//                countUserLikeInt -= elements.size();
             }
         } catch (NoSuchElementException e) {
-            logger.error(e.getMessage(), e);
             return resultActiveUser;
         }
         return resultActiveUser;
