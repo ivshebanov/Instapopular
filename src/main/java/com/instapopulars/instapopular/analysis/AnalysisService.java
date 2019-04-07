@@ -1,13 +1,18 @@
 package com.instapopulars.instapopular.analysis;
 
+import static com.instapopulars.instapopular.Constant.AnalysisConstant.CUT_OF_URL;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import static java.util.Collections.emptyList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +84,31 @@ public class AnalysisService {
         } catch (IOException e) {
             return emptyList();
         }
+    }
+
+    public String cutOfUrl(String url) {
+        Pattern p = Pattern.compile(CUT_OF_URL);
+        Matcher matcher = p.matcher(url);
+        String result = "";
+        while (matcher.find()) {
+            result = matcher.group();
+        }
+        result = result.split("/")[0] + "/"+ result.split("/")[1];
+        return result;
+    }
+
+    public void addFirstDoNotUnsubscribe(int count){
+        try {
+            List<ViewMap> photoAnalysisResults = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
+            Collections.sort(photoAnalysisResults);
+            if (photoAnalysisResults.size() >= count){
+                for (int i = 0; i < count; i++){
+                    propertiesDao.addDoNotUnsubscribe(photoAnalysisResults.get(i).getKey());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

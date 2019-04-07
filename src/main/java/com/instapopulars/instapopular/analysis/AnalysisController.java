@@ -38,6 +38,18 @@ public class AnalysisController {
         return "analysis";
     }
 
+    @PostMapping("/analysis")
+    public String doNotUnsubscribe(@RequestParam(name = "doNotUnsubscribe") int doNotUnsubscribe,
+                                   Map<String, Object> view) {
+
+        if (doNotUnsubscribe >= 1){
+            analysisService.addFirstDoNotUnsubscribe(doNotUnsubscribe);
+        }
+        view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("photoView", analysisService.getMyPhoto());
+        return "analysis";
+    }
+
     @PostMapping("/addRemoveInAnalysis")
     public String addRemove(@RequestParam(name = "addPhoto") String add,
                             @RequestParam(name = "removePhoto") String remove,
@@ -48,14 +60,29 @@ public class AnalysisController {
             view.put("photoView", analysisService.getMyPhoto());
             return "analysis";
         }
-        //https://www.instagram.com/p/Bv62bQMngfE/
+        if ((add == null || add.length() == 0) && (remove == null || remove.length() == 0)) {
+            view.put("analysisView", analysisService.getAnalysisPhoto());
+            view.put("photoView", analysisService.getMyPhoto());
+            return "analysis";
+        }
         if (add != null && add.length() > 0) {
-            view.put("photoView", analysisService.addMyPhoto(add));
+            add = analysisService.cutOfUrl(add);
+            if (!add.equals("")) {
+                view.put("photoView", analysisService.addMyPhoto(add));
+                view.put("analysisView", analysisService.getAnalysisPhoto());
+                return "analysis";
+            }
         }
         if (remove != null && remove.length() > 0) {
-            view.put("photoView", analysisService.removeMyPhoto(remove));
+            remove = analysisService.cutOfUrl(remove);
+            if (!remove.equals("")) {
+                view.put("photoView", analysisService.removeMyPhoto(remove));
+                view.put("analysisView", analysisService.getAnalysisPhoto());
+                return "analysis";
+            }
         }
         view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("photoView", analysisService.getMyPhoto());
         return "analysis";
     }
 }

@@ -10,7 +10,7 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form" method="post" action="login">
+        <form class="register-form" method="post" action="login">
             <label for="loginField">Введите логин от инстаграма</label>
             <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
 
@@ -21,7 +21,7 @@
             <br><br>
         </form>
 
-        <form class="login-form" method="post" action="analysis">
+        <form class="register-form" method="post" action="analysis">
             <label for="doNotUnsubscribeField">Не отписываться от первых:</label>
             <input id="doNotUnsubscribeField" type="number" name="doNotUnsubscribe"/>
 
@@ -31,7 +31,7 @@
 
             <br>
             <hr>
-            <div><b><h3>Активности</h3></b></div>
+            <div><b><h3>Список моих фото</h3></b></div>
             {{#analysisView}}
                 <div>
                     <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
@@ -41,7 +41,7 @@
             {{/analysisView}}
         </form>
 
-        <form class="register-form" method="post" action="addRemoveInAnalysis">
+        <form class="login-form" method="post" action="addRemoveInAnalysis">
             <label for="add">Добавить фото?</label>
             <input id="add" type="text" name="addPhoto" placeholder="Ссылка на фото"/>
 
@@ -54,7 +54,7 @@
 
             <br>
             <hr>
-            <div><b><h3>Список моих фото</h3></b></div>
+            <div><b><h3>Активности</h3></b></div>
             {{#photoView}}
                 <div>
                     <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
