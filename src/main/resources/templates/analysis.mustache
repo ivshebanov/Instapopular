@@ -22,7 +22,7 @@
         </form>
 
         <form class="register-form" method="post" action="analysis">
-            <label for="doNotUnsubscribeField">Не отписываться от первых:</label>
+            <label for="doNotUnsubscribeField">Не отписываться от кол-лайков:</label>
             <input id="doNotUnsubscribeField" type="number" name="doNotUnsubscribe"/>
 
             <button>Добавить</button>
@@ -31,12 +31,15 @@
 
             <br>
             <hr>
-            <div><b><h3>Список моих фото</h3></b></div>
+            <div><b><h3>Активности</h3></b></div>
             {{#analysisView}}
                 <div>
-                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
-                    <b> = {{value}}</b>
-                    <br>
+                    <table width="100%">
+                        <tr>
+                            <td><a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a></td>
+                            <td width="30px"><b>{{value}}</b></td>
+                        </tr>
+                    </table>
                 </div>
             {{/analysisView}}
         </form>
@@ -54,12 +57,15 @@
 
             <br>
             <hr>
-            <div><b><h3>Активности</h3></b></div>
+            <div><b><h3>Список моих фото</h3></b></div>
             {{#photoView}}
                 <div>
-                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
-                    <b> = {{value}}</b>
-                    <br>
+                    <table width="100%">
+                        <tr>
+                            <th><a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a></th>
+                            <th width="30px"><b>{{value}}</b></th>
+                        </tr>
+                    </table>
                 </div>
             {{/photoView}}
         </form>

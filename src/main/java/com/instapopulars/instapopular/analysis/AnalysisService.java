@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import static java.util.Collections.emptyList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +46,12 @@ public class AnalysisService {
 
     public List<ViewMap> addMyPhoto(String userName) {
         try {
+            Map<String, Integer> currentMyPhoro = propertiesDao.getMyPhoto();
+            if (currentMyPhoro.containsKey(userName)) {
+                ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getMyPhoto()));
+                Collections.sort(resultView);
+                return resultView;
+            }
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addMyPhoto(userName, String.valueOf(0))));
             Collections.sort(resultView);
             return resultView;
