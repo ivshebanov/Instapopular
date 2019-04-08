@@ -4,6 +4,8 @@ import static com.instapopulars.instapopular.Constant.AnalysisConstant.COUNT_USE
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.LINE_BREAK;
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.LOGIN_USER;
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.OPEN_LIKE;
+import static com.instapopulars.instapopular.Constant.AnalysisConstant.SUBSCRIBE_USER_BUTTON;
+import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
@@ -70,11 +72,16 @@ public class AnalysisDao {
         instagramDao.timeOut(2, 0);
         try {
             instagramDao.getWebElement(60, OPEN_LIKE).click();
+            instagramDao.timeOut(3, 0);
             String countUserLike = instagramDao.getWebElement(15, COUNT_USER_LIKE).getText();
             int countUserLikeInt = instagramDao.convertStringToInt(countUserLike);
-            for (int i = 0; i < countUserLikeInt / 6 + 1; i++) {
+            for (int i = 0; i < countUserLikeInt / 6 + 2; i++) {
                 instagramDao.timeOut(1, 0);
-                List<WebElement> elements = instagramDao.getWebElements(15, LOGIN_USER);
+                List<WebElement> elements = null;
+                try {
+                    elements = instagramDao.getWebElements(30, LOGIN_USER);
+                } catch (NoSuchElementException ignored) {
+                }
                 if (elements == null || elements.size() == 0) {
                     continue;
                 }
@@ -86,7 +93,7 @@ public class AnalysisDao {
                 resultActiveUser.addAll(set);
                 instagramDao.scrollOpenLikeUser(elements.get(elements.size() - 1));
             }
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             return resultActiveUser;
         }
         return resultActiveUser;
