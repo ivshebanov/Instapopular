@@ -9,9 +9,9 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SUBSCRIPTIONS_BTN;
+import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 import com.instapopulars.instapopular.DAO.InstagramDao;
-import static com.instapopulars.instapopular.Utils.getUnsubscribeBtn;
 import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.HashSet;
@@ -48,7 +48,7 @@ public class UnsubscribeDao {
                 }
                 instagramDao.timeOut(150, 50);
                 instagramDao.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
-                instagramDao.getWebElement(60, getUnsubscribeBtn()).click();
+                instagramDao.getWebElement(60, UNSUBSCRIBE_BTN).click();
                 logger.info(format(UNSUBSCRIBED_FROM, i));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

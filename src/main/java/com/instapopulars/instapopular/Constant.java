@@ -103,11 +103,9 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-            String UNSUBSCRIBE_BTN_MAC = "/html/body/div[4]/div/div/div[3]/button[1]";
-            String UNSUBSCRIBE_BTN_WINDOWS = "/html/body/div[3]/div/div/div[3]/button[1]";
+            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
             String COUNT_SUBSCRIBERS = "//li[2]/a/span";
-            String COUNT_SUBSCRIPTIONS = "//li[3]/a/span";
             String USER_LINK_TO_SUBSCRIBERS = "//li[%d]/div/div[1]/div[2]/div[1]/a";
         }
     }
@@ -128,7 +126,8 @@ public interface Constant {
 
     interface AnalysisConstant {
         String OPEN_LIKE = "//div[2]/section[2]/div/div/a";
-        String LOGIN_USER = "//div[4]/div/div[2]/div/div/div";
+        String LOGIN_USER_MAC = "//div[4]/div/div[2]/div/div/div";
+        String LOGIN_USER_WINDOWS = "//div[3]/div/div[2]/div/div/div";
         String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/a/span";
         String LINE_BREAK = "\n";
         String CUT_OF_URL = "p/.*";

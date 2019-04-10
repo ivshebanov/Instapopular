@@ -2,13 +2,11 @@ package com.instapopulars.instapopular.analysis;
 
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.COUNT_USER_LIKE;
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.LINE_BREAK;
-import static com.instapopulars.instapopular.Constant.AnalysisConstant.LOGIN_USER;
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.OPEN_LIKE;
-import static com.instapopulars.instapopular.Constant.AnalysisConstant.SUBSCRIBE_USER_BUTTON;
-import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIBE;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
+import static com.instapopulars.instapopular.Utils.getLoginUserBtn;
 import com.instapopulars.instapopular.groups.GroupsDao;
 import java.io.IOException;
 import static java.lang.String.format;
@@ -79,7 +77,7 @@ public class AnalysisDao {
                 instagramDao.timeOut(1, 0);
                 List<WebElement> elements = null;
                 try {
-                    elements = instagramDao.getWebElements(30, LOGIN_USER);
+                    elements = instagramDao.getWebElements(30, getLoginUserBtn());
                 } catch (NoSuchElementException ignored) {
                 }
                 if (elements == null || elements.size() == 0) {

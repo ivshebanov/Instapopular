@@ -1,12 +1,10 @@
 package com.instapopulars.instapopular;
 
+import static com.instapopulars.instapopular.Constant.AnalysisConstant.LOGIN_USER_MAC;
+import static com.instapopulars.instapopular.Constant.AnalysisConstant.LOGIN_USER_WINDOWS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_MAC;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_WINDOWS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN_MAC;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN_WINDOWS;
-import static com.instapopulars.instapopular.Constant.Utils.MAC;
-import static com.instapopulars.instapopular.Constant.Utils.OS_NAME;
-import static com.instapopulars.instapopular.Constant.Utils.WINDOWS;
+import static com.instapopulars.instapopular.Constant.Utils.*;
 
 public class Utils {
 
@@ -22,12 +20,12 @@ public class Utils {
         return "";
     }
 
-    public static String getUnsubscribeBtn() {
+    public static String getLoginUserBtn() {
         if (MAC.equalsIgnoreCase(ocName)) {
-            return UNSUBSCRIBE_BTN_MAC;
+            return LOGIN_USER_MAC;
         }
         if (WINDOWS.equalsIgnoreCase(ocName)) {
-            return UNSUBSCRIBE_BTN_WINDOWS;
+            return LOGIN_USER_WINDOWS;
         }
         return "";
     }
