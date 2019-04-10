@@ -1,10 +1,12 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.ViewSet;
+import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
-import static java.util.Collections.emptySet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.emptyList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,7 @@ public class UnsubscribeService {
 
     public void unsubscribeFromUnsigned(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, unsubscribeDao.getAllSubscribers());
+            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -48,27 +50,33 @@ public class UnsubscribeService {
         return false;
     }
 
-    public Set<ViewSet> addDoNotUnsubscribeUser(String userName) {
+    public List<ViewMap> addDoNotUnsubscribeUser(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.addDoNotUnsubscribe(userName));
+            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addDoNotUnsubscribe(userName, "")));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> removeDoNotUnsubscribeUser(String userName) {
+    public List<ViewMap> removeDoNotUnsubscribeUser(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.removeDoNotUnsubscribe(userName));
+            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeDoNotUnsubscribe(userName)));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> getDoNotUnsubscribeUser() {
+    public List<ViewMap> getDoNotUnsubscribeUser() {
         try {
-            return propertiesDao.revertSetView(propertiesDao.getDoNotUnsubscribe());
+            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getDoNotUnsubscribe()));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 }

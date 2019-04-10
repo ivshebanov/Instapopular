@@ -1,20 +1,13 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.GET_ALL_SUBSCRIBERS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBED_FROM;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.COUNT_SUBSCRIBERS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SUBSCRIPTIONS_BTN;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
+import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.*;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,12 +22,12 @@ public class UnsubscribeDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void unsubscribeFromUsers(int countSubscribers, Set<String> subscribers) {
+    public void unsubscribeFromUsers(int countSubscribers, Map<String, Integer> subscribers) {
         logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
         if (!instagramDao.openHomePage()) {
             return;
         }
-        Set<User> users = instagramDao.getUsersByUrls(subscribers);
+        Set<User> users = instagramDao.getUsersByUrls(subscribers.keySet());
         instagramDao.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i <= countSubscribers; i++) {

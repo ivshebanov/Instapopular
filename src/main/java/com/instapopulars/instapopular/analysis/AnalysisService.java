@@ -1,6 +1,7 @@
 package com.instapopulars.instapopular.analysis;
 
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.CUT_OF_URL;
+import static com.instapopulars.instapopular.Constant.AnalysisConstant.SLASH;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
@@ -97,17 +98,17 @@ public class AnalysisService {
         while (matcher.find()) {
             result = matcher.group();
         }
-        result = result.split("/")[0] + "/"+ result.split("/")[1];
+        result = result.split(SLASH)[0] + SLASH + result.split(SLASH)[1];
         return result;
     }
 
-    public void addFirstDoNotUnsubscribe(int count){
+    public void addFirstDoNotUnsubscribe(int count) {
         try {
             List<ViewMap> photoAnalysisResults = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
             Collections.sort(photoAnalysisResults);
-            for (ViewMap entry : photoAnalysisResults){
-                if (entry.getValue() >= count){
-                    propertiesDao.addDoNotUnsubscribe(entry.getKey());
+            for (ViewMap entry : photoAnalysisResults) {
+                if (entry.getValue() >= count) {
+                    propertiesDao.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
                 }
             }
 

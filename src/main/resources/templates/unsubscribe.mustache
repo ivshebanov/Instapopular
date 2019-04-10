@@ -41,8 +41,12 @@
         <div><b><h3>Не отписываться от</h3></b></div>
         {{#groupView}}
             <div>
-                <a target="_blank" href="https://www.instagram.com/{{name}}">{{name}}</a>
-                <br>
+                <table width="100%">
+                    <tr>
+                        <th><a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a></th>
+                        <th width="30px"><b>{{value}}</b></th>
+                    </tr>
+                </table>
             </div>
         {{/groupView}}
     </div>

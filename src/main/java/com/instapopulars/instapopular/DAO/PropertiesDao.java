@@ -1,10 +1,6 @@
 package com.instapopulars.instapopular.DAO;
 
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.DO_NOT_UNSUBSCRIBE;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.GROUPS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.HASHTAGS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.MY_PHOTO;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.PHOTO_ANALYSIS_RESULTS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.*;
 import com.instapopulars.instapopular.model.ViewMap;
 import com.instapopulars.instapopular.model.ViewSet;
 import java.io.File;
@@ -45,8 +41,8 @@ public class PropertiesDao {
         return getNameProperties(GROUPS_PATH);
     }
 
-    public Set<String> getDoNotUnsubscribe() throws IOException {
-        return getNameProperties(DO_NOT_UNSUBSCRIBE_PATH);
+    public Map<String, Integer> getDoNotUnsubscribe() throws IOException {
+        return getMapFromProperties(getProperties(DO_NOT_UNSUBSCRIBE_PATH));
     }
 
     public Map<String, Integer> getMyPhoto() throws IOException {
@@ -65,8 +61,8 @@ public class PropertiesDao {
         return addSetProperties(GROUPS_PATH, group);
     }
 
-    public Set<String> addDoNotUnsubscribe(String userName) throws IOException {
-        return addSetProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
+    public Map<String, Integer> addDoNotUnsubscribe(String userName, String countLike) throws IOException {
+        return getMapFromProperties(addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName, countLike));
     }
 
     public Map<String, Integer> addMyPhotos(Map<String, Integer> photos) throws IOException {
@@ -99,8 +95,8 @@ public class PropertiesDao {
         return removeSetProperties(GROUPS_PATH, group);
     }
 
-    public Set<String> removeDoNotUnsubscribe(String userName) throws IOException {
-        return removeSetProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
+    public Map<String, Integer> removeDoNotUnsubscribe(String userName) throws IOException {
+        return getMapFromProperties(removeProperties(DO_NOT_UNSUBSCRIBE_PATH, userName));
     }
 
     public Map<String, Integer> removeMyPhoto(String photo) throws IOException {
@@ -178,7 +174,12 @@ public class PropertiesDao {
     private Map<String, Integer> getMapFromProperties(Properties properties) {
         Map<String, Integer> resultMap = new HashMap<>();
         for (String name : properties.stringPropertyNames()) {
-            resultMap.put(name, Integer.parseInt(properties.getProperty(name)));
+            String value = properties.getProperty(name);
+            if (value != null && value.length() != 0){
+                resultMap.put(name, Integer.parseInt(value));
+                continue;
+            }
+            resultMap.put(name, 0);
         }
         return resultMap;
     }
