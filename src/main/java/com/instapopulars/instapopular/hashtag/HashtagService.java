@@ -2,9 +2,12 @@ package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.ViewSet;
+import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
-import static java.util.Collections.emptySet;
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.emptyList;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ public class HashtagService {
 
     public void topPublications(Action action) {
         try {
-            Set<String> hashtags = propertiesDao.getHestagFromProperties();
+            Set<String> hashtags = propertiesDao.getHestagFromProperties().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.topPublications(hashtag, action);
             }
@@ -33,7 +36,7 @@ public class HashtagService {
 
     public void newPublications(Action action, int countPhoto) {
         try {
-            Set<String> hashtags = propertiesDao.getHestagFromProperties();
+            Set<String> hashtags = propertiesDao.getHestagFromProperties().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.newPublications(action, countPhoto, hashtag);
             }
@@ -55,27 +58,33 @@ public class HashtagService {
         return false;
     }
 
-    public Set<ViewSet> addHestag(String userName) {
+    public List<ViewMap> addHestag(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.addHestagInProperties(userName));
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addHestagInProperties(userName)));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> removeHestag(String userName) {
+    public List<ViewMap> removeHestag(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.removeHestagFromProperties(userName));
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeHestagFromProperties(userName)));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> getHestags() {
+    public List<ViewMap> getHestags() {
         try {
-            return propertiesDao.revertSetView(propertiesDao.getHestagFromProperties());
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getHestagFromProperties()));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 }

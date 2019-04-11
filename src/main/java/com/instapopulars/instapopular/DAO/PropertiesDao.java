@@ -1,8 +1,9 @@
 package com.instapopulars.instapopular.DAO;
 
+import static com.instapopulars.instapopular.Constant.Attribute.SRC_MAIN_RESOURCES;
+import static com.instapopulars.instapopular.Constant.Attribute.TARGET_CLASSES;
 import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.*;
 import com.instapopulars.instapopular.model.ViewMap;
-import com.instapopulars.instapopular.model.ViewSet;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -28,17 +29,22 @@ public class PropertiesDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    private static String convertPath(String path) {
-        path = path.replace("target/classes", "src/main/resources");
-        return path;
+    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
+        HashSet<ViewMap> resultSet = new HashSet<>();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            resultSet.add(new ViewMap(entry.getKey(), entry.getValue()));
+        }
+        return resultSet;
     }
 
-    public Set<String> getHestagFromProperties() throws IOException {
-        return getNameProperties(HESHTEG_PATH);
+    //------
+
+    public Map<String, Integer> getHestagFromProperties() throws IOException {
+        return getMapFromProperties(getProperties(HESHTEG_PATH));
     }
 
-    public Set<String> getGroupsFromProperties() throws IOException {
-        return getNameProperties(GROUPS_PATH);
+    public Map<String, Integer> getGroupsFromProperties() throws IOException {
+        return getMapFromProperties(getProperties(GROUPS_PATH));
     }
 
     public Map<String, Integer> getDoNotUnsubscribe() throws IOException {
@@ -46,53 +52,53 @@ public class PropertiesDao {
     }
 
     public Map<String, Integer> getMyPhoto() throws IOException {
-        return getMapProperties(MY_PHOTO_PATH);
+        return getMapFromProperties(getProperties(MY_PHOTO_PATH));
     }
 
     public Map<String, Integer> getPhotoAnalysisResults() throws IOException {
-        return getMapProperties(PHOTO_ANALYSIS_RESULTS_PATH);
+        return getMapFromProperties(getProperties(PHOTO_ANALYSIS_RESULTS_PATH));
     }
 
-    public Set<String> addHestagInProperties(String hastag) throws IOException {
-        return addSetProperties(HESHTEG_PATH, hastag);
+    //------
+
+    public Map<String, Integer> addHestagInProperties(String hastag) throws IOException {
+        return getMapFromProperties(addProperties(HESHTEG_PATH, hastag, "0"));
     }
 
-    public Set<String> addGroupsInProperties(String group) throws IOException {
-        return addSetProperties(GROUPS_PATH, group);
+    public Map<String, Integer> addGroupsInProperties(String group) throws IOException {
+        return getMapFromProperties(addProperties(GROUPS_PATH, group, "0"));
     }
 
     public Map<String, Integer> addDoNotUnsubscribe(String userName, String countLike) throws IOException {
         return getMapFromProperties(addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName, countLike));
     }
 
-    public Map<String, Integer> addMyPhotos(Map<String, Integer> photos) throws IOException {
+    public Map<String, Integer> addMyPhoto(String key, String value) throws IOException {
+        return getMapFromProperties(addProperties(MY_PHOTO_PATH, key, value));
+    }
+
+    public void addMyPhotos(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
             addMyPhoto(entry.getKey(), String.valueOf(entry.getValue()));
         }
-        return getMyPhoto();
+        getMyPhoto();
     }
 
-    public Map<String, Integer> addMyPhoto(String key, String value) throws IOException {
-        return addMapProperties(MY_PHOTO_PATH, key, value);
-    }
-
-    public Map<String, Integer> addPhotoAnalysisResults(Map<String, Integer> photos) throws IOException {
+    public void addPhotoAnalysisResults(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
-            addPhotoAnalysisResults(entry.getKey(), String.valueOf(entry.getValue()));
+            getMapFromProperties(addProperties(PHOTO_ANALYSIS_RESULTS_PATH, entry.getKey(), String.valueOf(entry.getValue())));
         }
-        return getMyPhoto();
+        getMyPhoto();
     }
 
-    public Map<String, Integer> addPhotoAnalysisResults(String key, String value) throws IOException {
-        return addMapProperties(PHOTO_ANALYSIS_RESULTS_PATH, key, value);
+    //------
+
+    public Map<String, Integer> removeHestagFromProperties(String hastag) throws IOException {
+        return getMapFromProperties(removeProperties(HESHTEG_PATH, hastag));
     }
 
-    public Set<String> removeHestagFromProperties(String hastag) throws IOException {
-        return removeSetProperties(HESHTEG_PATH, hastag);
-    }
-
-    public Set<String> removeGroupsFromProperties(String group) throws IOException {
-        return removeSetProperties(GROUPS_PATH, group);
+    public Map<String, Integer> removeGroupsFromProperties(String group) throws IOException {
+        return getMapFromProperties(removeProperties(GROUPS_PATH, group));
     }
 
     public Map<String, Integer> removeDoNotUnsubscribe(String userName) throws IOException {
@@ -103,42 +109,12 @@ public class PropertiesDao {
         return getMapFromProperties(removeProperties(MY_PHOTO_PATH, photo));
     }
 
-    public Set<ViewSet> revertSetView(Set<String> set) {
-        Set<ViewSet> resultSet = new HashSet<>();
-        for (String str : set) {
-            resultSet.add(new ViewSet(str));
-        }
-        return resultSet;
-    }
-
-    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            resultSet.add(new ViewMap(entry.getKey(), entry.getValue()));
-        }
-        return resultSet;
-    }
-
-    private Map<String, Integer> getMapProperties(String path) throws IOException {
-        return getMapFromProperties(getProperties(path));
-    }
-
-    private Set<String> getNameProperties(String path) throws IOException {
-        return getProperties(path).stringPropertyNames();
-    }
+    //------
 
     private Properties getProperties(String path) throws IOException {
         Properties properties = new Properties();
         properties.load(new FileReader(new File(path)));
         return properties;
-    }
-
-    private Map<String, Integer> addMapProperties(String path, String key, String value) throws IOException {
-        return getMapFromProperties(addProperties(path, key, value));
-    }
-
-    private Set<String> addSetProperties(String path, String key) throws IOException {
-        return addProperties(path, key, "").stringPropertyNames();
     }
 
     private Properties addProperties(String path, String key, String value) throws IOException {
@@ -148,10 +124,6 @@ public class PropertiesDao {
         properties.put(key, value);
         properties.store(new FileWriter(file), null);
         return properties;
-    }
-
-    private Set<String> removeSetProperties(String path, String prop) throws IOException {
-        return removeProperties(path, prop).stringPropertyNames();
     }
 
     private Properties removeProperties(String path, String prop) throws IOException {
@@ -167,12 +139,17 @@ public class PropertiesDao {
         Map<String, Integer> resultMap = new HashMap<>();
         for (String name : properties.stringPropertyNames()) {
             String value = properties.getProperty(name);
-            if (value != null && value.length() != 0){
+            if (value != null && value.length() != 0) {
                 resultMap.put(name, Integer.parseInt(value));
                 continue;
             }
             resultMap.put(name, 0);
         }
         return resultMap;
+    }
+
+    private static String convertPath(String path) {
+        path = path.replace(TARGET_CLASSES, SRC_MAIN_RESOURCES);
+        return path;
     }
 }

@@ -16,6 +16,8 @@ public interface Constant {
         String REQUEST_SENT = "Запрос отправлен";
         String I_DO_NOT_LIKE = "Не нравится";
         String SUBSCRIPTIONS = "Подписки";
+        String TARGET_CLASSES = "target/classes";
+        String SRC_MAIN_RESOURCES = "src/main/resources";
     }
 
     interface Utils {

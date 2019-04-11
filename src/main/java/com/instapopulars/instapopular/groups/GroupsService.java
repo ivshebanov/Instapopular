@@ -2,9 +2,12 @@ package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.PropertiesDao;
-import com.instapopulars.instapopular.model.ViewSet;
+import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
-import static java.util.Collections.emptySet;
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.emptyList;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ public class GroupsService {
 
     public void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
-            Set<String> groups = propertiesDao.getGroupsFromProperties();
+            Set<String> groups = propertiesDao.getGroupsFromProperties().keySet();
             for (String urlGroup : groups) {
                 groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
@@ -43,27 +46,33 @@ public class GroupsService {
         return false;
     }
 
-    public Set<ViewSet> addGroup(String userName) {
+    public List<ViewMap> addGroup(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.addGroupsInProperties(userName));
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addGroupsInProperties(userName)));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> removeGroup(String userName) {
+    public List<ViewMap> removeGroup(String userName) {
         try {
-            return propertiesDao.revertSetView(propertiesDao.removeGroupsFromProperties(userName));
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeGroupsFromProperties(userName)));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 
-    public Set<ViewSet> getGroup() {
+    public List<ViewMap> getGroup() {
         try {
-            return propertiesDao.revertSetView(propertiesDao.getGroupsFromProperties());
+            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getGroupsFromProperties()));
+            Collections.sort(resultView);
+            return resultView;
         } catch (IOException e) {
-            return emptySet();
+            return emptyList();
         }
     }
 }
