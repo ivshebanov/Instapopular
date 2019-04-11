@@ -100,11 +100,7 @@ public class PropertiesDao {
     }
 
     public Map<String, Integer> removeMyPhoto(String photo) throws IOException {
-        return removeMapProperties(MY_PHOTO_PATH, photo);
-    }
-
-    public Map<String, Integer> removePhotoAnalysisResults(String userName) throws IOException {
-        return removeMapProperties(PHOTO_ANALYSIS_RESULTS_PATH, userName);
+        return getMapFromProperties(removeProperties(MY_PHOTO_PATH, photo));
     }
 
     public Set<ViewSet> revertSetView(Set<String> set) {
@@ -152,10 +148,6 @@ public class PropertiesDao {
         properties.put(key, value);
         properties.store(new FileWriter(file), null);
         return properties;
-    }
-
-    private Map<String, Integer> removeMapProperties(String path, String prop) throws IOException {
-        return getMapFromProperties(removeProperties(path, prop));
     }
 
     private Set<String> removeSetProperties(String path, String prop) throws IOException {
