@@ -22,9 +22,9 @@ public class UnsubscribeDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void unsubscribeFromUsers(int countSubscribers, Map<String, Integer> subscribers) {
+    void unsubscribeFromUsers(int countSubscribers, Map<String, Integer> subscribers) {
         logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
-        if (!instagramDao.openHomePage()) {
+        if (instagramDao.openHomePage()) {
             return;
         }
         Set<User> users = instagramDao.getUsersByUrls(subscribers.keySet());
@@ -57,10 +57,10 @@ public class UnsubscribeDao {
         return subscribers.contains(user);
     }
 
-    public Set<String> getAllSubscribers() {
+    Set<String> getAllSubscribers() {
         logger.info(GET_ALL_SUBSCRIBERS);
         Set<String> resultUser = new HashSet<>();
-        if (!instagramDao.openHomePage()) {
+        if (instagramDao.openHomePage()) {
             return resultUser;
         }
         String countSubscribersStr = instagramDao.getWebElement(60, COUNT_SUBSCRIBERS).getText();
@@ -91,15 +91,15 @@ public class UnsubscribeDao {
         return resultUrls;
     }
 
-    public void initDriver() {
+    void initDriver() {
         instagramDao.initDriver();
     }
 
-    public void quitDriver() {
+    void quitDriver() {
         instagramDao.quitDriver();
     }
 
-    public boolean loginOnWebSite(String login, String password) {
-        return instagramDao.loginOnWebSite(login, password);
+    void loginOnWebSite(String login, String password) {
+        instagramDao.loginOnWebSite(login, password);
     }
 }

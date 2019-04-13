@@ -24,17 +24,16 @@ public class AnalysisService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public boolean loginOnWebSite(String login, String password) {
+    public void loginOnWebSite(String login, String password) {
         try {
             analysisDao.initDriver();
-            return analysisDao.loginOnWebSite(login, password);
+            analysisDao.loginOnWebSite(login, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
-    public void runAnalysis() {
+    void runAnalysis() {
         try {
             Map<String, Integer> user = analysisDao.analysisPhotos(propertiesDao.getMyPhoto());
             propertiesDao.addPhotoAnalysisResults(analysisDao.addNewUser(propertiesDao.getPhotoAnalysisResults(), user));
@@ -45,10 +44,10 @@ public class AnalysisService {
         }
     }
 
-    public List<ViewMap> addMyPhoto(String userName) {
+    List<ViewMap> addMyPhoto(String userName) {
         try {
-            Map<String, Integer> currentMyPhoro = propertiesDao.getMyPhoto();
-            if (currentMyPhoro.containsKey(userName)) {
+            Map<String, Integer> currentMyPhoto = propertiesDao.getMyPhoto();
+            if (currentMyPhoto.containsKey(userName)) {
                 ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getMyPhoto()));
                 Collections.sort(resultView);
                 return resultView;
@@ -61,7 +60,7 @@ public class AnalysisService {
         }
     }
 
-    public List<ViewMap> removeMyPhoto(String userName) {
+    List<ViewMap> removeMyPhoto(String userName) {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeMyPhoto(userName)));
             Collections.sort(resultView);
@@ -71,7 +70,7 @@ public class AnalysisService {
         }
     }
 
-    public List<ViewMap> getAnalysisPhoto() {
+    List<ViewMap> getAnalysisPhoto() {
         try {
             List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
             Collections.sort(resultView);
@@ -81,7 +80,7 @@ public class AnalysisService {
         }
     }
 
-    public List<ViewMap> getMyPhoto() {
+    List<ViewMap> getMyPhoto() {
         try {
             List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getMyPhoto()));
             Collections.sort(resultView);
@@ -91,7 +90,7 @@ public class AnalysisService {
         }
     }
 
-    public String cutOfUrl(String url) {
+    String cutOfUrl(String url) {
         Pattern p = Pattern.compile(CUT_OF_URL);
         Matcher matcher = p.matcher(url);
         String result = "";
@@ -102,7 +101,7 @@ public class AnalysisService {
         return result;
     }
 
-    public void addFirstDoNotUnsubscribe(int count) {
+    void addFirstDoNotUnsubscribe(int count) {
         try {
             List<ViewMap> photoAnalysisResults = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
             Collections.sort(photoAnalysisResults);

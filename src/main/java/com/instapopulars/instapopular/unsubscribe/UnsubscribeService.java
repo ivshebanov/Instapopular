@@ -19,7 +19,7 @@ public class UnsubscribeService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public void unsubscribe(int count) {
+    void unsubscribe(int count) {
         try {
             unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
         } catch (Exception e) {
@@ -29,7 +29,7 @@ public class UnsubscribeService {
         }
     }
 
-    public void unsubscribeFromUnsigned(int count) {
+    void unsubscribeFromUnsigned(int count) {
         try {
             unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
         } catch (Exception e) {
@@ -39,18 +39,17 @@ public class UnsubscribeService {
         }
     }
 
-    public boolean loginOnWebSite(String login, String password) {
+    void loginOnWebSite(String login, String password) {
         try {
             unsubscribeDao.initDriver();
-            return unsubscribeDao.loginOnWebSite(login, password);
+            unsubscribeDao.loginOnWebSite(login, password);
         } catch (Exception e) {
             e.printStackTrace();
             unsubscribeDao.quitDriver();
         }
-        return false;
     }
 
-    public List<ViewMap> addDoNotUnsubscribeUser(String userName) {
+    List<ViewMap> addDoNotUnsubscribeUser(String userName) {
         try {
             List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addDoNotUnsubscribe(userName, "")));
             Collections.sort(resultView);
@@ -60,7 +59,7 @@ public class UnsubscribeService {
         }
     }
 
-    public List<ViewMap> removeDoNotUnsubscribeUser(String userName) {
+    List<ViewMap> removeDoNotUnsubscribeUser(String userName) {
         try {
             List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeDoNotUnsubscribe(userName)));
             Collections.sort(resultView);
@@ -70,7 +69,7 @@ public class UnsubscribeService {
         }
     }
 
-    public List<ViewMap> getDoNotUnsubscribeUser() {
+    List<ViewMap> getDoNotUnsubscribeUser() {
         try {
             List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getDoNotUnsubscribe()));
             Collections.sort(resultView);

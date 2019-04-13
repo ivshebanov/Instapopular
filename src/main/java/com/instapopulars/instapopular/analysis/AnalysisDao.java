@@ -34,7 +34,7 @@ public class AnalysisDao {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public Map<String, Integer> analysisPhotos(Map<String, Integer> photos) throws IOException {
+    Map<String, Integer> analysisPhotos(Map<String, Integer> photos) throws IOException {
         if (photos == null || photos.size() == 0) {
             return null;
         }
@@ -122,7 +122,7 @@ public class AnalysisDao {
         }
     }
 
-    public Map<String, Integer> addNewUser(Map<String, Integer> oldUser, Map<String, Integer> newUser) {
+    Map<String, Integer> addNewUser(Map<String, Integer> oldUser, Map<String, Integer> newUser) {
         for (Map.Entry<String, Integer> user : newUser.entrySet()) {
             if (oldUser.containsKey(user.getKey())) {
                 oldUser.put(user.getKey(), oldUser.get(user.getKey()) + user.getValue());
@@ -133,15 +133,15 @@ public class AnalysisDao {
         return oldUser;
     }
 
-    public void initDriver() {
+    void initDriver() {
         instagramDao.initDriver();
     }
 
-    public void quitDriver() {
+    void quitDriver() {
         instagramDao.quitDriver();
     }
 
-    public boolean loginOnWebSite(String login, String password) {
-        return instagramDao.loginOnWebSite(login, password);
+    void loginOnWebSite(String login, String password) {
+        instagramDao.loginOnWebSite(login, password);
     }
 }

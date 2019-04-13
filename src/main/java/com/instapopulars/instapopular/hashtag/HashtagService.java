@@ -21,7 +21,7 @@ public class HashtagService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public void topPublications(Action action) {
+    void topPublications(Action action) {
         try {
             Set<String> hashtags = propertiesDao.getHestagFromProperties().keySet();
             for (String hashtag : hashtags) {
@@ -47,18 +47,17 @@ public class HashtagService {
         }
     }
 
-    public boolean loginOnWebSite(String login, String password) {
+    void loginOnWebSite(String login, String password) {
         try {
             hashtagDao.initDriver();
-            return hashtagDao.loginOnWebSite(login, password);
+            hashtagDao.loginOnWebSite(login, password);
         } catch (Exception e) {
             e.printStackTrace();
             hashtagDao.quitDriver();
         }
-        return false;
     }
 
-    public List<ViewMap> addHestag(String userName) {
+    List<ViewMap> addHestag(String userName) {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addHestagInProperties(userName)));
             Collections.sort(resultView);
@@ -68,7 +67,7 @@ public class HashtagService {
         }
     }
 
-    public List<ViewMap> removeHestag(String userName) {
+    List<ViewMap> removeHestag(String userName) {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeHestagFromProperties(userName)));
             Collections.sort(resultView);
@@ -78,7 +77,7 @@ public class HashtagService {
         }
     }
 
-    public List<ViewMap> getHestags() {
+    List<ViewMap> getHestags() {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getHestagFromProperties()));
             Collections.sort(resultView);

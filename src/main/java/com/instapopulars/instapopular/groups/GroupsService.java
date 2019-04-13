@@ -21,7 +21,7 @@ public class GroupsService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public void subscribeToUsersInGroup(int countSubscriptions, Action action) {
+    void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
             Set<String> groups = propertiesDao.getGroupsFromProperties().keySet();
             for (String urlGroup : groups) {
@@ -35,18 +35,17 @@ public class GroupsService {
         }
     }
 
-    public boolean loginOnWebSite(String login, String password) {
+    void loginOnWebSite(String login, String password) {
         try {
             groupsDao.initDriver();
-            return groupsDao.loginOnWebSite(login, password);
+            groupsDao.loginOnWebSite(login, password);
         } catch (Exception e) {
             e.printStackTrace();
             groupsDao.quitDriver();
         }
-        return false;
     }
 
-    public List<ViewMap> addGroup(String userName) {
+    List<ViewMap> addGroup(String userName) {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addGroupsInProperties(userName)));
             Collections.sort(resultView);
@@ -56,7 +55,7 @@ public class GroupsService {
         }
     }
 
-    public List<ViewMap> removeGroup(String userName) {
+    List<ViewMap> removeGroup(String userName) {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeGroupsFromProperties(userName)));
             Collections.sort(resultView);
@@ -66,7 +65,7 @@ public class GroupsService {
         }
     }
 
-    public List<ViewMap> getGroup() {
+    List<ViewMap> getGroup() {
         try {
             ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getGroupsFromProperties()));
             Collections.sort(resultView);

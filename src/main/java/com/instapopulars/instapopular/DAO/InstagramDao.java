@@ -4,19 +4,11 @@ import static com.instapopulars.instapopular.Constant.Attribute.ARIA_LABEL;
 import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.CHECK_LOGIN_BY_NAME;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PASSWORD_INPUT;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.SET_LIKE;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.SUBSCRIBE;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
@@ -56,11 +48,10 @@ public class InstagramDao {
     private WebDriver driver;
     private String login;
 
-    public WebDriver initDriver() {
+    public void initDriver() {
         logger.info(System.getProperty(OS_NAME));
         logger.info(format(GET_DRIVER, Calendar.getInstance()));
         initChromeDriver();
-        return driver;
     }
 
     public void quitDriver() {
@@ -97,7 +88,7 @@ public class InstagramDao {
             openUrl(format(HOME_PAGE, login));
         }
         String accountName = getWebElement(60, ACCOUNT_NAME).getText();
-        return login.equalsIgnoreCase(accountName);
+        return !login.equalsIgnoreCase(accountName);
     }
 
     public int convertStringToInt(String count) {
@@ -160,7 +151,7 @@ public class InstagramDao {
         return user;
     }
 
-    public String genLoginByUrl(String url) {
+    private String genLoginByUrl(String url) {
         return url.substring(26, url.length() - 1);
     }
 
@@ -178,18 +169,13 @@ public class InstagramDao {
         return openUrl(url);
     }
 
-    public void selectTab(int countTab) {
+    private void selectTab(int countTab) {
         ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         selectTab(tabs.get(countTab));
     }
 
     public void selectTab(String windowHandle) {
         driver.switchTo().window(windowHandle);
-    }
-
-    public void closeTab(int countTab) {
-        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-        closeTab(tabs.get(countTab));
     }
 
     public void closeTab(String windowHandle) {
@@ -203,7 +189,7 @@ public class InstagramDao {
         boolean checkLike = false;
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
-            if (!isActiveLike()) {
+            if (isNotActiveLike()) {
                 getWebElement(60, SET_LIKE).click();
                 checkLike = true;
             }
@@ -222,7 +208,7 @@ public class InstagramDao {
         boolean checkSubscribe = false;
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
-            if (!isSubscribe()) {
+            if (isNotSubscribe()) {
                 getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
@@ -242,10 +228,10 @@ public class InstagramDao {
         boolean checkSubscribe = false;
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
-            if (!isActiveLike()) {
+            if (isNotActiveLike()) {
                 getWebElement(60, SET_LIKE).click();
             }
-            if (!isSubscribe()) {
+            if (isNotSubscribe()) {
                 getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
@@ -263,18 +249,14 @@ public class InstagramDao {
         return driver.getCurrentUrl();
     }
 
-    private boolean isActiveLike() {
+    private boolean isNotActiveLike() {
         String ariaLable = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
-        return I_DO_NOT_LIKE.equalsIgnoreCase(ariaLable);
+        return !I_DO_NOT_LIKE.equalsIgnoreCase(ariaLable);
     }
 
-    private boolean isSubscribe() {
+    private boolean isNotSubscribe() {
         String ariaLable = getWebElement(60, SUBSCRIBE).getText();
-        return SUBSCRIPTIONS.equalsIgnoreCase(ariaLable);
-    }
-
-    public WebDriver getDriver() {
-        return driver;
+        return !SUBSCRIPTIONS.equalsIgnoreCase(ariaLable);
     }
 
     public String getLogin() {

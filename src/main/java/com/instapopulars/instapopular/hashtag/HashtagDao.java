@@ -2,11 +2,8 @@ package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_NEW_PUBLICATIONS;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_TOP_PUBLICATIONS;
-import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.*;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HASHTAG_PAGE;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import static java.lang.String.format;
@@ -26,7 +23,7 @@ public class HashtagDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void topPublications(String hashtag, Action action) {
+    void topPublications(String hashtag, Action action) {
         logger.info(format(SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
         if (hashtag == null || hashtag.length() == 0 || action == null) {
             return;
@@ -39,7 +36,7 @@ public class HashtagDao {
         choiceOfAction(action, linkTopPublications);
     }
 
-    public void newPublications(Action action, int countPhoto, String hashtag) {
+    void newPublications(Action action, int countPhoto, String hashtag) {
         logger.info(format(SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG, hashtag, countPhoto));
         if (hashtag == null || hashtag.length() == 0 || action == null || countPhoto == 0) {
             return;
@@ -118,15 +115,15 @@ public class HashtagDao {
         return resultUrls;
     }
 
-    public void initDriver() {
+    void initDriver() {
         instagramDao.initDriver();
     }
 
-    public void quitDriver() {
+    void quitDriver() {
         instagramDao.quitDriver();
     }
 
-    public boolean loginOnWebSite(String login, String password) {
-        return instagramDao.loginOnWebSite(login, password);
+    void loginOnWebSite(String login, String password) {
+        instagramDao.loginOnWebSite(login, password);
     }
 }

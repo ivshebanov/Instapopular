@@ -4,11 +4,8 @@ import com.instapopulars.instapopular.Action;
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
 import static com.instapopulars.instapopular.Constant.Attribute.REQUEST_SENT;
 import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.Xpath.*;
 import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
@@ -30,7 +27,7 @@ public class GroupsDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    public void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
+    void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
         logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
         if (channelName == null || countSubscriptions <= 0 || action == null) {
             return;
@@ -91,7 +88,7 @@ public class GroupsDao {
         }
     }
 
-    private void subscribed(Action action, int i) throws InterruptedException {
+    private void subscribed(Action action, int i) {
 
     }
 
@@ -110,15 +107,15 @@ public class GroupsDao {
         return (webElement == null) ? 0 : webElement.size();
     }
 
-    public void initDriver() {
+    void initDriver() {
         instagramDao.initDriver();
     }
 
-    public void quitDriver() {
+    void quitDriver() {
         instagramDao.quitDriver();
     }
 
-    public boolean loginOnWebSite(String login, String password) {
-        return instagramDao.loginOnWebSite(login, password);
+    void loginOnWebSite(String login, String password) {
+        instagramDao.loginOnWebSite(login, password);
     }
 }
