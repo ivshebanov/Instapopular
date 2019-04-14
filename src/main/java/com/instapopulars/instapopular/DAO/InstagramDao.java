@@ -6,6 +6,7 @@ import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
 import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
 import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.DID_NOT_FIND_THE_BUTTON;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
 import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -78,7 +80,12 @@ public class InstagramDao {
         openUrl(LOGIN_PAGE);
         getWebElement(60, LOGIN_USERNAME_INPUT).sendKeys(login);
         getWebElement(60, LOGIN_PASSWORD_INPUT).sendKeys(password);
-        getWebElement(60, LOGIN_BUTTON).click();
+        try {
+            getWebElement(20, LOGIN_BUTTON_4).click();
+        } catch (TimeoutException ex) {
+            logger.error(format(DID_NOT_FIND_THE_BUTTON, LOGIN_BUTTON_4, LOGIN_BUTTON_5));
+            getWebElement(20, LOGIN_BUTTON_5).click();
+        }
         String accountName = getWebElement(120, CHECK_LOGIN_BY_NAME).getText();
         return login.equalsIgnoreCase(accountName);
     }

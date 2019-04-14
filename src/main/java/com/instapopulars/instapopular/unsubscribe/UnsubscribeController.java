@@ -31,7 +31,7 @@ public class UnsubscribeController {
         }
         unsubscribeService.loginOnWebSite(login, password);
         unsubscribeService.unsubscribe(countUnsubscribe);
-        unsubscribeService.getDoNotUnsubscribeUser();
+        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
         return "unsubscribe";
     }
 

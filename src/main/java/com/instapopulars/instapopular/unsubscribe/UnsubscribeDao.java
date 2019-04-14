@@ -1,6 +1,7 @@
 package com.instapopulars.instapopular.unsubscribe;
 
 import static com.instapopulars.instapopular.Constant.Attribute.HREF;
+import static com.instapopulars.instapopular.Constant.Attribute.TITLE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.*;
 import com.instapopulars.instapopular.DAO.InstagramDao;
@@ -22,20 +23,17 @@ public class UnsubscribeDao {
     @Autowired
     private InstagramDao instagramDao;
 
-    void unsubscribeFromUsers(int countSubscribers, Map<String, Integer> subscribers) {
-        logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers));
+    void unsubscribeFromUsers(int countSubscribers, Set<String> subscribers) {
+        logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers, subscribers.size()));
         if (instagramDao.openHomePage()) {
             return;
         }
-        Set<User> users = instagramDao.getUsersByUrls(subscribers.keySet());
         instagramDao.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramDao.scrollSubscriptions(20);
         for (int i = 1; i <= countSubscribers; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                if (users != null
-                        && users.size() != 0
-                        && isSubscribed(users, format(USER_LINK_TO_SUBSCRIBERS, i))) {
+                if (subscribers.size() != 0 && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
                     i++;
                     continue;
                 }
@@ -51,10 +49,9 @@ public class UnsubscribeDao {
 
     }
 
-    private boolean isSubscribed(Set<User> subscribers, String xpath) {
-        String url = instagramDao.getWebElement(60, xpath).getAttribute(HREF);
-        User user = instagramDao.getUserByUrl(url);
-        return subscribers.contains(user);
+    private boolean isSubscribed(Set<String> subscribers, String xpath) {
+        String url = instagramDao.getWebElement(60, xpath).getAttribute(TITLE);
+        return subscribers.contains(url);
     }
 
     Set<String> getAllSubscribers() {

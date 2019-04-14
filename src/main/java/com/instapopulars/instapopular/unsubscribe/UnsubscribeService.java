@@ -21,7 +21,7 @@ public class UnsubscribeService {
 
     void unsubscribe(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
+            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe().keySet());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -31,7 +31,7 @@ public class UnsubscribeService {
 
     void unsubscribeFromUnsigned(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe());
+            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe().keySet());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

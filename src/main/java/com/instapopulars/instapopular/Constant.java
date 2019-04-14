@@ -11,6 +11,7 @@ public interface Constant {
 
     interface Attribute {
 
+        String TITLE = "title";
         String HREF = "href";
         String ARIA_LABEL = "aria-label";
         String REQUEST_SENT = "Запрос отправлен";
@@ -75,13 +76,15 @@ public interface Constant {
 
         interface MessageConstants {
             String LOGIN_ON_WEB_SITE = "loginOnWebSite(%s, %s)";
+            String DID_NOT_FIND_THE_BUTTON = "Не нашел кнопку %s, нажимаем на %s";
         }
 
         interface Xpath {
             String LOGIN_USERNAME_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='username']";
             String LOGIN_PASSWORD_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='password']";
             String CHECK_LOGIN_BY_NAME = "//*[@id=\"react-root\"]//div[1]/div/div[2]/div[1]/a";
-            String LOGIN_BUTTON = "//form/div[4]/button";
+            String LOGIN_BUTTON_4 = "//form/div[4]/button";
+            String LOGIN_BUTTON_5 = "//form/div[5]/button";
             String IS_ACTIVE_LIKE = "//div[2]/section[1]/span[1]/button/span";
             String SET_LIKE = "//div[2]/section[1]/span[1]/button";
             String SUBSCRIBE = "//*[@id=\"react-root\"]//div[2]/div[1]/div[2]/button";
@@ -95,7 +98,7 @@ public interface Constant {
     interface UnsubscribeConstant {
 
         interface MessageConstants {
-            String UNSUBSCRIBE_FROM_USERS = "unsubscribeFromUsers(%d)";
+            String UNSUBSCRIBE_FROM_USERS = "unsubscribeFromUsers(%d, %d)";
             String UNSUBSCRIBED_FROM = "unsubscribed from %d";
             String GET_ALL_SUBSCRIBERS = "getAllSubscribers()";
         }
