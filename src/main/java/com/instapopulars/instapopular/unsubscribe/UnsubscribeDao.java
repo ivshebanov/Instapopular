@@ -5,10 +5,8 @@ import static com.instapopulars.instapopular.Constant.Attribute.TITLE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.*;
 import com.instapopulars.instapopular.DAO.InstagramDao;
-import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +32,7 @@ public class UnsubscribeDao {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
                 if (subscribers.size() != 0 && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
-                    i++;
+                    countSubscribers += 1;
                     continue;
                 }
                 instagramDao.timeOut(150, 50);
