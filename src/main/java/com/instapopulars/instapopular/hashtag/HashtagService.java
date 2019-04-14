@@ -9,11 +9,15 @@ import java.util.Collections;
 import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HashtagService {
+
+    private static final Logger logger = LogManager.getLogger(HashtagService.class);
 
     @Autowired
     private HashtagDao hashtagDao;
@@ -28,7 +32,7 @@ public class HashtagService {
                 hashtagDao.topPublications(hashtag, action);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             hashtagDao.quitDriver();
         }
@@ -41,7 +45,7 @@ public class HashtagService {
                 hashtagDao.newPublications(action, countPhoto, hashtag);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             hashtagDao.quitDriver();
         }
@@ -52,28 +56,24 @@ public class HashtagService {
             hashtagDao.initDriver();
             hashtagDao.loginOnWebSite(login, password);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             hashtagDao.quitDriver();
         }
     }
 
-    List<ViewMap> addHestag(String userName) {
+    void addHestag(String userName) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addHestagInProperties(userName)));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.addHestagInProperties(userName);
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> removeHestag(String userName) {
+    void removeHestag(String userName) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeHestagFromProperties(userName)));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.removeHestagFromProperties(userName);
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 

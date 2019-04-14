@@ -26,12 +26,10 @@ public class HashtagController {
                                    @RequestParam(name = "action", defaultValue = "LIKE") Action action,
                                    Map<String, Object> view) {
 
-        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || action == null) {
-            view.put("hashtagView", hashtagService.getHestags());
-            return "hashtags";
+        if ((login != null && login.length() > 0) || (password != null && password.length() > 0)) {
+            hashtagService.loginOnWebSite(login, password);
+            hashtagService.topPublications(action);
         }
-        hashtagService.loginOnWebSite(login, password);
-        hashtagService.topPublications(action);
         view.put("hashtagView", hashtagService.getHestags());
         return "hashtags";
     }
@@ -41,25 +39,12 @@ public class HashtagController {
                             @RequestParam(name = "removeHashtag") String remove,
                             Map<String, Object> view) {
 
-        if ((add != null && add.length() > 0) && (remove != null && remove.length() > 0)) {
-            view.put("hashtagView", hashtagService.getHestags());
-            return "hashtags";
-        }
         if (add != null && add.length() > 0) {
-            view.put("hashtagView", hashtagService.addHestag(add));
-            return "hashtags";
-        }
-        if (remove != null && remove.length() > 0) {
-            view.put("hashtagView", hashtagService.removeHestag(remove));
-            return "hashtags";
+            hashtagService.addHestag(add);
+        } else if (remove != null && remove.length() > 0) {
+            hashtagService.removeHestag(remove);
         }
         view.put("hashtagView", hashtagService.getHestags());
         return "hashtags";
-    }
-
-    @PostMapping("/new")
-    private void newPublications() {
-//        hashtagService.loginOnWebSite(LOGIN, PASSWORD);
-//        hashtagService.newPublications(SUBSCRIBE_AND_LIKE, 50);
     }
 }

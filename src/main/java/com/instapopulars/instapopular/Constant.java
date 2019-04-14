@@ -136,6 +136,5 @@ public interface Constant {
         String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/a/span";
         String LINE_BREAK = "\n";
         String CUT_OF_URL = "p/.*";
-        String SLASH = "/";
     }
 }

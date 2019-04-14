@@ -52,7 +52,7 @@ public class HashtagDao {
     private List<WebElement> getNewPublication(int countPhoto) {
         List<WebElement> newPublication = new ArrayList<>();
         int countRow = countPhoto / 3 + 1;
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= countRow; i++) {
             newPublication.addAll(instagramDao.getWebElements(60, format(PATH_SEARCH_NEW_PUBLICATIONS, i)));
             scrollElement(i);
         }

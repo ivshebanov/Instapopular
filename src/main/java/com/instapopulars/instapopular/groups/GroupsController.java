@@ -27,14 +27,10 @@ public class GroupsController {
                         @RequestParam(name = "action", defaultValue = "SUBSCRIBE_AND_LIKE") Action action,
                         Map<String, Object> view) {
 
-        if (login == null || login.length() <= 0
-                || password == null || password.length() <= 0
-                || countSubscriptions < 0 || action == null) {
-            view.put("groupView", groupsService.getGroup());
-            return "groups";
+        if ((login != null && login.length() > 0) || (password != null && password.length() > 0)) {
+            groupsService.loginOnWebSite(login, password);
+            groupsService.subscribeToUsersInGroup(countSubscriptions, action);
         }
-        groupsService.loginOnWebSite(login, password);
-        groupsService.subscribeToUsersInGroup(countSubscriptions, action);
         view.put("groupView", groupsService.getGroup());
         return "groups";
     }
@@ -44,17 +40,10 @@ public class GroupsController {
                             @RequestParam(name = "removeGroup") String remove,
                             Map<String, Object> view) {
 
-        if ((add != null && add.length() > 0) && (remove != null && remove.length() > 0)) {
-            view.put("groupView", groupsService.getGroup());
-            return "groups";
-        }
         if (add != null && add.length() > 0) {
-            view.put("groupView", groupsService.addGroup(add));
-            return "groups";
-        }
-        if (remove != null && remove.length() > 0) {
-            view.put("groupView", groupsService.removeGroup(remove));
-            return "groups";
+            groupsService.addGroup(add);
+        } else if (remove != null && remove.length() > 0) {
+            groupsService.removeGroup(remove);
         }
         view.put("groupView", groupsService.getGroup());
         return "groups";

@@ -41,7 +41,6 @@ public class GroupsDao {
         for (int i = 1; i <= countSubscriptions; i++) {
             try {
                 instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                subscribed(action, i);
                 if (action == Action.SUBSCRIBE || action == Action.SUBSCRIBE_AND_LIKE) {
                     if (isSubscribed(format(IS_SUBSCRIBED, i))) {
                         countSubscriptions++;
@@ -86,10 +85,6 @@ public class GroupsDao {
                 instagramDao.selectTab(baseWindowHandle);
             }
         }
-    }
-
-    private void subscribed(Action action, int i) {
-
     }
 
     private boolean isSubscribed(String xpath) {

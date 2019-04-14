@@ -68,10 +68,10 @@ public class InstagramDao {
         driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
     }
 
-    public boolean loginOnWebSite(String login, String password) {
+    public void loginOnWebSite(String login, String password) {
         logger.info(format(LOGIN_ON_WEB_SITE, login, password));
         if (login == null || login.length() == 0 || password == null || password.length() == 0) {
-            return false;
+            return;
         }
         this.login = login;
         openUrl(LOGIN_PAGE);
@@ -84,7 +84,6 @@ public class InstagramDao {
             getWebElement(20, LOGIN_BUTTON_5).click();
         }
         String accountName = getWebElement(120, CHECK_LOGIN_BY_NAME).getText();
-        return login.equalsIgnoreCase(accountName);
     }
 
     public boolean openHomePage() {
@@ -242,10 +241,6 @@ public class InstagramDao {
     private boolean isNotSubscribe() {
         String ariaLable = getWebElement(60, SUBSCRIBE).getText();
         return !SUBSCRIPTIONS.equalsIgnoreCase(ariaLable);
-    }
-
-    public String getLogin() {
-        return login;
     }
 
     public WebElement getWebElement(int timeOutInSeconds, String xpathExpression) {

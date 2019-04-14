@@ -25,12 +25,10 @@ public class UnsubscribeController {
                          @RequestParam(name = "countUnsubscribe", defaultValue = "400") int countUnsubscribe,
                          Map<String, Object> view) {
 
-        if (login == null || login.length() <= 0 || password == null || password.length() <= 0 || countUnsubscribe < 0) {
-            view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
-            return "unsubscribe";
+        if ((login != null && login.length() > 0) || (password != null && password.length() > 0)) {
+            unsubscribeService.loginOnWebSite(login, password);
+            unsubscribeService.unsubscribe(countUnsubscribe);
         }
-        unsubscribeService.loginOnWebSite(login, password);
-        unsubscribeService.unsubscribe(countUnsubscribe);
         view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
         return "unsubscribe";
     }
@@ -40,17 +38,10 @@ public class UnsubscribeController {
                             @RequestParam(name = "removeGroup") String remove,
                             Map<String, Object> view) {
 
-        if ((add != null && add.length() > 0) && (remove != null && remove.length() > 0)) {
-            view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
-            return "unsubscribe";
-        }
         if (add != null && add.length() > 0) {
-            view.put("groupView", unsubscribeService.addDoNotUnsubscribeUser(add));
-            return "unsubscribe";
-        }
-        if (remove != null && remove.length() > 0) {
-            view.put("groupView", unsubscribeService.removeDoNotUnsubscribeUser(remove));
-            return "unsubscribe";
+            unsubscribeService.addDoNotUnsubscribeUser(add);
+        } else if (remove != null && remove.length() > 0) {
+            unsubscribeService.removeDoNotUnsubscribeUser(remove);
         }
         view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
         return "unsubscribe";

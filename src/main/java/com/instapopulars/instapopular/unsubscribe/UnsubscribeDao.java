@@ -1,12 +1,10 @@
 package com.instapopulars.instapopular.unsubscribe;
 
-import static com.instapopulars.instapopular.Constant.Attribute.HREF;
 import static com.instapopulars.instapopular.Constant.Attribute.TITLE;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.MessageConstants.*;
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.*;
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import static java.lang.String.format;
-import java.util.HashSet;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,40 +48,6 @@ public class UnsubscribeDao {
     private boolean isSubscribed(Set<String> subscribers, String xpath) {
         String url = instagramDao.getWebElement(60, xpath).getAttribute(TITLE);
         return subscribers.contains(url);
-    }
-
-    Set<String> getAllSubscribers() {
-        logger.info(GET_ALL_SUBSCRIBERS);
-        Set<String> resultUser = new HashSet<>();
-        if (instagramDao.openHomePage()) {
-            return resultUser;
-        }
-        String countSubscribersStr = instagramDao.getWebElement(60, COUNT_SUBSCRIBERS).getText();
-        int countSubscribers = instagramDao.convertStringToInt(countSubscribersStr);
-        instagramDao.getWebElement(60, OPEN_SUBSCRIBERS).click();
-        if (countSubscribers > 2400) {
-            resultUser.addAll(getUserLinks(2400));
-        }
-        if (countSubscribers < 2400) {
-            resultUser.addAll(getUserLinks(countSubscribers));
-        }
-        return resultUser;
-    }
-
-    private Set<String> getUserLinks(int count) {
-        Set<String> resultUrls = new HashSet<>();
-        instagramDao.scrollSubscriptions(20);
-        for (int i = 1; i < count; i++) {
-            try {
-                instagramDao.scrollElementSubscriptions(format(SCROLL, i));
-                String url = instagramDao.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
-                resultUrls.add(url);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                instagramDao.scrollSubscriptions(i);
-            }
-        }
-        return resultUrls;
     }
 
     void initDriver() {

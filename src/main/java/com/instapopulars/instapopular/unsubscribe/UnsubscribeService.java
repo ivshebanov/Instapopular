@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import static java.util.Collections.emptyList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UnsubscribeService {
+
+    private static final Logger logger = LogManager.getLogger(UnsubscribeService.class);
 
     @Autowired
     private UnsubscribeDao unsubscribeDao;
@@ -23,17 +27,7 @@ public class UnsubscribeService {
         try {
             unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe().keySet());
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            unsubscribeDao.quitDriver();
-        }
-    }
-
-    void unsubscribeFromUnsigned(int count) {
-        try {
-            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe().keySet());
-        } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             unsubscribeDao.quitDriver();
         }
@@ -44,28 +38,24 @@ public class UnsubscribeService {
             unsubscribeDao.initDriver();
             unsubscribeDao.loginOnWebSite(login, password);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             unsubscribeDao.quitDriver();
         }
     }
 
-    List<ViewMap> addDoNotUnsubscribeUser(String userName) {
+    void addDoNotUnsubscribeUser(String userName) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addDoNotUnsubscribe(userName, "")));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.addDoNotUnsubscribe(userName, "");
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> removeDoNotUnsubscribeUser(String userName) {
+    void removeDoNotUnsubscribeUser(String userName) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeDoNotUnsubscribe(userName)));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.removeDoNotUnsubscribe(userName);
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 

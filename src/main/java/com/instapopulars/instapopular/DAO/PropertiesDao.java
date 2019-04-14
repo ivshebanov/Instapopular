@@ -61,52 +61,50 @@ public class PropertiesDao {
 
     //------
 
-    public Map<String, Integer> addHestagInProperties(String hastag) throws IOException {
-        return getMapFromProperties(addProperties(HESHTEG_PATH, hastag, "0"));
+    public void addHestagInProperties(String hastag) throws IOException {
+        addProperties(HESHTEG_PATH, hastag, "0");
     }
 
-    public Map<String, Integer> addGroupsInProperties(String group) throws IOException {
-        return getMapFromProperties(addProperties(GROUPS_PATH, group, "0"));
+    public void addGroupsInProperties(String group) throws IOException {
+        addProperties(GROUPS_PATH, group, "0");
     }
 
-    public Map<String, Integer> addDoNotUnsubscribe(String userName, String countLike) throws IOException {
-        return getMapFromProperties(addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName, countLike));
+    public void addDoNotUnsubscribe(String userName, String countLike) throws IOException {
+        addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName, countLike);
     }
 
-    public Map<String, Integer> addMyPhoto(String key, String value) throws IOException {
-        return getMapFromProperties(addProperties(MY_PHOTO_PATH, key, value));
+    public void addMyPhoto(String key, String value) throws IOException {
+        addProperties(MY_PHOTO_PATH, key, value);
     }
 
     public void addMyPhotos(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
             addMyPhoto(entry.getKey(), String.valueOf(entry.getValue()));
         }
-        getMyPhoto();
     }
 
     public void addPhotoAnalysisResults(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
-            getMapFromProperties(addProperties(PHOTO_ANALYSIS_RESULTS_PATH, entry.getKey(), String.valueOf(entry.getValue())));
+            addProperties(PHOTO_ANALYSIS_RESULTS_PATH, entry.getKey(), String.valueOf(entry.getValue()));
         }
-        getMyPhoto();
     }
 
     //------
 
-    public Map<String, Integer> removeHestagFromProperties(String hastag) throws IOException {
-        return getMapFromProperties(removeProperties(HESHTEG_PATH, hastag));
+    public void removeHestagFromProperties(String hastag) throws IOException {
+        removeProperties(HESHTEG_PATH, hastag);
     }
 
-    public Map<String, Integer> removeGroupsFromProperties(String group) throws IOException {
-        return getMapFromProperties(removeProperties(GROUPS_PATH, group));
+    public void removeGroupsFromProperties(String group) throws IOException {
+        removeProperties(GROUPS_PATH, group);
     }
 
-    public Map<String, Integer> removeDoNotUnsubscribe(String userName) throws IOException {
-        return getMapFromProperties(removeProperties(DO_NOT_UNSUBSCRIBE_PATH, userName));
+    public void removeDoNotUnsubscribe(String userName) throws IOException {
+        removeProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
     }
 
-    public Map<String, Integer> removeMyPhoto(String photo) throws IOException {
-        return getMapFromProperties(removeProperties(MY_PHOTO_PATH, photo));
+    public void removeMyPhoto(String photo) throws IOException {
+        removeProperties(MY_PHOTO_PATH, photo);
     }
 
     //------
@@ -117,22 +115,20 @@ public class PropertiesDao {
         return properties;
     }
 
-    private Properties addProperties(String path, String key, String value) throws IOException {
+    private void addProperties(String path, String key, String value) throws IOException {
         File file = new File(path);
         Properties properties = new Properties();
         properties.load(new FileReader(file));
         properties.put(key, value);
         properties.store(new FileWriter(file), null);
-        return properties;
     }
 
-    private Properties removeProperties(String path, String prop) throws IOException {
+    private void removeProperties(String path, String prop) throws IOException {
         File file = new File(path);
         Properties properties = new Properties();
         properties.load(new FileReader(file));
         properties.remove(prop);
         properties.store(new FileWriter(file), null);
-        return properties;
     }
 
     private Map<String, Integer> getMapFromProperties(Properties properties) {

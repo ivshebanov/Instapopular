@@ -9,11 +9,15 @@ import java.util.Collections;
 import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GroupsService {
+
+    private static final Logger logger = LogManager.getLogger(GroupsService.class);
 
     @Autowired
     private GroupsDao groupsDao;
@@ -29,7 +33,7 @@ public class GroupsService {
             }
             System.out.println();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             groupsDao.quitDriver();
         }
@@ -40,28 +44,24 @@ public class GroupsService {
             groupsDao.initDriver();
             groupsDao.loginOnWebSite(login, password);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             groupsDao.quitDriver();
         }
     }
 
-    List<ViewMap> addGroup(String userName) {
+    void addGroup(String userName) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.addGroupsInProperties(userName)));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.addGroupsInProperties(userName);
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> removeGroup(String userName) {
+    void removeGroup(String userName) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.removeGroupsFromProperties(userName)));
-            Collections.sort(resultView);
-            return resultView;
+            propertiesDao.removeGroupsFromProperties(userName);
         } catch (IOException e) {
-            return emptyList();
+            logger.error(e.getMessage(), e);
         }
     }
 
