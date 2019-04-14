@@ -16,15 +16,12 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import static com.instapopulars.instapopular.Constant.Utils.OS_NAME;
 import static com.instapopulars.instapopular.Utils.getChromeDriver;
-import com.instapopulars.instapopular.model.User;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -141,25 +138,6 @@ public class InstagramDao {
         Coordinates coordinate = ((Locatable) scroll).getCoordinates();
         coordinate.onPage();
         coordinate.inViewPort();
-    }
-
-    public Set<User> getUsersByUrls(Set<String> logins) {
-        Set<User> resultUsers = new HashSet<>();
-        for (String login : logins) {
-            resultUsers.add(getUserByUrl(format(HOME_PAGE, login)));
-        }
-        return resultUsers;
-    }
-
-    public User getUserByUrl(String url) {
-        User user = new User();
-        user.setLinkAccount(url);
-        user.setName(genLoginByUrl(url));
-        return user;
-    }
-
-    private String genLoginByUrl(String url) {
-        return url.substring(26, url.length() - 1);
     }
 
     public String openUrl(String url) {
