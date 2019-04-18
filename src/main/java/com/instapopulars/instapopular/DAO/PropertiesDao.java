@@ -15,6 +15,8 @@ import static java.util.Objects.requireNonNull;
 import java.util.Properties;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,8 +33,13 @@ public class PropertiesDao {
 
     public Set<ViewMap> revertMapView(Map<String, Integer> map) {
         HashSet<ViewMap> resultSet = new HashSet<>();
+        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
+
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            resultSet.add(new ViewMap(entry.getKey(), entry.getValue()));
+            ViewMap viewMap = context.getBean(ViewMap.class);
+            viewMap.setKey(entry.getKey());
+            viewMap.setValue(entry.getValue());
+            resultSet.add(viewMap);
         }
         return resultSet;
     }

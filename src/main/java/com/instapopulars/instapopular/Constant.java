@@ -100,7 +100,6 @@ public interface Constant {
         interface MessageConstants {
             String UNSUBSCRIBE_FROM_USERS = "unsubscribeFromUsers(%d, %d)";
             String UNSUBSCRIBED_FROM = "unsubscribed from %d";
-            String GET_ALL_SUBSCRIBERS = "getAllSubscribers()";
         }
 
         interface Xpath {
@@ -110,7 +109,6 @@ public interface Constant {
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
             String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
-            String COUNT_SUBSCRIBERS = "//li[2]/a/span";
             String USER_LINK_TO_SUBSCRIBERS = "//li[%d]/div/div[1]/div[2]/div[1]/a";
         }
     }
