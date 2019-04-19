@@ -1,6 +1,6 @@
 package com.instapopulars.instapopular.unsubscribe;
 
-import com.instapopulars.instapopular.DAO.PropertiesDao;
+import com.instapopulars.instapopular.DAO.IntapopularDAO;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,11 +21,11 @@ public class UnsubscribeService {
     private UnsubscribeDao unsubscribeDao;
 
     @Autowired
-    private PropertiesDao propertiesDao;
+    private IntapopularDAO intapopularDAO;
 
     void unsubscribe(int count) {
         try {
-            unsubscribeDao.unsubscribeFromUsers(count, propertiesDao.getDoNotUnsubscribe().keySet());
+            unsubscribeDao.unsubscribeFromUsers(count, intapopularDAO.getDoNotUnsubscribe().keySet());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -45,7 +45,7 @@ public class UnsubscribeService {
 
     void addDoNotUnsubscribeUser(String userName) {
         try {
-            propertiesDao.addDoNotUnsubscribe(userName, "");
+            intapopularDAO.addDoNotUnsubscribe(userName, "");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -53,7 +53,7 @@ public class UnsubscribeService {
 
     void removeDoNotUnsubscribeUser(String userName) {
         try {
-            propertiesDao.removeDoNotUnsubscribe(userName);
+            intapopularDAO.removeDoNotUnsubscribe(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -61,7 +61,7 @@ public class UnsubscribeService {
 
     List<ViewMap> getDoNotUnsubscribeUser() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(unsubscribeDao.revertMapView(propertiesDao.getDoNotUnsubscribe()));
+            List<ViewMap> resultView = new ArrayList<>(unsubscribeDao.revertMapView(intapopularDAO.getDoNotUnsubscribe()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

@@ -1,7 +1,8 @@
 package com.instapopulars.instapopular.analysis;
 
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.CUT_OF_URL;
-import com.instapopulars.instapopular.DAO.PropertiesDao;
+
+import com.instapopulars.instapopular.DAO.IntapopularDAO;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class AnalysisService {
     private AnalysisDao analysisDao;
 
     @Autowired
-    private PropertiesDao propertiesDao;
+    private IntapopularDAO intapopularDAO;
 
     public void loginOnWebSite(String login, String password) {
         try {
@@ -38,8 +39,8 @@ public class AnalysisService {
 
     void runAnalysis() {
         try {
-            Map<String, Integer> user = analysisDao.analysisPhotos(propertiesDao.getMyPhoto());
-            propertiesDao.addPhotoAnalysisResults(analysisDao.addNewUser(propertiesDao.getPhotoAnalysisResults(), user));
+            Map<String, Integer> user = analysisDao.analysisPhotos(intapopularDAO.getMyPhoto());
+            intapopularDAO.addPhotoAnalysisResults(analysisDao.addNewUser(intapopularDAO.getPhotoAnalysisResults(), user));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -49,9 +50,9 @@ public class AnalysisService {
 
     void addMyPhoto(String userName) {
         try {
-            Map<String, Integer> currentMyPhoto = propertiesDao.getMyPhoto();
+            Map<String, Integer> currentMyPhoto = intapopularDAO.getMyPhoto();
             if (!currentMyPhoto.containsKey(userName)) {
-                propertiesDao.addMyPhoto(userName, String.valueOf(0));
+                intapopularDAO.addMyPhoto(userName, String.valueOf(0));
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -60,7 +61,7 @@ public class AnalysisService {
 
     void removeMyPhoto(String userName) {
         try {
-            propertiesDao.removeMyPhoto(userName);
+            intapopularDAO.removeMyPhoto(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -68,7 +69,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
+            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(intapopularDAO.getPhotoAnalysisResults()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
@@ -78,7 +79,7 @@ public class AnalysisService {
 
     List<ViewMap> getMyPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(propertiesDao.getMyPhoto()));
+            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(intapopularDAO.getMyPhoto()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
@@ -98,10 +99,10 @@ public class AnalysisService {
 
     void addFirstDoNotUnsubscribe(int count) {
         try {
-            Map<String, Integer> photoAnalysisResults = propertiesDao.getPhotoAnalysisResults();
+            Map<String, Integer> photoAnalysisResults = intapopularDAO.getPhotoAnalysisResults();
             for (Map.Entry<String, Integer> entry : photoAnalysisResults.entrySet()) {
                 if (entry.getValue() >= count) {
-                    propertiesDao.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
+                    intapopularDAO.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
                 }
             }
         } catch (IOException e) {

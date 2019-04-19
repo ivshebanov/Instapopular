@@ -1,7 +1,7 @@
 package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.Action;
-import com.instapopulars.instapopular.DAO.PropertiesDao;
+import com.instapopulars.instapopular.DAO.IntapopularDAO;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class GroupsService {
     private GroupsDao groupsDao;
 
     @Autowired
-    private PropertiesDao propertiesDao;
+    private IntapopularDAO intapopularDAO;
 
     void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
-            Set<String> groups = propertiesDao.getGroups().keySet();
+            Set<String> groups = intapopularDAO.getGroups().keySet();
             for (String urlGroup : groups) {
                 groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
@@ -51,7 +51,7 @@ public class GroupsService {
 
     void addGroup(String userName) {
         try {
-            propertiesDao.addGroup(userName);
+            intapopularDAO.addGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -59,7 +59,7 @@ public class GroupsService {
 
     void removeGroup(String userName) {
         try {
-            propertiesDao.removeGroup(userName);
+            intapopularDAO.removeGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -67,7 +67,7 @@ public class GroupsService {
 
     List<ViewMap> getGroup() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(groupsDao.revertMapView(propertiesDao.getGroups()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(groupsDao.revertMapView(intapopularDAO.getGroups()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

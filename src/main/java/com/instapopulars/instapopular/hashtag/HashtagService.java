@@ -1,7 +1,7 @@
 package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
-import com.instapopulars.instapopular.DAO.PropertiesDao;
+import com.instapopulars.instapopular.DAO.IntapopularDAO;
 import com.instapopulars.instapopular.model.ViewMap;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class HashtagService {
     private HashtagDao hashtagDao;
 
     @Autowired
-    private PropertiesDao propertiesDao;
+    private IntapopularDAO intapopularDAO;
 
     void topPublications(Action action) {
         try {
-            Set<String> hashtags = propertiesDao.getHestags().keySet();
+            Set<String> hashtags = intapopularDAO.getHestags().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.topPublications(hashtag, action);
             }
@@ -40,7 +40,7 @@ public class HashtagService {
 
     public void newPublications(Action action, int countPhoto) {
         try {
-            Set<String> hashtags = propertiesDao.getHestags().keySet();
+            Set<String> hashtags = intapopularDAO.getHestags().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.newPublications(action, countPhoto, hashtag);
             }
@@ -63,7 +63,7 @@ public class HashtagService {
 
     void addHestag(String userName) {
         try {
-            propertiesDao.addHestag(userName);
+            intapopularDAO.addHestag(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -71,7 +71,7 @@ public class HashtagService {
 
     void removeHestag(String userName) {
         try {
-            propertiesDao.removeHestag(userName);
+            intapopularDAO.removeHestag(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -79,7 +79,7 @@ public class HashtagService {
 
     List<ViewMap> getHestags() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(propertiesDao.getHestags()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(intapopularDAO.getHestags()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
