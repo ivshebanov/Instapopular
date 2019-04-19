@@ -61,7 +61,7 @@ public class UnsubscribeService {
 
     List<ViewMap> getDoNotUnsubscribeUser() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getDoNotUnsubscribe()));
+            List<ViewMap> resultView = new ArrayList<>(unsubscribeDao.revertMapView(propertiesDao.getDoNotUnsubscribe()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

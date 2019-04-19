@@ -68,7 +68,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
+            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(propertiesDao.getPhotoAnalysisResults()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
@@ -78,7 +78,7 @@ public class AnalysisService {
 
     List<ViewMap> getMyPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getMyPhoto()));
+            List<ViewMap> resultView = new ArrayList<>(analysisDao.revertMapView(propertiesDao.getMyPhoto()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

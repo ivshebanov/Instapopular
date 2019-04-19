@@ -79,7 +79,7 @@ public class HashtagService {
 
     List<ViewMap> getHestags() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getHestagFromProperties()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(propertiesDao.getHestagFromProperties()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

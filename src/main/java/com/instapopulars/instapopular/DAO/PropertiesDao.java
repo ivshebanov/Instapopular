@@ -1,26 +1,22 @@
 package com.instapopulars.instapopular.DAO;
 
-import static com.instapopulars.instapopular.Constant.Attribute.SRC_MAIN_RESOURCES;
-import static com.instapopulars.instapopular.Constant.Attribute.TARGET_CLASSES;
-import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.*;
-import com.instapopulars.instapopular.model.ViewMap;
+import org.springframework.stereotype.Repository;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Properties;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Repository;
+
+import static com.instapopulars.instapopular.Constant.Attribute.SRC_MAIN_RESOURCES;
+import static com.instapopulars.instapopular.Constant.Attribute.TARGET_CLASSES;
+import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesName.*;
+import static java.util.Objects.requireNonNull;
 
 @Repository
-public class PropertiesDao {
+public class PropertiesDao implements IntapopularDAO {
 
     private static final String HESHTEG_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(HASHTAGS)).getPath());
     private static final String GROUPS_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(GROUPS)).getPath());
@@ -28,68 +24,61 @@ public class PropertiesDao {
     private static final String MY_PHOTO_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(MY_PHOTO)).getPath());
     private static final String PHOTO_ANALYSIS_RESULTS_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(PHOTO_ANALYSIS_RESULTS)).getPath());
 
-    @Autowired
-    private InstagramDao instagramDao;
-
-    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
-        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
-
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            ViewMap viewMap = context.getBean(ViewMap.class);
-            viewMap.setKey(entry.getKey());
-            viewMap.setValue(entry.getValue());
-            resultSet.add(viewMap);
-        }
-        return resultSet;
-    }
-
-    //------
-
+    @Override
     public Map<String, Integer> getHestagFromProperties() throws IOException {
         return getMapFromProperties(getProperties(HESHTEG_PATH));
     }
 
+    @Override
     public Map<String, Integer> getGroupsFromProperties() throws IOException {
         return getMapFromProperties(getProperties(GROUPS_PATH));
     }
 
+    @Override
     public Map<String, Integer> getDoNotUnsubscribe() throws IOException {
         return getMapFromProperties(getProperties(DO_NOT_UNSUBSCRIBE_PATH));
     }
 
+    @Override
     public Map<String, Integer> getMyPhoto() throws IOException {
         return getMapFromProperties(getProperties(MY_PHOTO_PATH));
     }
 
+    @Override
     public Map<String, Integer> getPhotoAnalysisResults() throws IOException {
         return getMapFromProperties(getProperties(PHOTO_ANALYSIS_RESULTS_PATH));
     }
 
     //------
 
+    @Override
     public void addHestagInProperties(String hastag) throws IOException {
         addProperties(HESHTEG_PATH, hastag, "0");
     }
 
+    @Override
     public void addGroupsInProperties(String group) throws IOException {
         addProperties(GROUPS_PATH, group, "0");
     }
 
+    @Override
     public void addDoNotUnsubscribe(String userName, String countLike) throws IOException {
         addProperties(DO_NOT_UNSUBSCRIBE_PATH, userName, countLike);
     }
 
+    @Override
     public void addMyPhoto(String key, String value) throws IOException {
         addProperties(MY_PHOTO_PATH, key, value);
     }
 
+    @Override
     public void addMyPhotos(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
             addMyPhoto(entry.getKey(), String.valueOf(entry.getValue()));
         }
     }
 
+    @Override
     public void addPhotoAnalysisResults(Map<String, Integer> photos) throws IOException {
         for (Map.Entry<String, Integer> entry : photos.entrySet()) {
             addProperties(PHOTO_ANALYSIS_RESULTS_PATH, entry.getKey(), String.valueOf(entry.getValue()));
@@ -98,18 +87,22 @@ public class PropertiesDao {
 
     //------
 
+    @Override
     public void removeHestagFromProperties(String hastag) throws IOException {
         removeProperties(HESHTEG_PATH, hastag);
     }
 
+    @Override
     public void removeGroupsFromProperties(String group) throws IOException {
         removeProperties(GROUPS_PATH, group);
     }
 
+    @Override
     public void removeDoNotUnsubscribe(String userName) throws IOException {
         removeProperties(DO_NOT_UNSUBSCRIBE_PATH, userName);
     }
 
+    @Override
     public void removeMyPhoto(String photo) throws IOException {
         removeProperties(MY_PHOTO_PATH, photo);
     }

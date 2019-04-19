@@ -19,10 +19,16 @@ import static com.instapopulars.instapopular.Utils.getChromeDriver;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import com.instapopulars.instapopular.model.ViewMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -36,6 +42,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -261,5 +269,18 @@ public class InstagramDao {
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
+        HashSet<ViewMap> resultSet = new HashSet<>();
+        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            ViewMap viewMap = context.getBean(ViewMap.class);
+            viewMap.setKey(entry.getKey());
+            viewMap.setValue(entry.getValue());
+            resultSet.add(viewMap);
+        }
+        return resultSet;
     }
 }

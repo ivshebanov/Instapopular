@@ -13,6 +13,10 @@ import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.
 import com.instapopulars.instapopular.DAO.InstagramDao;
 import static java.lang.String.format;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.instapopulars.instapopular.model.ViewMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
@@ -112,5 +116,9 @@ public class GroupsDao {
 
     void loginOnWebSite(String login, String password) {
         instagramDao.loginOnWebSite(login, password);
+    }
+
+    Set<ViewMap> revertMapView(Map<String, Integer> map) {
+        return instagramDao.revertMapView(map);
     }
 }

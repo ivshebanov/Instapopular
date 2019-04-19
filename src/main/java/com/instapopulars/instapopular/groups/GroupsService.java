@@ -67,7 +67,7 @@ public class GroupsService {
 
     List<ViewMap> getGroup() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(propertiesDao.revertMapView(propertiesDao.getGroupsFromProperties()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(groupsDao.revertMapView(propertiesDao.getGroupsFromProperties()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
