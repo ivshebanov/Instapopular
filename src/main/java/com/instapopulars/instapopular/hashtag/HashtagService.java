@@ -27,7 +27,7 @@ public class HashtagService {
 
     void topPublications(Action action) {
         try {
-            Set<String> hashtags = propertiesDao.getHestagFromProperties().keySet();
+            Set<String> hashtags = propertiesDao.getHestags().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.topPublications(hashtag, action);
             }
@@ -40,7 +40,7 @@ public class HashtagService {
 
     public void newPublications(Action action, int countPhoto) {
         try {
-            Set<String> hashtags = propertiesDao.getHestagFromProperties().keySet();
+            Set<String> hashtags = propertiesDao.getHestags().keySet();
             for (String hashtag : hashtags) {
                 hashtagDao.newPublications(action, countPhoto, hashtag);
             }
@@ -63,7 +63,7 @@ public class HashtagService {
 
     void addHestag(String userName) {
         try {
-            propertiesDao.addHestagInProperties(userName);
+            propertiesDao.addHestag(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -71,7 +71,7 @@ public class HashtagService {
 
     void removeHestag(String userName) {
         try {
-            propertiesDao.removeHestagFromProperties(userName);
+            propertiesDao.removeHestag(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -79,7 +79,7 @@ public class HashtagService {
 
     List<ViewMap> getHestags() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(propertiesDao.getHestagFromProperties()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(propertiesDao.getHestags()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

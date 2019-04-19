@@ -25,12 +25,12 @@ public class PropertiesDao implements IntapopularDAO {
     private static final String PHOTO_ANALYSIS_RESULTS_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(PHOTO_ANALYSIS_RESULTS)).getPath());
 
     @Override
-    public Map<String, Integer> getHestagFromProperties() throws IOException {
+    public Map<String, Integer> getHestags() throws IOException {
         return getMapFromProperties(getProperties(HESHTEG_PATH));
     }
 
     @Override
-    public Map<String, Integer> getGroupsFromProperties() throws IOException {
+    public Map<String, Integer> getGroups() throws IOException {
         return getMapFromProperties(getProperties(GROUPS_PATH));
     }
 
@@ -52,12 +52,12 @@ public class PropertiesDao implements IntapopularDAO {
     //------
 
     @Override
-    public void addHestagInProperties(String hastag) throws IOException {
+    public void addHestag(String hastag) throws IOException {
         addProperties(HESHTEG_PATH, hastag, "0");
     }
 
     @Override
-    public void addGroupsInProperties(String group) throws IOException {
+    public void addGroup(String group) throws IOException {
         addProperties(GROUPS_PATH, group, "0");
     }
 
@@ -88,12 +88,12 @@ public class PropertiesDao implements IntapopularDAO {
     //------
 
     @Override
-    public void removeHestagFromProperties(String hastag) throws IOException {
+    public void removeHestag(String hastag) throws IOException {
         removeProperties(HESHTEG_PATH, hastag);
     }
 
     @Override
-    public void removeGroupsFromProperties(String group) throws IOException {
+    public void removeGroup(String group) throws IOException {
         removeProperties(GROUPS_PATH, group);
     }
 

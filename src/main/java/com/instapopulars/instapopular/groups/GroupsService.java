@@ -27,7 +27,7 @@ public class GroupsService {
 
     void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
-            Set<String> groups = propertiesDao.getGroupsFromProperties().keySet();
+            Set<String> groups = propertiesDao.getGroups().keySet();
             for (String urlGroup : groups) {
                 groupsDao.subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
@@ -51,7 +51,7 @@ public class GroupsService {
 
     void addGroup(String userName) {
         try {
-            propertiesDao.addGroupsInProperties(userName);
+            propertiesDao.addGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -59,7 +59,7 @@ public class GroupsService {
 
     void removeGroup(String userName) {
         try {
-            propertiesDao.removeGroupsFromProperties(userName);
+            propertiesDao.removeGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -67,7 +67,7 @@ public class GroupsService {
 
     List<ViewMap> getGroup() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(groupsDao.revertMapView(propertiesDao.getGroupsFromProperties()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(groupsDao.revertMapView(propertiesDao.getGroups()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
