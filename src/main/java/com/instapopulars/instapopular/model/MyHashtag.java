@@ -9,8 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "my_group")
-public class MyGroup {
+@Table(name = "my_hashtag")
+public class MyHashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +20,7 @@ public class MyGroup {
     @JoinColumn(name = "id_user")
     private User idUser;
 
-    private String group;
+    private String hashtag;
 
     private Integer status;
 
@@ -40,12 +40,12 @@ public class MyGroup {
         this.idUser = idUser;
     }
 
-    public String getGroup() {
-        return group;
+    public String getHashtag() {
+        return hashtag;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setHashtag(String hashtag) {
+        this.hashtag = hashtag;
     }
 
     public Integer getStatus() {

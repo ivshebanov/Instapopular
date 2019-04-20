@@ -22,7 +22,7 @@ public class MyPhoto {
 
     private String photo;
 
-    private String status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -48,11 +48,11 @@ public class MyPhoto {
         this.photo = photo;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
