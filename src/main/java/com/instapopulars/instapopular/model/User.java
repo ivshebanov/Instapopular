@@ -1,11 +1,17 @@
 package com.instapopulars.instapopular.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.List;
 
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -13,10 +19,19 @@ public class User {
     private Integer id;
 
     private String email;
+
     private String login;
+
     private String password;
-    private String inst_name;
-    private String inst_password;
+
+    @Column(name = "inst_name")
+    private String instName;
+
+    @Column(name = "inst_password")
+    private String instPassword;
+
+    @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL)
+    private List<MyPhoto> myPhotos;
 
     public Integer getId() {
         return id;
@@ -50,19 +65,27 @@ public class User {
         this.password = password;
     }
 
-    public String getInst_name() {
-        return inst_name;
+    public String getInstName() {
+        return instName;
     }
 
-    public void setInst_name(String inst_name) {
-        this.inst_name = inst_name;
+    public void setInstName(String instName) {
+        this.instName = instName;
     }
 
-    public String getInst_password() {
-        return inst_password;
+    public String getInstPassword() {
+        return instPassword;
     }
 
-    public void setInst_password(String inst_password) {
-        this.inst_password = inst_password;
+    public void setInstPassword(String instPassword) {
+        this.instPassword = instPassword;
+    }
+
+    public List<MyPhoto> getMyPhotos() {
+        return myPhotos;
+    }
+
+    public void setMyPhotos(List<MyPhoto> myPhotos) {
+        this.myPhotos = myPhotos;
     }
 }

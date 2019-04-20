@@ -27,10 +27,12 @@ DROP TABLE public.myphoto;
 
 CREATE TABLE public.myphoto
 (
-    id_user integer                                   NOT NULL,
-    photo   character(1) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                   NOT NULL,
-    CONSTRAINT myphoto_id_user_fkey FOREIGN KEY (id_user)
+    id      integer   NOT NULL,
+    id_user integer   NOT NULL,
+    photo   character NOT NULL,
+    status  integer   NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -50,10 +52,12 @@ DROP TABLE public.mylike;
 
 CREATE TABLE public.mylike
 (
+    id      integer                                   NOT NULL,
     id_user integer                                   NOT NULL,
     "user"  character(1) COLLATE pg_catalog."default" NOT NULL,
     count   integer                                   NOT NULL,
-    CONSTRAINT mylike_id_user_fkey FOREIGN KEY (id_user)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -73,10 +77,12 @@ DROP TABLE public.mygroup;
 
 CREATE TABLE public.mygroup
 (
+    id      integer                                   NOT NULL,
     id_user integer                                   NOT NULL,
     "group" character(1) COLLATE pg_catalog."default" NOT NULL,
     status  integer                                   NOT NULL,
-    CONSTRAINT mygroup_id_user_fkey FOREIGN KEY (id_user)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -96,10 +102,12 @@ DROP TABLE public.hashtag;
 
 CREATE TABLE public.hashtag
 (
+    id      integer                                   NOT NULL,
     id_user integer                                   NOT NULL,
     hashteg character(1) COLLATE pg_catalog."default" NOT NULL,
     status  integer                                   NOT NULL,
-    CONSTRAINT hashtag_id_user_fkey FOREIGN KEY (id_user)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
