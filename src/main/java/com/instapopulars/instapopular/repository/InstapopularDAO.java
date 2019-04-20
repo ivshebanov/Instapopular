@@ -1,9 +1,10 @@
-package com.instapopulars.instapopular.DAO;
+package com.instapopulars.instapopular.repository;
 
 import java.io.IOException;
 import java.util.Map;
 
-public interface IntapopularDAO {
+public interface InstapopularDAO {
+
     Map<String, Integer> getHestags() throws IOException;
 
     Map<String, Integer> getGroups() throws IOException;

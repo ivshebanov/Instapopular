@@ -1,6 +1,6 @@
 package com.instapopulars.instapopular.analysis;
 
-import com.instapopulars.instapopular.DAO.IntapopularDAO;
+import com.instapopulars.instapopular.repository.InstapopularDAO;
 import com.instapopulars.instapopular.service.InstagramService;
 import com.instapopulars.instapopular.view.ViewMap;
 import org.apache.logging.log4j.LogManager;
@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,11 +33,14 @@ public class AnalysisService {
 
     private static final Logger logger = LogManager.getLogger(AnalysisService.class);
 
-    @Autowired
-    private InstagramService instagramService;
+    private final InstagramService instagramService;
 
-    @Autowired
-    private IntapopularDAO intapopularDAO;
+    private final InstapopularDAO instapopularDAO;
+
+    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+        this.instagramService = instagramService;
+        this.instapopularDAO = instapopularDAO;
+    }
 
     public void loginOnWebSite(String login, String password) {
         try {
@@ -50,8 +53,8 @@ public class AnalysisService {
 
     void runAnalysis() {
         try {
-            Map<String, Integer> user = analysisPhotos(intapopularDAO.getMyPhoto());
-            intapopularDAO.addPhotoAnalysisResults(addNewUser(intapopularDAO.getPhotoAnalysisResults(), user));
+            Map<String, Integer> user = analysisPhotos(instapopularDAO.getMyPhoto());
+            instapopularDAO.addPhotoAnalysisResults(addNewUser(instapopularDAO.getPhotoAnalysisResults(), user));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -61,9 +64,9 @@ public class AnalysisService {
 
     void addMyPhoto(String userName) {
         try {
-            Map<String, Integer> currentMyPhoto = intapopularDAO.getMyPhoto();
+            Map<String, Integer> currentMyPhoto = instapopularDAO.getMyPhoto();
             if (!currentMyPhoto.containsKey(userName)) {
-                intapopularDAO.addMyPhoto(userName, String.valueOf(0));
+                instapopularDAO.addMyPhoto(userName, String.valueOf(0));
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -72,7 +75,7 @@ public class AnalysisService {
 
     void removeMyPhoto(String userName) {
         try {
-            intapopularDAO.removeMyPhoto(userName);
+            instapopularDAO.removeMyPhoto(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -80,7 +83,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(intapopularDAO.getPhotoAnalysisResults()));
+            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getPhotoAnalysisResults()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
@@ -90,7 +93,7 @@ public class AnalysisService {
 
     List<ViewMap> getMyPhoto() {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(intapopularDAO.getMyPhoto()));
+            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getMyPhoto()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
@@ -110,10 +113,10 @@ public class AnalysisService {
 
     void addFirstDoNotUnsubscribe(int count) {
         try {
-            Map<String, Integer> photoAnalysisResults = intapopularDAO.getPhotoAnalysisResults();
+            Map<String, Integer> photoAnalysisResults = instapopularDAO.getPhotoAnalysisResults();
             for (Map.Entry<String, Integer> entry : photoAnalysisResults.entrySet()) {
                 if (entry.getValue() >= count) {
-                    intapopularDAO.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
+                    instapopularDAO.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
                 }
             }
         } catch (IOException e) {
@@ -155,7 +158,7 @@ public class AnalysisService {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        intapopularDAO.addMyPhotos(resultPhotos);
+        instapopularDAO.addMyPhotos(resultPhotos);
         return resultUser;
     }
 

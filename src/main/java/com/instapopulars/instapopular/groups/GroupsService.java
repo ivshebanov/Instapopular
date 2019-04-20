@@ -1,13 +1,13 @@
 package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.Action;
-import com.instapopulars.instapopular.DAO.IntapopularDAO;
+import com.instapopulars.instapopular.repository.InstapopularDAO;
 import com.instapopulars.instapopular.view.ViewMap;
 import com.instapopulars.instapopular.service.InstagramService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,15 +33,18 @@ public class GroupsService {
 
     private static final Logger logger = LogManager.getLogger(GroupsService.class);
 
-    @Autowired
-    private InstagramService instagramService;
+    private final InstagramService instagramService;
 
-    @Autowired
-    private IntapopularDAO intapopularDAO;
+    private final InstapopularDAO instapopularDAO;
+
+    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+        this.instagramService = instagramService;
+        this.instapopularDAO = instapopularDAO;
+    }
 
     void subscribeToUsersInGroup(int countSubscriptions, Action action) {
         try {
-            Set<String> groups = intapopularDAO.getGroups().keySet();
+            Set<String> groups = instapopularDAO.getGroups().keySet();
             for (String urlGroup : groups) {
                 subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
@@ -65,7 +68,7 @@ public class GroupsService {
 
     void addGroup(String userName) {
         try {
-            intapopularDAO.addGroup(userName);
+            instapopularDAO.addGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -73,7 +76,7 @@ public class GroupsService {
 
     void removeGroup(String userName) {
         try {
-            intapopularDAO.removeGroup(userName);
+            instapopularDAO.removeGroup(userName);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -81,7 +84,7 @@ public class GroupsService {
 
     List<ViewMap> getGroup() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(intapopularDAO.getGroups()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getGroups()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {

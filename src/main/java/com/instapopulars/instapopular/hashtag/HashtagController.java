@@ -1,7 +1,6 @@
 package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +11,11 @@ import java.util.Map;
 @Controller
 public class HashtagController {
 
-    @Autowired
-    private HashtagService hashtagService;
+    private final HashtagService hashtagService;
+
+    public HashtagController(HashtagService hashtagService) {
+        this.hashtagService = hashtagService;
+    }
 
     @GetMapping("/hashtags")
     public String hashtags(Map<String, Object> view) {

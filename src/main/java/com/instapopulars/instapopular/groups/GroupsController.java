@@ -1,7 +1,6 @@
 package com.instapopulars.instapopular.groups;
 
 import com.instapopulars.instapopular.Action;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +11,11 @@ import java.util.Map;
 @Controller
 public class GroupsController {
 
-    @Autowired
-    private GroupsService groupsService;
+    private final GroupsService groupsService;
+
+    public GroupsController(GroupsService groupsService) {
+        this.groupsService = groupsService;
+    }
 
     @GetMapping("/groups")
     public String groups(Map<String, Object> view) {

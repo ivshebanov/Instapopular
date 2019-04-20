@@ -1,5 +1,6 @@
-package com.instapopulars.instapopular.DAO;
+package com.instapopulars.instapopular.repository.impl;
 
+import com.instapopulars.instapopular.repository.InstapopularDAO;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import static com.instapopulars.instapopular.Constant.DriverConstant.PropertiesN
 import static java.util.Objects.requireNonNull;
 
 @Repository
-public class PropertiesDao implements IntapopularDAO {
+public class PropertiesDao implements InstapopularDAO {
 
     private static final String HESHTEG_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(HASHTAGS)).getPath());
     private static final String GROUPS_PATH = convertPath(requireNonNull(ClassLoader.getSystemResource(GROUPS)).getPath());

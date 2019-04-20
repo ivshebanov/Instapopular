@@ -1,6 +1,5 @@
 package com.instapopulars.instapopular.analysis;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,8 +10,11 @@ import java.util.Map;
 @Controller
 public class AnalysisController {
 
-    @Autowired
-    private AnalysisService analysisService;
+    private final AnalysisService analysisService;
+
+    public AnalysisController(AnalysisService analysisService) {
+        this.analysisService = analysisService;
+    }
 
     @GetMapping("/analysis")
     public String analysis(Map<String, Object> view) {
