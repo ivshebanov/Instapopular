@@ -1,15 +1,16 @@
 -- Table: public."user"
 
---DROP TABLE public."user";
+-- DROP TABLE public."user";
 
 CREATE TABLE public."user"
 (
-    id            integer                                     NOT NULL,
-    email         character(255) COLLATE pg_catalog."default" NOT NULL,
-    login         character(255) COLLATE pg_catalog."default" NOT NULL,
-    password      character(255) COLLATE pg_catalog."default" NOT NULL,
-    inst_name     character(255) COLLATE pg_catalog."default" NOT NULL,
-    inst_password character(255) COLLATE pg_catalog."default" NOT NULL,
+    id                 integer                                     NOT NULL,
+    email              character(255) COLLATE pg_catalog."default" NOT NULL,
+    login              character(255) COLLATE pg_catalog."default" NOT NULL,
+    password           character(255) COLLATE pg_catalog."default" NOT NULL,
+    inst_name          character(255) COLLATE pg_catalog."default" NOT NULL,
+    inst_password      character(255) COLLATE pg_catalog."default" NOT NULL,
+    do_not_unsubscribe integer                                     NOT NULL,
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
     WITH (

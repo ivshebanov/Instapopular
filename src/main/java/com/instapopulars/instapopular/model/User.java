@@ -28,6 +28,9 @@ public class User {
     @Column(name = "inst_password")
     private String instPassword;
 
+    @Column(name = "do_not_unsubscribe")
+    private Integer doNotUnsubscribe;
+
     @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL)
     private List<MyPhoto> myPhotos;
 
@@ -77,6 +80,14 @@ public class User {
 
     public void setInstPassword(String instPassword) {
         this.instPassword = instPassword;
+    }
+
+    public Integer getDoNotUnsubscribe() {
+        return doNotUnsubscribe;
+    }
+
+    public void setDoNotUnsubscribe(Integer doNotUnsubscribe) {
+        this.doNotUnsubscribe = doNotUnsubscribe;
     }
 
     public List<MyPhoto> getMyPhotos() {
