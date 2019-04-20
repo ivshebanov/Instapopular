@@ -1,4 +1,4 @@
-package com.instapopulars.instapopular.model;
+package com.instapopulars.instapopular.view;
 
 import org.springframework.context.annotation.Scope;
 

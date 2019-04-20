@@ -2,17 +2,26 @@ package com.instapopulars.instapopular.hashtag;
 
 import com.instapopulars.instapopular.Action;
 import com.instapopulars.instapopular.DAO.IntapopularDAO;
-import com.instapopulars.instapopular.model.ViewMap;
+import com.instapopulars.instapopular.view.ViewMap;
+import com.instapopulars.instapopular.service.InstagramService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Set;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import static com.instapopulars.instapopular.Constant.Attribute.HREF;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG;
+import static com.instapopulars.instapopular.Constant.HashtagConstant.Xpath.*;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HASHTAG_PAGE;
+import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 
 @Service
 public class HashtagService {
@@ -20,7 +29,7 @@ public class HashtagService {
     private static final Logger logger = LogManager.getLogger(HashtagService.class);
 
     @Autowired
-    private HashtagDao hashtagDao;
+    private InstagramService instagramService;
 
     @Autowired
     private IntapopularDAO intapopularDAO;
@@ -29,12 +38,12 @@ public class HashtagService {
         try {
             Set<String> hashtags = intapopularDAO.getHestags().keySet();
             for (String hashtag : hashtags) {
-                hashtagDao.topPublications(hashtag, action);
+                topPublications(hashtag, action);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
-            hashtagDao.quitDriver();
+            instagramService.quitDriver();
         }
     }
 
@@ -42,22 +51,22 @@ public class HashtagService {
         try {
             Set<String> hashtags = intapopularDAO.getHestags().keySet();
             for (String hashtag : hashtags) {
-                hashtagDao.newPublications(action, countPhoto, hashtag);
+                newPublications(action, countPhoto, hashtag);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
-            hashtagDao.quitDriver();
+            instagramService.quitDriver();
         }
     }
 
     void loginOnWebSite(String login, String password) {
         try {
-            hashtagDao.initDriver();
-            hashtagDao.loginOnWebSite(login, password);
+            instagramService.initDriver();
+            instagramService.loginOnWebSite(login, password);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            hashtagDao.quitDriver();
+            instagramService.quitDriver();
         }
     }
 
@@ -79,11 +88,103 @@ public class HashtagService {
 
     List<ViewMap> getHestags() {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(hashtagDao.revertMapView(intapopularDAO.getHestags()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(intapopularDAO.getHestags()));
             Collections.sort(resultView);
             return resultView;
         } catch (IOException e) {
             return emptyList();
         }
+    }
+
+    private void topPublications(String hashtag, Action action) {
+        logger.info(format(SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
+        if (hashtag == null || hashtag.length() == 0 || action == null) {
+            return;
+        }
+        if (!format(HASHTAG_PAGE, hashtag).equalsIgnoreCase(instagramService.getCurrentUrl())) {
+            instagramService.openUrl(format(HASHTAG_PAGE, hashtag));
+        }
+        List<WebElement> weLinkTopPublications = instagramService.getWebElements(60, PATH_SEARCH_TOP_PUBLICATIONS);
+        List<String> linkTopPublications = getUrlsPhoto(weLinkTopPublications);
+        choiceOfAction(action, linkTopPublications);
+    }
+
+    private void newPublications(Action action, int countPhoto, String hashtag) {
+//        logger.info(format(SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG, hashtag, countPhoto));
+//        if (hashtag == null || hashtag.length() == 0 || action == null || countPhoto < 0) {
+//            return;
+//        }
+//        if (!format(HASHTAG_PAGE, hashtag).equalsIgnoreCase(instagramService.getCurrentUrl())) {
+//            instagramService.openUrl(format(HASHTAG_PAGE, hashtag));
+//        }
+//        List<WebElement> weLinkTopPublications = getNewPublication(countPhoto);
+//        List<String> linkTopPublications = getUrlsPhoto(weLinkTopPublications);
+//        choiceOfAction(action, linkTopPublications);
+    }
+
+    private List<WebElement> getNewPublication(int countPhoto) {
+        List<WebElement> newPublication = new ArrayList<>();
+        int countRow = countPhoto / 3 + 1;
+        for (int i = 1; i <= countRow; i++) {
+            newPublication.addAll(instagramService.getWebElements(60, format(PATH_SEARCH_NEW_PUBLICATIONS, i)));
+            scrollElement(i);
+        }
+        return newPublication;
+    }
+
+    private void scrollElement(int i) {
+        if (i > 14) {
+            for (int t = 10; t < 15; t++) {
+                instagramService.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, t));
+            }
+        }
+        instagramService.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, i));
+        instagramService.timeOut(2, 0);
+    }
+
+    private void choiceOfAction(Action action, List<String> linkToPublications) {
+        switch (action) {
+            case LIKE:
+                like(linkToPublications);
+                break;
+            case SUBSCRIBE:
+                subscribe(linkToPublications);
+                break;
+            case SUBSCRIBE_AND_LIKE:
+                subscribeAndLike(linkToPublications);
+                break;
+        }
+    }
+
+    private void subscribeAndLike(List<String> urls) {
+        for (String url : urls) {
+            if (instagramService.setLikeAndSubscribe(url)) {
+                instagramService.timeOut(150, 50);
+            }
+        }
+    }
+
+    private void subscribe(List<String> urls) {
+        for (String url : urls) {
+            if (instagramService.subscribe(url)) {
+                instagramService.timeOut(150, 50);
+            }
+        }
+    }
+
+    private void like(List<String> urls) {
+        for (String url : urls) {
+            if (instagramService.setLike(url)) {
+                instagramService.timeOut(20, 5);
+            }
+        }
+    }
+
+    private List<String> getUrlsPhoto(List<WebElement> weLinkTopPublications) {
+        List<String> resultUrls = new ArrayList<>();
+        for (WebElement we : weLinkTopPublications) {
+            resultUrls.add(we.getAttribute(HREF));
+        }
+        return resultUrls;
     }
 }

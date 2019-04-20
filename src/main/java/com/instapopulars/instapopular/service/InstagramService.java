@@ -1,34 +1,6 @@
-package com.instapopulars.instapopular.DAO;
+package com.instapopulars.instapopular.service;
 
-import static com.instapopulars.instapopular.Constant.Attribute.ARIA_LABEL;
-import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
-import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
-import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
-import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
-import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.DID_NOT_FIND_THE_BUTTON;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
-import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
-import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
-import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
-import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
-import static com.instapopulars.instapopular.Constant.Utils.OS_NAME;
-import static com.instapopulars.instapopular.Utils.getChromeDriver;
-import static java.lang.String.format;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import com.instapopulars.instapopular.model.ViewMap;
+import com.instapopulars.instapopular.view.ViewMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -44,12 +16,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-@Repository
-public class InstagramDao {
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-    private static final Logger logger = LoggerFactory.getLogger(InstagramDao.class);
+import static com.instapopulars.instapopular.Constant.Attribute.ARIA_LABEL;
+import static com.instapopulars.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
+import static com.instapopulars.instapopular.Constant.Attribute.SUBSCRIPTIONS;
+import static com.instapopulars.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
+import static com.instapopulars.instapopular.Constant.DriverConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.MessageConstants.*;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
+import static com.instapopulars.instapopular.Constant.InstagramConstant.Xpath.*;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
+import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
+import static com.instapopulars.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
+import static com.instapopulars.instapopular.Constant.Utils.OS_NAME;
+import static com.instapopulars.instapopular.Utils.getChromeDriver;
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
+@Service
+public class InstagramService {
+
+    private static final Logger logger = LoggerFactory.getLogger(InstagramService.class);
     private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(getChromeDriver())).getPath();
 
     private WebDriver driver;

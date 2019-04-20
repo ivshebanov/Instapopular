@@ -1,6 +1,6 @@
 package com.instapopulars.instapopular;
 
-import com.instapopulars.instapopular.model.ViewMap;
+import com.instapopulars.instapopular.view.ViewMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
