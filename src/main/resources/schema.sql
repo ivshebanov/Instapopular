@@ -52,10 +52,10 @@ ALTER TABLE public.my_photo
 
 CREATE TABLE public.my_like
 (
-    id integer NOT NULL,
-    id_user integer NOT NULL,
-    "user" character(255) COLLATE pg_catalog."default" NOT NULL,
-    count integer NOT NULL,
+    id      integer                                     NOT NULL,
+    id_user integer                                     NOT NULL,
+    "user"  character(255) COLLATE pg_catalog."default" NOT NULL,
+    count   integer                                     NOT NULL,
     CONSTRAINT my_like_pkey PRIMARY KEY (id),
     CONSTRAINT my_like_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE
@@ -102,10 +102,10 @@ ALTER TABLE public.my_group
 
 CREATE TABLE public.my_hashtag
 (
-    id integer NOT NULL,
-    id_user integer NOT NULL,
+    id      integer                                     NOT NULL,
+    id_user integer                                     NOT NULL,
     hashtag character(255) COLLATE pg_catalog."default" NOT NULL,
-    status integer NOT NULL,
+    status  integer                                     NOT NULL,
     CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
     CONSTRAINT my_hashtag_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public."user" (id) MATCH SIMPLE

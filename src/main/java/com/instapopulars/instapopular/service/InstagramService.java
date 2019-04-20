@@ -241,13 +241,13 @@ public class InstagramService {
     }
 
     private boolean isNotActiveLike() {
-        String ariaLable = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
-        return !I_DO_NOT_LIKE.equalsIgnoreCase(ariaLable);
+        String ariaLabel = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
+        return !I_DO_NOT_LIKE.equalsIgnoreCase(ariaLabel);
     }
 
     private boolean isNotSubscribe() {
-        String ariaLable = getWebElement(60, SUBSCRIBE).getText();
-        return !SUBSCRIPTIONS.equalsIgnoreCase(ariaLable);
+        String ariaLabel = getWebElement(60, SUBSCRIBE).getText();
+        return !SUBSCRIPTIONS.equalsIgnoreCase(ariaLabel);
     }
 
     public WebElement getWebElement(int timeOutInSeconds, String xpathExpression) {
