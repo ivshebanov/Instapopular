@@ -1,10 +1,11 @@
--- Table: public."user"
+-- Table: public.usr
 
--- DROP TABLE public."user";
+-- DROP TABLE public.usr;
 
-CREATE TABLE public."user"
+CREATE TABLE public.usr
 (
     id                 integer                                     NOT NULL,
+    active             boolean                                     NOT NULL,
     email              character(255) COLLATE pg_catalog."default" NOT NULL,
     login              character(255) COLLATE pg_catalog."default" NOT NULL,
     password           character(255) COLLATE pg_catalog."default" NOT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE public."user"
     )
     TABLESPACE pg_default;
 
-ALTER TABLE public."user"
+ALTER TABLE public.usr
     OWNER to iliashebanov;
 
 
@@ -34,7 +35,7 @@ CREATE TABLE public.my_photo
     status  integer                                     NOT NULL,
     CONSTRAINT my_photo_pkey PRIMARY KEY (id),
     CONSTRAINT my_photo_id_user_fkey FOREIGN KEY (id_user)
-        REFERENCES public."user" (id) MATCH SIMPLE
+        REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -55,11 +56,11 @@ CREATE TABLE public.my_like
 (
     id      integer                                     NOT NULL,
     id_user integer                                     NOT NULL,
-    "user"  character(255) COLLATE pg_catalog."default" NOT NULL,
+    usr     character(255) COLLATE pg_catalog."default" NOT NULL,
     count   integer                                     NOT NULL,
     CONSTRAINT my_like_pkey PRIMARY KEY (id),
     CONSTRAINT my_like_id_user_fkey FOREIGN KEY (id_user)
-        REFERENCES public."user" (id) MATCH SIMPLE
+        REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -84,7 +85,7 @@ CREATE TABLE public.my_group
     status  integer                                     NOT NULL,
     CONSTRAINT my_group_pkey PRIMARY KEY (id),
     CONSTRAINT my_group_id_user_fkey FOREIGN KEY (id_user)
-        REFERENCES public."user" (id) MATCH SIMPLE
+        REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -109,7 +110,7 @@ CREATE TABLE public.my_hashtag
     status  integer                                     NOT NULL,
     CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
     CONSTRAINT my_hashtag_id_user_fkey FOREIGN KEY (id_user)
-        REFERENCES public."user" (id) MATCH SIMPLE
+        REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -119,4 +120,26 @@ CREATE TABLE public.my_hashtag
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_hashtag
+    OWNER to iliashebanov;
+
+
+-- Table: public.user_role
+
+-- DROP TABLE public.user_role;
+
+CREATE TABLE public.user_role
+(
+    id_user integer                                     NOT NULL,
+    roles   character(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_role_id_user_fkey FOREIGN KEY (id_user)
+        REFERENCES public.usr (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+    WITH (
+        OIDS = FALSE
+    )
+    TABLESPACE pg_default;
+
+ALTER TABLE public.user_role
     OWNER to iliashebanov;
