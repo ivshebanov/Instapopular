@@ -1,5 +1,6 @@
 package com.instapopulars.instapopular.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class MyLike {
     @JoinColumn(name = "id_user")
     private User idUser;
 
+    @Column(name = "usr")
     private String user;
 
     private Integer count;
