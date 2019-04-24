@@ -7,7 +7,7 @@ CREATE TABLE public.usr
     id                 integer                                     NOT NULL,
     active             boolean                                     NOT NULL,
     email              character(255) COLLATE pg_catalog."default" NOT NULL,
-    login              character(255) COLLATE pg_catalog."default" NOT NULL,
+    username           character(255) COLLATE pg_catalog."default" NOT NULL,
     password           character(255) COLLATE pg_catalog."default" NOT NULL,
     inst_name          character(255) COLLATE pg_catalog."default" NOT NULL,
     inst_password      character(255) COLLATE pg_catalog."default" NOT NULL,
