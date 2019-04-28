@@ -23,6 +23,7 @@
             <button>Начать</button>
             <br><br>
             <p class="message"><a href="#">Редактирование групп.</a></p>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
         <form class="register-form" method="post" action="addRemoveUnsub">
@@ -35,6 +36,7 @@
             <button type="submit">Выполнить</button>
             <br><br>
             <p class="message"><a href="#">Начать работу?</a></p>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
         <br>

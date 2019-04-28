@@ -90,7 +90,6 @@ public class InstagramService {
             logger.error(format(DID_NOT_FIND_THE_BUTTON, LOGIN_BUTTON_4, LOGIN_BUTTON_5));
             getWebElement(20, LOGIN_BUTTON_5).click();
         }
-        String accountName = getWebElement(120, CHECK_LOGIN_BY_NAME).getText();
     }
 
     public boolean openHomePage() {

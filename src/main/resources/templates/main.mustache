@@ -9,13 +9,6 @@
 
 <div class="login-page" method="post">
     <div class="form">
-        <div>
-            <form action="/logout" method="post">
-                <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
-                <input type="submit" value="Sign Out"/>
-            </form>
-        </div>
-
         <form class="login-form">
             <h1>Instapopular</h1>
             <hr>
@@ -23,7 +16,17 @@
             <div><a href="http://localhost:8080/hashtags"><h3>Работа с хештэгами.</h3></a></div>
             <div><a href="http://localhost:8080/unsubscribe"><h3>Зпупустить отписку.</h3></a></div>
             <div><a href="http://localhost:8080/analysis"><h3>Анализ фото.</h3></a></div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
+
+        <div>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+<!--                <input type="submit" value="Выход"/>-->
+                <button>Выход</button>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            </form>
+        </div>
     </div>
 </div>
 

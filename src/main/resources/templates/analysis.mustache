@@ -19,6 +19,7 @@
 
             <button>Запустить сканирование</button>
             <br><br>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
         <form class="register-form" method="post" action="analysis">
@@ -42,6 +43,7 @@
                     </table>
                 </div>
             {{/analysisView}}
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
         <form class="login-form" method="post" action="addRemoveInAnalysis">
@@ -68,6 +70,7 @@
                     </table>
                 </div>
             {{/photoView}}
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
     </div>
 </div>
