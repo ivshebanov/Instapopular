@@ -4,14 +4,14 @@
 
 CREATE TABLE public.usr
 (
-    id                 integer                                     NOT NULL,
-    active             boolean                                     NOT NULL,
-    email              character(255) COLLATE pg_catalog."default" NOT NULL,
-    username           character(255) COLLATE pg_catalog."default" NOT NULL,
-    password           character(255) COLLATE pg_catalog."default" NOT NULL,
-    inst_name          character(255) COLLATE pg_catalog."default" NOT NULL,
-    inst_password      character(255) COLLATE pg_catalog."default" NOT NULL,
-    do_not_unsubscribe integer                                     NOT NULL,
+    id                 bigint                                              NOT NULL,
+    active             boolean                                             NOT NULL,
+    email              character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    username           character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    password           character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    inst_name          character varying(255) COLLATE pg_catalog."default",
+    inst_password      character varying(255) COLLATE pg_catalog."default",
+    do_not_unsubscribe integer,
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
     WITH (
@@ -29,10 +29,10 @@ ALTER TABLE public.usr
 
 CREATE TABLE public.my_photo
 (
-    id      integer                                     NOT NULL,
-    id_user integer                                     NOT NULL,
-    photo   character(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                     NOT NULL,
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    photo   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    status  integer                                             NOT NULL,
     CONSTRAINT my_photo_pkey PRIMARY KEY (id),
     CONSTRAINT my_photo_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
@@ -54,10 +54,10 @@ ALTER TABLE public.my_photo
 
 CREATE TABLE public.my_like
 (
-    id      integer                                     NOT NULL,
-    id_user integer                                     NOT NULL,
-    usr     character(255) COLLATE pg_catalog."default" NOT NULL,
-    count   integer                                     NOT NULL,
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    usr     character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    count   integer                                             NOT NULL,
     CONSTRAINT my_like_pkey PRIMARY KEY (id),
     CONSTRAINT my_like_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
@@ -79,10 +79,10 @@ ALTER TABLE public.my_like
 
 CREATE TABLE public.my_group
 (
-    id      integer                                     NOT NULL,
-    id_user integer                                     NOT NULL,
-    "group" character(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                     NOT NULL,
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    "group" character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    status  integer                                             NOT NULL,
     CONSTRAINT my_group_pkey PRIMARY KEY (id),
     CONSTRAINT my_group_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
@@ -104,10 +104,10 @@ ALTER TABLE public.my_group
 
 CREATE TABLE public.my_hashtag
 (
-    id      integer                                     NOT NULL,
-    id_user integer                                     NOT NULL,
-    hashtag character(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                     NOT NULL,
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    hashtag character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    status  integer                                             NOT NULL,
     CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
     CONSTRAINT my_hashtag_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
@@ -129,8 +129,8 @@ ALTER TABLE public.my_hashtag
 
 CREATE TABLE public.user_role
 (
-    id_user integer                                     NOT NULL,
-    roles   character(255) COLLATE pg_catalog."default" NOT NULL,
+    id_user bigint                                              NOT NULL,
+    roles   character varying(255) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT user_role_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION

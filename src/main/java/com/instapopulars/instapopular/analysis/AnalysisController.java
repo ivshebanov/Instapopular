@@ -23,7 +23,7 @@ public class AnalysisController {
         return "analysis";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/loginToInst")
     public String loginAnalysis(@RequestParam(name = "login") String login,
                                 @RequestParam(name = "password") String password,
                                 Map<String, Object> view) {

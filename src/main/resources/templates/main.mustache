@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Instapopular</title>
-    <link href="style.css" rel="stylesheet">
+    <link href="style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 
-<div class="login-page">
+<div class="login-page" method="post">
     <div class="form">
+        <div>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+                <input type="submit" value="Sign Out"/>
+            </form>
+        </div>
+
         <form class="login-form">
             <h1>Instapopular</h1>
             <hr>

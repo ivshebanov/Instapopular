@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Instapopular</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="style.css" rel="stylesheet">
+    <link href="style.css" type="text/css" rel="stylesheet">
     <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
@@ -37,7 +37,8 @@
             <p class="message"><a href="#">Начать работу?</a></p>
         </form>
 
-        <br><hr>
+        <br>
+        <hr>
         <div><b><h3>Не отписываться от</h3></b></div>
         {{#groupView}}
             <div>
@@ -53,8 +54,8 @@
 </div>
 
 <script type="text/javascript">
-$('.message a').click(function(){
-$('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-});
+    $('.message a').click(function () {
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
 </script>
 </body>

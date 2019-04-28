@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Instapopular</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="style.css" rel="stylesheet">
+    <link href="style.css" type="text/css" rel="stylesheet">
     <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
@@ -10,7 +10,7 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="register-form" method="post" action="login">
+        <form class="register-form" method="post" action="loginToInst">
             <label for="loginField">Введите логин от инстаграма</label>
             <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
 
@@ -73,8 +73,8 @@
 </div>
 
 <script type="text/javascript">
-$('.message a').click(function(){
-$('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-});
+    $('.message a').click(function () {
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
 </script>
 </body>
