@@ -44,9 +44,6 @@ public class RegistrationController {
         user.setDoNotUnsubscribe(0);
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
-        user.setEmail("mail");
-        user.setInstName("1");
-        user.setPassword("2");
         userRepository.save(user);
         return "redirect:/login";
     }
