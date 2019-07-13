@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Map;
 
 @Controller
@@ -21,7 +22,7 @@ public class RegistrationController {
 
     @GetMapping("/")
     public String greeting() {
-        return "login";
+        return "main";
     }
 
     @GetMapping("/main")
@@ -31,19 +32,20 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String registration() {
-        return "registration";
+        return "login";
     }
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
         if (userFromDb != null) {
-            model.put("message", "User exists!");
-            return "registration";
+            model.put("message", "Пользователь существует!");
+            return "login";
         }
         user.setDoNotUnsubscribe(0);
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
+        user.setMyPhotos(new LinkedList<>());
         userRepository.save(user);
         return "redirect:/login";
     }

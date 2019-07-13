@@ -1,8 +1,8 @@
 package com.instapopulars.instapopular.repository;
 
 import com.instapopulars.instapopular.model.MyGroup;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MyGroupRepository extends CrudRepository<MyGroup, Integer> {
+public interface MyGroupRepository extends JpaRepository<MyGroup, Integer> {
 
 }

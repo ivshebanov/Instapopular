@@ -6,6 +6,7 @@ public interface Constant {
 
         String LOGIN_PAGE = "https://www.instagram.com/accounts/login/";
         String HOME_PAGE = "https://www.instagram.com/%s/";
+        String HOME_PAGE_2 = "https://www.instagram.com/%s";
         String HASHTAG_PAGE = "https://www.instagram.com/explore/tags/%s/";
     }
 

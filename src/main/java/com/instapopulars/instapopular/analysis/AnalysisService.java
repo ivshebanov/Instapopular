@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.instapopulars.instapopular.Constant.AnalysisConstant.*;
-import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static com.instapopulars.instapopular.Constant.LinkToInstagram.HOME_PAGE_2;
 import static com.instapopulars.instapopular.Utils.getLoginUserBtn;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
@@ -167,7 +167,7 @@ public class AnalysisService {
             return null;
         }
         Set<String> resultActiveUser = new HashSet<>();
-        instagramService.openUrl(format(HOME_PAGE, urlPhoto));
+        instagramService.openUrl(format(HOME_PAGE_2, urlPhoto));
         instagramService.timeOut(2, 0);
         try {
             instagramService.getWebElement(60, OPEN_LIKE).click();
