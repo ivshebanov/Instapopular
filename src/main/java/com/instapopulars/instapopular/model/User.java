@@ -1,5 +1,9 @@
 package com.instapopulars.instapopular.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -17,6 +21,8 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "usr")
 public class User {
@@ -49,84 +55,4 @@ public class User {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getInstName() {
-        return instName;
-    }
-
-    public void setInstName(String instName) {
-        this.instName = instName;
-    }
-
-    public String getInstPassword() {
-        return instPassword;
-    }
-
-    public void setInstPassword(String instPassword) {
-        this.instPassword = instPassword;
-    }
-
-    public Integer getDoNotUnsubscribe() {
-        return doNotUnsubscribe;
-    }
-
-    public void setDoNotUnsubscribe(Integer doNotUnsubscribe) {
-        this.doNotUnsubscribe = doNotUnsubscribe;
-    }
-
-    public List<MyPhoto> getMyPhotos() {
-        return myPhotos;
-    }
-
-    public void setMyPhotos(List<MyPhoto> myPhotos) {
-        this.myPhotos = myPhotos;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }
