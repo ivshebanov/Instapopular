@@ -4,11 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.instapopulars</groupId>
+    <groupId>com.instapopular</groupId>
     <artifactId>instapopular</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>InstapopularS</name>
+    <packaging>war</packaging>
+    <name>instapopular</name>
+
+    <properties>
+        <java.version>11</java.version>
+    </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -65,13 +69,7 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
-
     </dependencies>
-
-    <properties>
-        <java.version>12</java.version>
-    </properties>
-
 
     <build>
         <plugins>
