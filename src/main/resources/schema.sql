@@ -20,7 +20,7 @@ CREATE TABLE public.usr
     TABLESPACE pg_default;
 
 ALTER TABLE public.usr
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
 
 
 -- Table: public.my_photo
@@ -45,7 +45,7 @@ CREATE TABLE public.my_photo
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_photo
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
 
 
 -- Table: public.my_like
@@ -70,7 +70,7 @@ CREATE TABLE public.my_like
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_like
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
 
 
 -- Table: public.my_group
@@ -95,7 +95,7 @@ CREATE TABLE public.my_group
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_group
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
 
 
 -- Table: public.my_hashtag
@@ -120,7 +120,7 @@ CREATE TABLE public.my_hashtag
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_hashtag
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
 
 
 -- Table: public.user_role
@@ -142,4 +142,4 @@ CREATE TABLE public.user_role
     TABLESPACE pg_default;
 
 ALTER TABLE public.user_role
-    OWNER to iliashebanov;
+    OWNER to ivshebanov;
