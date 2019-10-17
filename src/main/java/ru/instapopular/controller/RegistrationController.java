@@ -48,7 +48,7 @@ public class RegistrationController {
         }
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setInstPassword(passwordEncoder.encode(user.getInstPassword()));
+        user.setInstPassword(user.getInstPassword());
         user.setDoNotUnsubscribe(0);
         user.setMyPhotos(new ArrayList<>());
         user.setRoles(singleton(Role.USER));
