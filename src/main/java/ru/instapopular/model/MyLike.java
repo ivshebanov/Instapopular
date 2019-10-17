@@ -23,11 +23,11 @@ public class MyLike {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User idUser;
+    @JoinColumn(name = "id_usr")
+    private Usr idUsr;
 
     @Column(name = "usr")
-    private String user;
+    private String usr;
 
     private Integer count;
 }

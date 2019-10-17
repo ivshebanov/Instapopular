@@ -1,8 +1,8 @@
 package ru.instapopular.controller;
 
 import ru.instapopular.model.Role;
-import ru.instapopular.model.User;
-import ru.instapopular.repository.UserRepository;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.UsrRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +16,11 @@ import static java.util.Collections.singleton;
 @Controller
 public class RegistrationController {
 
-    private UserRepository userRepository;
+    private UsrRepository usrRepository;
     private PasswordEncoder passwordEncoder;
 
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public RegistrationController(UsrRepository usrRepository, PasswordEncoder passwordEncoder) {
+        this.usrRepository = usrRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -40,19 +40,19 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
-        if (userFromDb != null) {
+    public String addUser(Usr usr, Map<String, Object> model) {
+        Usr usrFromDb = usrRepository.findByUsrname(usr.getUsrname());
+        if (usrFromDb != null) {
             model.put("message", "Пользователь существует!");
             return "login";
         }
-        user.setActive(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setInstPassword(user.getInstPassword());
-        user.setDoNotUnsubscribe(0);
-        user.setMyPhotos(new ArrayList<>());
-        user.setRoles(singleton(Role.USER));
-        userRepository.save(user);
+        usr.setActive(true);
+        usr.setPassword(passwordEncoder.encode(usr.getPassword()));
+        usr.setInstPassword(usr.getInstPassword());
+        usr.setDoNotUnsubscribe(0);
+        usr.setMyPhotos(new ArrayList<>());
+        usr.setRoles(singleton(Role.USER));
+        usrRepository.save(usr);
         return "redirect:/login";
     }
 }

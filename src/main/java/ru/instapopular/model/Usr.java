@@ -24,7 +24,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "usr")
-public class User {
+public class Usr {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +34,7 @@ public class User {
 
     private String email;
 
-    private String username;
+    private String usrname;
 
     private String password;
 
@@ -47,11 +47,11 @@ public class User {
     @Column(name = "do_not_unsubscribe")
     private Integer doNotUnsubscribe;
 
-    @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "idUsr", cascade = CascadeType.ALL)
     private List<MyPhoto> myPhotos;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"))
+    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "id_usr"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 }
