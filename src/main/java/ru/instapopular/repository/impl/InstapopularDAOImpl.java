@@ -9,7 +9,7 @@ import ru.instapopular.repository.MyGroupRepository;
 import ru.instapopular.repository.MyHashtagRepository;
 import ru.instapopular.repository.MyLikeRepository;
 import ru.instapopular.repository.MyPhotoRepository;
-import ru.instapopular.repository.UserRepository;
+import ru.instapopular.repository.UsrRepository;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -19,14 +19,14 @@ import java.util.Map;
 @Repository
 public class InstapopularDAOImpl implements InstapopularDAO {
 
-    private final UserRepository userRepository;
+    private final UsrRepository usrRepository;
     private final MyGroupRepository myGroupRepository;
     private final MyHashtagRepository myHashtagRepository;
     private final MyLikeRepository myLikeRepository;
     private final MyPhotoRepository myPhotoRepository;
 
-    public InstapopularDAOImpl(UserRepository userRepository, MyGroupRepository myGroupRepository, MyHashtagRepository myHashtagRepository, MyLikeRepository myLikeRepository, MyPhotoRepository myPhotoRepository) {
-        this.userRepository = userRepository;
+    public InstapopularDAOImpl(UsrRepository usrRepository, MyGroupRepository myGroupRepository, MyHashtagRepository myHashtagRepository, MyLikeRepository myLikeRepository, MyPhotoRepository myPhotoRepository) {
+        this.usrRepository = usrRepository;
         this.myGroupRepository = myGroupRepository;
         this.myHashtagRepository = myHashtagRepository;
         this.myLikeRepository = myLikeRepository;
@@ -78,7 +78,7 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<MyLike> myLikeRepositoryAll = myLikeRepository.findAll();
         for (MyLike like : myLikeRepositoryAll) {
-            resultMap.put(like.getUser(), like.getCount());
+            resultMap.put(like.getUsr(), like.getCount());
         }
         return resultMap;
     }
