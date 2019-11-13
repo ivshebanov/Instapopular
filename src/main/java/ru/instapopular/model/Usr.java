@@ -1,7 +1,6 @@
 package ru.instapopular.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -20,8 +19,7 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "usr")
 public class Usr {
