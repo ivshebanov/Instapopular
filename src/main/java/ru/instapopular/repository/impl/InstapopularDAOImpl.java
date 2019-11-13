@@ -38,7 +38,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<Hashtag> myHashtagRepositoryAll = hashtagRepository.findAll();
         for (Hashtag hashtag : myHashtagRepositoryAll) {
-            resultMap.put(hashtag.getHashtag(), hashtag.getStatus());
+            int active = hashtag.isActive() ? 1 : 0;
+            resultMap.put(hashtag.getHashtag(), active);
         }
         return resultMap;
     }
@@ -48,8 +49,7 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<MyGroup> myGroupRepositoryAll = myGroupRepository.findAll();
         for (MyGroup group : myGroupRepositoryAll) {
-            int active = 0;
-            if (group.isActive()) active = 1;
+            int active = group.isActive() ? 1 : 0;
             resultMap.put(group.getMyGroup(), active);
         }
         return resultMap;
@@ -70,8 +70,7 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<Photo> myPhotoRepositoryAll = photoRepository.findAll();
         for (Photo photo : myPhotoRepositoryAll) {
-            int active = 0;
-            if (photo.isActive()) active = 1;
+            int active = photo.isActive() ? 1 : 0;
             resultMap.put(photo.getPhoto(), active);
         }
         return resultMap;

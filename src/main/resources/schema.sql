@@ -79,11 +79,11 @@ ALTER TABLE public.my_group
 CREATE TABLE public.hashtag
 (
     id      bigint                                              NOT NULL,
-    id_usr  bigint                                              NOT NULL,
+    usr_id  bigint                                              NOT NULL,
     hashtag character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                             NOT NULL,
+    active  boolean                                             NOT NULL,
     CONSTRAINT hashtag_pkey PRIMARY KEY (id),
-    CONSTRAINT hashtag_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT hashtag_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION

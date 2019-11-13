@@ -50,8 +50,12 @@ public class RegistrationController {
         usr.setPassword(passwordEncoder.encode(usr.getPassword()));
         usr.setInstPassword(usr.getInstPassword());
         usr.setDoNotUnsubscribe(0);
+
         usr.setPhotos(new ArrayList<>());
         usr.setLikes(new ArrayList<>());
+        usr.setGroups(new ArrayList<>());
+        usr.setHashtags(new ArrayList<>());
+
         usr.setRoles(singleton(Role.USER));
         usrRepository.save(usr);
         model.put("message", "Пользователь зарегистрирован!");

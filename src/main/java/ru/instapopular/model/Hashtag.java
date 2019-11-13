@@ -22,10 +22,10 @@ public class Hashtag {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usr")
-    private Usr idUsr;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
     private String hashtag;
 
-    private Integer status;
+    private boolean active;
 }
