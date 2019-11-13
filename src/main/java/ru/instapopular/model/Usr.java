@@ -47,7 +47,7 @@ public class Usr {
     @Column(name = "do_not_unsubscribe")
     private Integer doNotUnsubscribe;
 
-    @OneToMany(mappedBy = "idUsr", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

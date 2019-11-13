@@ -11,9 +11,6 @@ CREATE TABLE public.usr
     do_not_unsubscribe integer,
     CONSTRAINT usr_pkey PRIMARY KEY (id)
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.usr
@@ -24,18 +21,15 @@ ALTER TABLE public.usr
 CREATE TABLE public.photo
 (
     id     bigint                                              NOT NULL,
-    id_usr bigint                                              NOT NULL,
+    usr_id bigint                                              NOT NULL,
+    active integer                                             NOT NULL,
     photo  character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status integer                                             NOT NULL,
     CONSTRAINT photo_pkey PRIMARY KEY (id),
-    CONSTRAINT photo_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT photo_usr_id__fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.photo
@@ -55,9 +49,6 @@ CREATE TABLE public.like
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.like
@@ -77,9 +68,6 @@ CREATE TABLE public.my_group
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_group
@@ -99,9 +87,6 @@ CREATE TABLE public.hashtag
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.hashtag
@@ -118,9 +103,6 @@ CREATE TABLE public.usr_role
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.usr_role
