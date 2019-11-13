@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_hashtag")
-public class MyHashtag {
+@Table(name = "hashtag")
+public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

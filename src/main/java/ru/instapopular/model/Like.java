@@ -3,6 +3,7 @@ package ru.instapopular.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +15,8 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_photo")
-public class MyPhoto {
+@Table(name = "like")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +26,8 @@ public class MyPhoto {
     @JoinColumn(name = "id_usr")
     private Usr idUsr;
 
-    private String photo;
+    @Column(name = "usr")
+    private String usr;
 
-    private Integer status;
+    private Integer count;
 }

@@ -48,7 +48,7 @@ public class Usr {
     private Integer doNotUnsubscribe;
 
     @OneToMany(mappedBy = "idUsr", cascade = CascadeType.ALL)
-    private List<MyPhoto> myPhotos;
+    private List<Photo> photos;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "id_usr"))

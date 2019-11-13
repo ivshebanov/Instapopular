@@ -20,15 +20,15 @@ ALTER TABLE public.usr
     OWNER to ivshebanov;
 
 
--- Table: public.my_photo
-CREATE TABLE public.my_photo
+-- Table: public.photo
+CREATE TABLE public.photo
 (
     id     bigint                                              NOT NULL,
     id_usr bigint                                              NOT NULL,
     photo  character varying(255) COLLATE pg_catalog."default" NOT NULL,
     status integer                                             NOT NULL,
-    CONSTRAINT my_photo_pkey PRIMARY KEY (id),
-    CONSTRAINT my_photo_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT photo_pkey PRIMARY KEY (id),
+    CONSTRAINT photo_id_usr_fkey FOREIGN KEY (id_usr)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -38,19 +38,19 @@ CREATE TABLE public.my_photo
     )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_photo
+ALTER TABLE public.photo
     OWNER to ivshebanov;
 
 
--- Table: public.my_like
-CREATE TABLE public.my_like
+-- Table: public.like
+CREATE TABLE public.like
 (
     id     bigint                                              NOT NULL,
     id_usr bigint                                              NOT NULL,
     usr    character varying(255) COLLATE pg_catalog."default" NOT NULL,
     count  integer                                             NOT NULL,
-    CONSTRAINT my_like_pkey PRIMARY KEY (id),
-    CONSTRAINT my_like_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT like_pkey PRIMARY KEY (id),
+    CONSTRAINT like_id_usr_fkey FOREIGN KEY (id_usr)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -60,7 +60,7 @@ CREATE TABLE public.my_like
     )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_like
+ALTER TABLE public.like
     OWNER to ivshebanov;
 
 
@@ -86,15 +86,15 @@ ALTER TABLE public.my_group
     OWNER to ivshebanov;
 
 
--- Table: public.my_hashtag
-CREATE TABLE public.my_hashtag
+-- Table: public.hashtag
+CREATE TABLE public.hashtag
 (
     id      bigint                                              NOT NULL,
     id_usr  bigint                                              NOT NULL,
     hashtag character varying(255) COLLATE pg_catalog."default" NOT NULL,
     status  integer                                             NOT NULL,
-    CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
-    CONSTRAINT my_hashtag_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT hashtag_pkey PRIMARY KEY (id),
+    CONSTRAINT hashtag_id_usr_fkey FOREIGN KEY (id_usr)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -104,7 +104,7 @@ CREATE TABLE public.my_hashtag
     )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_hashtag
+ALTER TABLE public.hashtag
     OWNER to ivshebanov;
 
 

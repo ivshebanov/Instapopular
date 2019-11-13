@@ -1,14 +1,14 @@
 package ru.instapopular.repository.impl;
 
 import ru.instapopular.model.MyGroup;
-import ru.instapopular.model.MyHashtag;
-import ru.instapopular.model.MyLike;
-import ru.instapopular.model.MyPhoto;
+import ru.instapopular.model.Hashtag;
+import ru.instapopular.model.Like;
+import ru.instapopular.model.Photo;
 import ru.instapopular.repository.InstapopularDAO;
 import ru.instapopular.repository.MyGroupRepository;
-import ru.instapopular.repository.MyHashtagRepository;
-import ru.instapopular.repository.MyLikeRepository;
-import ru.instapopular.repository.MyPhotoRepository;
+import ru.instapopular.repository.HashtagRepository;
+import ru.instapopular.repository.LikeRepository;
+import ru.instapopular.repository.PhotoRepository;
 import ru.instapopular.repository.UsrRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,23 +21,23 @@ public class InstapopularDAOImpl implements InstapopularDAO {
 
     private final UsrRepository usrRepository;
     private final MyGroupRepository myGroupRepository;
-    private final MyHashtagRepository myHashtagRepository;
-    private final MyLikeRepository myLikeRepository;
-    private final MyPhotoRepository myPhotoRepository;
+    private final HashtagRepository hashtagRepository;
+    private final LikeRepository likeRepository;
+    private final PhotoRepository photoRepository;
 
-    public InstapopularDAOImpl(UsrRepository usrRepository, MyGroupRepository myGroupRepository, MyHashtagRepository myHashtagRepository, MyLikeRepository myLikeRepository, MyPhotoRepository myPhotoRepository) {
+    public InstapopularDAOImpl(UsrRepository usrRepository, MyGroupRepository myGroupRepository, HashtagRepository hashtagRepository, LikeRepository likeRepository, PhotoRepository photoRepository) {
         this.usrRepository = usrRepository;
         this.myGroupRepository = myGroupRepository;
-        this.myHashtagRepository = myHashtagRepository;
-        this.myLikeRepository = myLikeRepository;
-        this.myPhotoRepository = myPhotoRepository;
+        this.hashtagRepository = hashtagRepository;
+        this.likeRepository = likeRepository;
+        this.photoRepository = photoRepository;
     }
 
     @Override
     public Map<String, Integer> getHestags() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyHashtag> myHashtagRepositoryAll = myHashtagRepository.findAll();
-        for (MyHashtag hashtag : myHashtagRepositoryAll) {
+        Iterable<Hashtag> myHashtagRepositoryAll = hashtagRepository.findAll();
+        for (Hashtag hashtag : myHashtagRepositoryAll) {
             resultMap.put(hashtag.getHashtag(), hashtag.getStatus());
         }
         return resultMap;
@@ -56,8 +56,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getDoNotUnsubscribe() throws IOException {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyLike> myLikeRepositoryAll = myLikeRepository.findAll();
-        for (MyLike like : myLikeRepositoryAll){
+        Iterable<Like> myLikeRepositoryAll = likeRepository.findAll();
+        for (Like like : myLikeRepositoryAll){
 
         }
         return resultMap;
@@ -66,8 +66,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getMyPhoto() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyPhoto> myPhotoRepositoryAll = myPhotoRepository.findAll();
-        for (MyPhoto photo : myPhotoRepositoryAll) {
+        Iterable<Photo> myPhotoRepositoryAll = photoRepository.findAll();
+        for (Photo photo : myPhotoRepositoryAll) {
             resultMap.put(photo.getPhoto(), photo.getStatus());
         }
         return resultMap;
@@ -76,8 +76,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getPhotoAnalysisResults() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyLike> myLikeRepositoryAll = myLikeRepository.findAll();
-        for (MyLike like : myLikeRepositoryAll) {
+        Iterable<Like> myLikeRepositoryAll = likeRepository.findAll();
+        for (Like like : myLikeRepositoryAll) {
             resultMap.put(like.getUsr(), like.getCount());
         }
         return resultMap;
