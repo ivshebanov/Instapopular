@@ -60,7 +60,7 @@ public class Usr {
     private List<MyGroup> groups;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "usr_roles", joinColumns = @JoinColumn(name = "usr_id"))
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
     private Set<Roles> role;
 }

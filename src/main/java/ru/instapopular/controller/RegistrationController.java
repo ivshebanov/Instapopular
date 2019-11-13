@@ -1,5 +1,6 @@
 package ru.instapopular.controller;
 
+import ru.instapopular.model.Photo;
 import ru.instapopular.model.Roles;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.UsrRepository;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 
 @Controller
 public class RegistrationController {
@@ -50,12 +52,6 @@ public class RegistrationController {
         usr.setPassword(passwordEncoder.encode(usr.getPassword()));
         usr.setInstPassword(usr.getInstPassword());
         usr.setDoNotUnsubscribe(0);
-
-        usr.setPhotos(new ArrayList<>());
-        usr.setLikes(new ArrayList<>());
-        usr.setGroups(new ArrayList<>());
-        usr.setHashtags(new ArrayList<>());
-
         usr.setRole(singleton(Roles.USER));
         usrRepository.save(usr);
         model.put("message", "Пользователь зарегистрирован!");
