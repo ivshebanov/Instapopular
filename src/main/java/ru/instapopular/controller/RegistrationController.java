@@ -50,9 +50,10 @@ public class RegistrationController {
         usr.setPassword(passwordEncoder.encode(usr.getPassword()));
         usr.setInstPassword(usr.getInstPassword());
         usr.setDoNotUnsubscribe(0);
-//        usr.setPhotos(new ArrayList<>());
+        usr.setPhotos(new ArrayList<>());
         usr.setRoles(singleton(Role.USER));
         usrRepository.save(usr);
-        return "redirect:/login";
+        model.put("message", "Пользователь зарегистрирован!");
+        return "login";
     }
 }
