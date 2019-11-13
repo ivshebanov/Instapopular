@@ -3,7 +3,6 @@ package ru.instapopular.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,11 +22,13 @@ public class Like {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usr")
-    private Usr idUsr;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
-    @Column(name = "usr")
-    private String usr;
+    private boolean active;
 
-    private Integer count;
+    private String guys;
+
+    @JoinColumn(name = "count_like")
+    private Integer countLike;
 }

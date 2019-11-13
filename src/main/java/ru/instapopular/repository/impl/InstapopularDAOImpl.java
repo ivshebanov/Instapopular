@@ -68,7 +68,9 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<Photo> myPhotoRepositoryAll = photoRepository.findAll();
         for (Photo photo : myPhotoRepositoryAll) {
-            resultMap.put(photo.getPhoto(), photo.getStatus());
+            int active = 0;
+            if (photo.isActive()) active = 1;
+            resultMap.put(photo.getPhoto(), active);
         }
         return resultMap;
     }
@@ -78,7 +80,7 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<Like> myLikeRepositoryAll = likeRepository.findAll();
         for (Like like : myLikeRepositoryAll) {
-            resultMap.put(like.getUsr(), like.getCount());
+            resultMap.put(like.getGuys(), like.getCountLike());
         }
         return resultMap;
     }

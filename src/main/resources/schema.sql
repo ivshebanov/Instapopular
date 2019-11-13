@@ -22,10 +22,10 @@ CREATE TABLE public.photo
 (
     id     bigint                                              NOT NULL,
     usr_id bigint                                              NOT NULL,
-    active integer                                             NOT NULL,
+    active boolean                                             NOT NULL,
     photo  character varying(255) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT photo_pkey PRIMARY KEY (id),
-    CONSTRAINT photo_usr_id__fkey FOREIGN KEY (usr_id)
+    CONSTRAINT photo_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -39,12 +39,13 @@ ALTER TABLE public.photo
 -- Table: public.like
 CREATE TABLE public.like
 (
-    id     bigint                                              NOT NULL,
-    id_usr bigint                                              NOT NULL,
-    usr    character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    count  integer                                             NOT NULL,
+    id         bigint                                              NOT NULL,
+    usr_id     bigint                                              NOT NULL,
+    active     boolean                                             NOT NULL,
+    guys       character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    count_like integer                                             NOT NULL,
     CONSTRAINT like_pkey PRIMARY KEY (id),
-    CONSTRAINT like_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT like_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION

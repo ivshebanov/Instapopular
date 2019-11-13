@@ -25,7 +25,7 @@ public class Photo {
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
-    private String photo;
+    private boolean active;
 
-    private Integer status;
+    private String photo;
 }

@@ -50,6 +50,9 @@ public class Usr {
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "id_usr"))
     @Enumerated(EnumType.STRING)
