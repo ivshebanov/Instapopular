@@ -14,18 +14,21 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_hashtag")
-public class MyHashtag {
+@Table(name = "like")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usr")
-    private Usr idUsr;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
-    private String hashtag;
+    private boolean active;
 
-    private Integer status;
+    private String guys;
+
+    @JoinColumn(name = "count_like")
+    private Integer countLike;
 }

@@ -14,18 +14,18 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_photo")
-public class MyPhoto {
+@Table(name = "hashtag")
+public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usr")
-    private Usr idUsr;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
-    private String photo;
+    private String hashtag;
 
-    private Integer status;
+    private boolean active;
 }

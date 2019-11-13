@@ -47,11 +47,20 @@ public class Usr {
     @Column(name = "do_not_unsubscribe")
     private Integer doNotUnsubscribe;
 
-    @OneToMany(mappedBy = "idUsr", cascade = CascadeType.ALL)
-    private List<MyPhoto> myPhotos;
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    private List<Photo> photos;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "id_usr"))
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    private List<Hashtag> hashtags;
+
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    private List<MyGroup> groups;
+
+    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Set<Roles> role;
 }

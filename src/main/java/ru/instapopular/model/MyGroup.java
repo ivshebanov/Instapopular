@@ -22,10 +22,11 @@ public class MyGroup {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usr")
-    private Usr idUsr;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
-    private String group;
+    @JoinColumn(name = "my_group")
+    private String myGroup;
 
-    private Integer status;
+    private boolean active;
 }

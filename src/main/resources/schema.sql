@@ -11,117 +11,100 @@ CREATE TABLE public.usr
     do_not_unsubscribe integer,
     CONSTRAINT usr_pkey PRIMARY KEY (id)
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.usr
     OWNER to ivshebanov;
 
 
--- Table: public.my_photo
-CREATE TABLE public.my_photo
+-- Table: public.photo
+CREATE TABLE public.photo
 (
     id     bigint                                              NOT NULL,
-    id_usr bigint                                              NOT NULL,
+    usr_id bigint                                              NOT NULL,
+    active boolean                                             NOT NULL,
     photo  character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status integer                                             NOT NULL,
-    CONSTRAINT my_photo_pkey PRIMARY KEY (id),
-    CONSTRAINT my_photo_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT photo_pkey PRIMARY KEY (id),
+    CONSTRAINT photo_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_photo
+ALTER TABLE public.photo
     OWNER to ivshebanov;
 
 
--- Table: public.my_like
-CREATE TABLE public.my_like
+-- Table: public.like
+CREATE TABLE public.like
 (
-    id     bigint                                              NOT NULL,
-    id_usr bigint                                              NOT NULL,
-    usr    character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    count  integer                                             NOT NULL,
-    CONSTRAINT my_like_pkey PRIMARY KEY (id),
-    CONSTRAINT my_like_id_usr_fkey FOREIGN KEY (id_usr)
+    id         bigint                                              NOT NULL,
+    usr_id     bigint                                              NOT NULL,
+    active     boolean                                             NOT NULL,
+    guys       character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    count_like integer                                             NOT NULL,
+    CONSTRAINT like_pkey PRIMARY KEY (id),
+    CONSTRAINT like_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_like
+ALTER TABLE public.like
     OWNER to ivshebanov;
 
 
 -- Table: public.my_group
 CREATE TABLE public.my_group
 (
-    id      bigint                                              NOT NULL,
-    id_usr  bigint                                              NOT NULL,
-    "group" character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                             NOT NULL,
+    id       bigint                                              NOT NULL,
+    usr_id   bigint                                              NOT NULL,
+    my_group character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    active   boolean                                             NOT NULL,
     CONSTRAINT my_group_pkey PRIMARY KEY (id),
-    CONSTRAINT my_group_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT my_group_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_group
     OWNER to ivshebanov;
 
 
--- Table: public.my_hashtag
-CREATE TABLE public.my_hashtag
+-- Table: public.hashtag
+CREATE TABLE public.hashtag
 (
     id      bigint                                              NOT NULL,
-    id_usr  bigint                                              NOT NULL,
+    usr_id  bigint                                              NOT NULL,
     hashtag character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                             NOT NULL,
-    CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
-    CONSTRAINT my_hashtag_id_usr_fkey FOREIGN KEY (id_usr)
+    active  boolean                                             NOT NULL,
+    CONSTRAINT hashtag_pkey PRIMARY KEY (id),
+    CONSTRAINT hashtag_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.my_hashtag
+ALTER TABLE public.hashtag
     OWNER to ivshebanov;
 
 
--- Table: public.usr_role
-CREATE TABLE public.usr_role
+-- Table: public.roles
+CREATE TABLE public.roles
 (
-    id_usr bigint                                              NOT NULL,
-    roles  character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT usr_role_id_usr_fkey FOREIGN KEY (id_usr)
+    usr_id bigint                                              NOT NULL,
+    role   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT roles_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-    WITH (
-        OIDS = FALSE
-    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.usr_role
+ALTER TABLE public.roles
     OWNER to ivshebanov;

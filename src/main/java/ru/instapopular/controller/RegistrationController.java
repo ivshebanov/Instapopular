@@ -1,6 +1,7 @@
 package ru.instapopular.controller;
 
-import ru.instapopular.model.Role;
+import ru.instapopular.model.Photo;
+import ru.instapopular.model.Roles;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.UsrRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 
 @Controller
 public class RegistrationController {
@@ -50,9 +52,9 @@ public class RegistrationController {
         usr.setPassword(passwordEncoder.encode(usr.getPassword()));
         usr.setInstPassword(usr.getInstPassword());
         usr.setDoNotUnsubscribe(0);
-        usr.setMyPhotos(new ArrayList<>());
-        usr.setRoles(singleton(Role.USER));
+        usr.setRole(singleton(Roles.USER));
         usrRepository.save(usr);
-        return "redirect:/login";
+        model.put("message", "Пользователь зарегистрирован!");
+        return "login";
     }
 }
