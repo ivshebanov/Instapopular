@@ -48,7 +48,9 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<MyGroup> myGroupRepositoryAll = myGroupRepository.findAll();
         for (MyGroup group : myGroupRepositoryAll) {
-            resultMap.put(group.getGroup(), group.getStatus());
+            int active = 0;
+            if (group.isActive()) active = 1;
+            resultMap.put(group.getMyGroup(), active);
         }
         return resultMap;
     }

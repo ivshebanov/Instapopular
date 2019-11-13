@@ -59,12 +59,12 @@ ALTER TABLE public.like
 -- Table: public.my_group
 CREATE TABLE public.my_group
 (
-    id      bigint                                              NOT NULL,
-    id_usr  bigint                                              NOT NULL,
-    "group" character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    status  integer                                             NOT NULL,
+    id       bigint                                              NOT NULL,
+    usr_id   bigint                                              NOT NULL,
+    my_group character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    active   boolean                                             NOT NULL,
     CONSTRAINT my_group_pkey PRIMARY KEY (id),
-    CONSTRAINT my_group_id_usr_fkey FOREIGN KEY (id_usr)
+    CONSTRAINT my_group_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
