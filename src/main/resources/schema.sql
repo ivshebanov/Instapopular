@@ -95,16 +95,16 @@ ALTER TABLE public.hashtag
 
 
 -- Table: public.usr_role
-CREATE TABLE public.usr_role
+CREATE TABLE public.usr_roles
 (
-    id_usr bigint                                              NOT NULL,
-    roles  character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT usr_role_id_usr_fkey FOREIGN KEY (id_usr)
+    usr_id bigint                                              NOT NULL,
+    role   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT usr_role_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
     TABLESPACE pg_default;
 
-ALTER TABLE public.usr_role
+ALTER TABLE public.usr_roles
     OWNER to ivshebanov;

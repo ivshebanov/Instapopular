@@ -1,6 +1,6 @@
 package ru.instapopular.model;
 
-public enum Role {
+public enum Roles {
     ADMIN,
     USER,
     ANONYMOUS

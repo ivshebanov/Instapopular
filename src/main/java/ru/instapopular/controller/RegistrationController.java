@@ -1,6 +1,6 @@
 package ru.instapopular.controller;
 
-import ru.instapopular.model.Role;
+import ru.instapopular.model.Roles;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.UsrRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +56,7 @@ public class RegistrationController {
         usr.setGroups(new ArrayList<>());
         usr.setHashtags(new ArrayList<>());
 
-        usr.setRoles(singleton(Role.USER));
+        usr.setRole(singleton(Roles.USER));
         usrRepository.save(usr);
         model.put("message", "Пользователь зарегистрирован!");
         return "login";

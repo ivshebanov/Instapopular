@@ -59,8 +59,8 @@ public class Usr {
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
     private List<MyGroup> groups;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "id_usr"))
+    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "usr_roles", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Set<Roles> role;
 }
