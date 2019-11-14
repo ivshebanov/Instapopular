@@ -16,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
@@ -30,15 +33,22 @@ public class Usr {
 
     private boolean active;
 
+    @Email
     private String email;
 
+    @NotBlank
+    @Size(min=2, max=50)
     private String usrname;
 
+    @NotBlank
+    @Size(min=2, max=50)
     private String password;
 
     @Column(name = "inst_name")
     private String instName;
 
+    @NotBlank
+    @Size(min=2, max=50)
     @Column(name = "inst_password")
     private String instPassword;
 
