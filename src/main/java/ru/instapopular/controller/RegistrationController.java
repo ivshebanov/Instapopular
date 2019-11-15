@@ -49,9 +49,11 @@ public class RegistrationController {
         try {
             Set<ConstraintViolation<Usr>> validates = validator.validate(usr);
             if (validates.size() > 0) {
+                StringBuilder massage = new StringBuilder().append("Вы ввели невалидные данные, ");
                 for (ConstraintViolation<Usr> validate : validates) {
-                    model.put("message", "Вы ввели невалидные данные, " + validate.getMessage() + ": " + validate.getInvalidValue());
+                    massage.append(validate.getMessage()).append(" ").append(validate.getInvalidValue()).append("/");
                 }
+                model.put("message", massage);
                 return "login";
             }
 

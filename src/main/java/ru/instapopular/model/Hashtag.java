@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
@@ -23,6 +24,7 @@ public class Hashtag {
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
+    @NotBlank
     private String hashtag;
 
     private boolean active;
