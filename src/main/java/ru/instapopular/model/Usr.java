@@ -1,7 +1,6 @@
 package ru.instapopular.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -17,11 +16,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "usr")
 public class Usr {
@@ -32,18 +36,25 @@ public class Usr {
 
     private boolean active;
 
+    @Email
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String usrname;
 
+    @NotBlank
     private String password;
 
+    @NotBlank
     @Column(name = "inst_name")
     private String instName;
 
+    @NotBlank
     @Column(name = "inst_password")
     private String instPassword;
 
+    @PositiveOrZero
     @Column(name = "do_not_unsubscribe")
     private Integer doNotUnsubscribe;
 
