@@ -9,6 +9,7 @@ import ru.instapopular.model.Usr;
 import ru.instapopular.repository.UsrRepository;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.util.Map;
 import java.util.Set;
@@ -45,26 +46,32 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(Usr usr, Map<String, Object> model) {
-        Set<ConstraintViolation<Usr>> validates = validator.validate(usr);
-        if (validates.size() > 0) {
-            for (ConstraintViolation<Usr> validate : validates) {
-                model.put("message", "Вы ввели невалидные данные " + validate.getMessage() + ": " + validate.getInvalidValue());
+        try {
+            Set<ConstraintViolation<Usr>> validates = validator.validate(usr);
+            if (validates.size() > 0) {
+                for (ConstraintViolation<Usr> validate : validates) {
+                    model.put("message", "Вы ввели невалидные данные, " + validate.getMessage() + ": " + validate.getInvalidValue());
+                }
+                return "login";
             }
-            return "login";
+
+            Usr usrFromDb = usrRepository.findByUsrname(usr.getUsrname());
+            if (usrFromDb != null) {
+                model.put("message", "Пользователь существует!");
+                return "login";
+            }
+            usr.setActive(true);
+            usr.setPassword(passwordEncoder.encode(usr.getPassword()));
+            usr.setInstPassword(usr.getInstPassword());
+            usr.setDoNotUnsubscribe(0);
+            usr.setRole(singleton(Roles.USER));
+            usrRepository.save(usr);
+            model.put("message", "Пользователь зарегистрирован!");
+
+        } catch (ConstraintViolationException e) {
+
         }
 
-        Usr usrFromDb = usrRepository.findByUsrname(usr.getUsrname());
-        if (usrFromDb != null) {
-            model.put("message", "Пользователь существует!");
-            return "login";
-        }
-        usr.setActive(true);
-        usr.setPassword(passwordEncoder.encode(usr.getPassword()));
-        usr.setInstPassword(usr.getInstPassword());
-        usr.setDoNotUnsubscribe(0);
-        usr.setRole(singleton(Roles.USER));
-        usrRepository.save(usr);
-        model.put("message", "Пользователь зарегистрирован!");
         return "login";
     }
 }
