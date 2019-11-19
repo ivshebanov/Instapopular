@@ -1,12 +1,10 @@
 package ru.instapopular.groups;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import ru.instapopular.Action;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.instapopular.Action;
-import ru.instapopular.model.Usr;
 
 import java.util.Map;
 
@@ -20,40 +18,37 @@ public class GroupsController {
     }
 
     @GetMapping("/groups")
-    public String groups(@AuthenticationPrincipal Usr usr,
-                         Map<String, Object> view) {
-        view.put("groupView", groupsService.getGroup(usr));
+    public String groups(Map<String, Object> view) {
+        view.put("groupView", groupsService.getGroup());
         return "groups";
     }
 
     @PostMapping("/group")
-    public String group(@AuthenticationPrincipal Usr usr,
-                        @RequestParam(name = "login") String login,
+    public String group(@RequestParam(name = "login") String login,
                         @RequestParam(name = "password") String password,
                         @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions,
                         @RequestParam(name = "action", defaultValue = "SUBSCRIBE_AND_LIKE") Action action,
                         Map<String, Object> view) {
 
-        if (login.length() > 0 || password.length() > 0) {
+        if ((login != null && login.length() > 0) || (password != null && password.length() > 0)) {
             groupsService.loginOnWebSite(login, password);
             groupsService.subscribeToUsersInGroup(countSubscriptions, action);
         }
-        view.put("groupView", groupsService.getGroup(usr));
+        view.put("groupView", groupsService.getGroup());
         return "groups";
     }
 
     @PostMapping("/addRemove")
-    public String addRemove(@AuthenticationPrincipal Usr usr,
-                            @RequestParam(name = "addGroup") String add,
+    public String addRemove(@RequestParam(name = "addGroup") String add,
                             @RequestParam(name = "removeGroup") String remove,
                             Map<String, Object> view) {
 
-        if (add.length() > 0) {
-            groupsService.addGroup(usr, add);
-        } else if (remove.length() > 0) {
-            groupsService.removeGroup(usr, remove);
+        if (add != null && add.length() > 0) {
+            groupsService.addGroup(add);
+        } else if (remove != null && remove.length() > 0) {
+            groupsService.removeGroup(remove);
         }
-        view.put("groupView", groupsService.getGroup(usr));
+        view.put("groupView", groupsService.getGroup());
         return "groups";
     }
 }

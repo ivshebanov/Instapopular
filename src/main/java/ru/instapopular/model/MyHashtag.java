@@ -1,6 +1,7 @@
 package ru.instapopular.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,23 +10,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "hashtag")
-public class Hashtag {
+@Table(name = "my_hashtag")
+public class MyHashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "usr_id")
-    private Usr usr;
+    @JoinColumn(name = "id_user")
+    private User idUser;
 
-    @NotBlank
     private String hashtag;
 
-    private boolean active;
+    private Integer status;
 }
