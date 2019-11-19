@@ -8,16 +8,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.sql.DataSource;
+import ru.instapopular.service.UsrService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final DataSource dataSource;
 
-    public WebSecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+    private final UsrService usrService;
+
+    public WebSecurityConfig(UsrService usrService) {
+        this.usrService = usrService;
     }
 
     @Bean
@@ -42,10 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("select usrname, password, active from usr where usrname=?")
-                .authoritiesByUsernameQuery("select u.usrname, ur.role from usr u inner join roles ur on u.id = ur.usr_id where u.usrname=?");
+        auth.userDetailsService(usrService)
+                .passwordEncoder(passwordEncoder());
     }
 }
