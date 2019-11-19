@@ -1,9 +1,7 @@
 package ru.instapopular.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,23 +9,28 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "my_like")
-public class MyLike {
+@Table(name = "like")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User idUser;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
-    @Column(name = "usr")
-    private String user;
+    private boolean active;
 
-    private Integer count;
+    @NotBlank
+    private String guys;
+
+    @PositiveOrZero
+    @JoinColumn(name = "count_like")
+    private Integer countLike;
 }

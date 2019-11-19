@@ -1,27 +1,33 @@
 package ru.instapopular.controller;
 
-import ru.instapopular.model.Role;
-import ru.instapopular.model.User;
-import ru.instapopular.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.instapopular.model.Roles;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.UsrRepository;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Collections.singleton;
 
 @Controller
 public class RegistrationController {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UsrRepository usrRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final Validator validator;
 
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public RegistrationController(UsrRepository usrRepository, PasswordEncoder passwordEncoder, Validator validator) {
+        this.usrRepository = usrRepository;
         this.passwordEncoder = passwordEncoder;
+        this.validator = validator;
     }
 
     @GetMapping("/")
@@ -40,19 +46,35 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
-        if (userFromDb != null) {
-            model.put("message", "Пользователь существует!");
-            return "login";
+    public String addUser(Usr usr, Map<String, Object> model) {
+        try {
+            Set<ConstraintViolation<Usr>> validates = validator.validate(usr);
+            if (validates.size() > 0) {
+                StringBuilder massage = new StringBuilder().append("Вы ввели невалидные данные, ");
+                for (ConstraintViolation<Usr> validate : validates) {
+                    massage.append(validate.getMessage()).append(" ").append(validate.getInvalidValue()).append("/");
+                }
+                model.put("message", massage);
+                return "login";
+            }
+
+            Usr usrFromDb = usrRepository.findByUsrname(usr.getUsrname());
+            if (usrFromDb != null) {
+                model.put("message", "Пользователь существует!");
+                return "login";
+            }
+            usr.setActive(true);
+            usr.setPassword(passwordEncoder.encode(usr.getPassword()));
+            usr.setInstPassword(usr.getInstPassword());
+            usr.setDoNotUnsubscribe(0);
+            usr.setRole(singleton(Roles.USER));
+            usrRepository.save(usr);
+            model.put("message", "Пользователь зарегистрирован!");
+
+        } catch (ConstraintViolationException e) {
+
         }
-        user.setActive(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setInstPassword(passwordEncoder.encode(user.getInstPassword()));
-        user.setDoNotUnsubscribe(0);
-        user.setMyPhotos(new ArrayList<>());
-        user.setRoles(singleton(Role.USER));
-        userRepository.save(user);
-        return "redirect:/login";
+
+        return "login";
     }
 }

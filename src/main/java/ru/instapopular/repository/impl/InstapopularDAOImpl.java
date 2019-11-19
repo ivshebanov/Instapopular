@@ -1,15 +1,15 @@
 package ru.instapopular.repository.impl;
 
 import ru.instapopular.model.MyGroup;
-import ru.instapopular.model.MyHashtag;
-import ru.instapopular.model.MyLike;
-import ru.instapopular.model.MyPhoto;
+import ru.instapopular.model.Hashtag;
+import ru.instapopular.model.Like;
+import ru.instapopular.model.Photo;
 import ru.instapopular.repository.InstapopularDAO;
 import ru.instapopular.repository.MyGroupRepository;
-import ru.instapopular.repository.MyHashtagRepository;
-import ru.instapopular.repository.MyLikeRepository;
-import ru.instapopular.repository.MyPhotoRepository;
-import ru.instapopular.repository.UserRepository;
+import ru.instapopular.repository.HashtagRepository;
+import ru.instapopular.repository.LikeRepository;
+import ru.instapopular.repository.PhotoRepository;
+import ru.instapopular.repository.UsrRepository;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -19,26 +19,27 @@ import java.util.Map;
 @Repository
 public class InstapopularDAOImpl implements InstapopularDAO {
 
-    private final UserRepository userRepository;
+    private final UsrRepository usrRepository;
     private final MyGroupRepository myGroupRepository;
-    private final MyHashtagRepository myHashtagRepository;
-    private final MyLikeRepository myLikeRepository;
-    private final MyPhotoRepository myPhotoRepository;
+    private final HashtagRepository hashtagRepository;
+    private final LikeRepository likeRepository;
+    private final PhotoRepository photoRepository;
 
-    public InstapopularDAOImpl(UserRepository userRepository, MyGroupRepository myGroupRepository, MyHashtagRepository myHashtagRepository, MyLikeRepository myLikeRepository, MyPhotoRepository myPhotoRepository) {
-        this.userRepository = userRepository;
+    public InstapopularDAOImpl(UsrRepository usrRepository, MyGroupRepository myGroupRepository, HashtagRepository hashtagRepository, LikeRepository likeRepository, PhotoRepository photoRepository) {
+        this.usrRepository = usrRepository;
         this.myGroupRepository = myGroupRepository;
-        this.myHashtagRepository = myHashtagRepository;
-        this.myLikeRepository = myLikeRepository;
-        this.myPhotoRepository = myPhotoRepository;
+        this.hashtagRepository = hashtagRepository;
+        this.likeRepository = likeRepository;
+        this.photoRepository = photoRepository;
     }
 
     @Override
     public Map<String, Integer> getHestags() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyHashtag> myHashtagRepositoryAll = myHashtagRepository.findAll();
-        for (MyHashtag hashtag : myHashtagRepositoryAll) {
-            resultMap.put(hashtag.getHashtag(), hashtag.getStatus());
+        Iterable<Hashtag> myHashtagRepositoryAll = hashtagRepository.findAll();
+        for (Hashtag hashtag : myHashtagRepositoryAll) {
+            int active = hashtag.isActive() ? 1 : 0;
+            resultMap.put(hashtag.getHashtag(), active);
         }
         return resultMap;
     }
@@ -48,7 +49,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
         HashMap<String, Integer> resultMap = new HashMap<>();
         Iterable<MyGroup> myGroupRepositoryAll = myGroupRepository.findAll();
         for (MyGroup group : myGroupRepositoryAll) {
-            resultMap.put(group.getGroup(), group.getStatus());
+            int active = group.isActive() ? 1 : 0;
+            resultMap.put(group.getMyGroup(), active);
         }
         return resultMap;
     }
@@ -56,8 +58,8 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getDoNotUnsubscribe() throws IOException {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyLike> myLikeRepositoryAll = myLikeRepository.findAll();
-        for (MyLike like : myLikeRepositoryAll){
+        Iterable<Like> myLikeRepositoryAll = likeRepository.findAll();
+        for (Like like : myLikeRepositoryAll){
 
         }
         return resultMap;
@@ -66,9 +68,10 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getMyPhoto() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyPhoto> myPhotoRepositoryAll = myPhotoRepository.findAll();
-        for (MyPhoto photo : myPhotoRepositoryAll) {
-            resultMap.put(photo.getPhoto(), photo.getStatus());
+        Iterable<Photo> myPhotoRepositoryAll = photoRepository.findAll();
+        for (Photo photo : myPhotoRepositoryAll) {
+            int active = photo.isActive() ? 1 : 0;
+            resultMap.put(photo.getPhoto(), active);
         }
         return resultMap;
     }
@@ -76,9 +79,9 @@ public class InstapopularDAOImpl implements InstapopularDAO {
     @Override
     public Map<String, Integer> getPhotoAnalysisResults() {
         HashMap<String, Integer> resultMap = new HashMap<>();
-        Iterable<MyLike> myLikeRepositoryAll = myLikeRepository.findAll();
-        for (MyLike like : myLikeRepositoryAll) {
-            resultMap.put(like.getUser(), like.getCount());
+        Iterable<Like> myLikeRepositoryAll = likeRepository.findAll();
+        for (Like like : myLikeRepositoryAll) {
+            resultMap.put(like.getGuys(), like.getCountLike());
         }
         return resultMap;
     }

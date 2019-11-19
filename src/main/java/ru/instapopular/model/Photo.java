@@ -1,7 +1,6 @@
 package ru.instapopular.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,22 +9,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "my_photo")
-public class MyPhoto {
+@Table(name = "photo")
+public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User idUser;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
 
+    private boolean active;
+
+    @NotBlank
     private String photo;
-
-    private Integer status;
 }
