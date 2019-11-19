@@ -8,6 +8,7 @@ import ru.instapopular.model.Roles;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.UsrRepository;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;

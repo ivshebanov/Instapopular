@@ -1,23 +1,26 @@
 package ru.instapopular.groups;
 
-import ru.instapopular.Action;
-import ru.instapopular.Constant;
-import ru.instapopular.repository.InstapopularDAO;
-import ru.instapopular.view.ViewMap;
-import ru.instapopular.service.InstagramService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.instapopular.Action;
+import ru.instapopular.Constant;
+import ru.instapopular.model.MyGroup;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.InstapopularDAO;
+import ru.instapopular.repository.MyGroupRepository;
+import ru.instapopular.repository.UsrRepository;
+import ru.instapopular.service.InstagramService;
+import ru.instapopular.view.ViewMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Service
@@ -26,12 +29,15 @@ public class GroupsService {
     private static final Logger logger = LogManager.getLogger(GroupsService.class);
 
     private final InstagramService instagramService;
-
     private final InstapopularDAO instapopularDAO;
+    private final MyGroupRepository myGroupRepository;
+    private final UsrRepository usrRepository;
 
-    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, MyGroupRepository myGroupRepository, UsrRepository usrRepository) {
         this.instagramService = instagramService;
         this.instapopularDAO = instapopularDAO;
+        this.myGroupRepository = myGroupRepository;
+        this.usrRepository = usrRepository;
     }
 
     void subscribeToUsersInGroup(int countSubscriptions, Action action) {
@@ -58,28 +64,39 @@ public class GroupsService {
         }
     }
 
-    void addGroup(String userName) {
+    @Transactional
+    void addGroup(Usr usr, String groupName) {
         try {
-            instapopularDAO.addGroup(userName);
-        } catch (IOException e) {
+            MyGroup group = new MyGroup();
+            group.setUsr(usr);
+            group.setActive(true);
+            group.setMyGroup(groupName);
+            myGroupRepository.save(group);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    void removeGroup(String userName) {
+    @Transactional
+    void removeGroup(Usr usr, String groupName) {
         try {
-            instapopularDAO.removeGroup(userName);
-        } catch (IOException e) {
+            MyGroup group = new MyGroup();
+            group.setUsr(usr);
+            group.setActive(false);
+            group.setMyGroup(groupName);
+
+            myGroupRepository.deactivateMyGroup(usr, groupName);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> getGroup() {
+    List<ViewMap> getGroup(Usr usr) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getGroups()));
+            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapViewGroup(myGroupRepository.findAllByUsr(usr)));
             Collections.sort(resultView);
             return resultView;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return emptyList();
         }
     }
