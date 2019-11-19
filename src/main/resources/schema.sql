@@ -1,110 +1,145 @@
 -- Table: public.usr
+
+-- DROP TABLE public.usr;
+
 CREATE TABLE public.usr
 (
     id                 bigint                                              NOT NULL,
     active             boolean                                             NOT NULL,
     email              character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    usrname            character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    username           character varying(255) COLLATE pg_catalog."default" NOT NULL,
     password           character varying(255) COLLATE pg_catalog."default" NOT NULL,
     inst_name          character varying(255) COLLATE pg_catalog."default",
     inst_password      character varying(255) COLLATE pg_catalog."default",
     do_not_unsubscribe integer,
-    CONSTRAINT usr_pkey PRIMARY KEY (id)
+    CONSTRAINT user_pkey PRIMARY KEY (id)
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.usr
-    OWNER to ivshebanov;
+    OWNER to iliashebanov;
 
 
--- Table: public.photo
-CREATE TABLE public.photo
+-- Table: public.my_photo
+
+-- DROP TABLE public.my_photo;
+
+CREATE TABLE public.my_photo
 (
-    id     bigint                                              NOT NULL,
-    usr_id bigint                                              NOT NULL,
-    active boolean                                             NOT NULL,
-    photo  character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT photo_pkey PRIMARY KEY (id),
-    CONSTRAINT photo_usr_id_fkey FOREIGN KEY (usr_id)
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    photo   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    status  integer                                             NOT NULL,
+    CONSTRAINT my_photo_pkey PRIMARY KEY (id),
+    CONSTRAINT my_photo_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.photo
-    OWNER to ivshebanov;
+ALTER TABLE public.my_photo
+    OWNER to iliashebanov;
 
 
--- Table: public.like
-CREATE TABLE public.like
+-- Table: public.my_like
+
+-- DROP TABLE public.my_like;
+
+CREATE TABLE public.my_like
 (
-    id         bigint                                              NOT NULL,
-    usr_id     bigint                                              NOT NULL,
-    active     boolean                                             NOT NULL,
-    guys       character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    count_like integer                                             NOT NULL,
-    CONSTRAINT like_pkey PRIMARY KEY (id),
-    CONSTRAINT like_usr_id_fkey FOREIGN KEY (usr_id)
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    usr     character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    count   integer                                             NOT NULL,
+    CONSTRAINT my_like_pkey PRIMARY KEY (id),
+    CONSTRAINT my_like_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.like
-    OWNER to ivshebanov;
+ALTER TABLE public.my_like
+    OWNER to iliashebanov;
 
 
 -- Table: public.my_group
+
+-- DROP TABLE public.my_group;
+
 CREATE TABLE public.my_group
 (
-    id       bigint                                              NOT NULL,
-    usr_id   bigint                                              NOT NULL,
-    my_group character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    active   boolean                                             NOT NULL,
+    id      bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
+    "group" character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    status  integer                                             NOT NULL,
     CONSTRAINT my_group_pkey PRIMARY KEY (id),
-    CONSTRAINT my_group_usr_id_fkey FOREIGN KEY (usr_id)
+    CONSTRAINT my_group_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
 ALTER TABLE public.my_group
-    OWNER to ivshebanov;
+    OWNER to iliashebanov;
 
 
--- Table: public.hashtag
-CREATE TABLE public.hashtag
+-- Table: public.my_hashtag
+
+-- DROP TABLE public.my_hashtag;
+
+CREATE TABLE public.my_hashtag
 (
     id      bigint                                              NOT NULL,
-    usr_id  bigint                                              NOT NULL,
+    id_user bigint                                              NOT NULL,
     hashtag character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    active  boolean                                             NOT NULL,
-    CONSTRAINT hashtag_pkey PRIMARY KEY (id),
-    CONSTRAINT hashtag_usr_id_fkey FOREIGN KEY (usr_id)
+    status  integer                                             NOT NULL,
+    CONSTRAINT my_hashtag_pkey PRIMARY KEY (id),
+    CONSTRAINT my_hashtag_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.hashtag
-    OWNER to ivshebanov;
+ALTER TABLE public.my_hashtag
+    OWNER to iliashebanov;
 
 
--- Table: public.roles
-CREATE TABLE public.roles
+-- Table: public.user_role
+
+-- DROP TABLE public.user_role;
+
+CREATE TABLE public.user_role
 (
-    usr_id bigint                                              NOT NULL,
-    role   character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT roles_usr_id_fkey FOREIGN KEY (usr_id)
+    id_user bigint                                              NOT NULL,
+    roles   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_role_id_user_fkey FOREIGN KEY (id_user)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+    WITH (
+        OIDS = FALSE
+    )
     TABLESPACE pg_default;
 
-ALTER TABLE public.roles
-    OWNER to ivshebanov;
+ALTER TABLE public.user_role
+    OWNER to iliashebanov;
