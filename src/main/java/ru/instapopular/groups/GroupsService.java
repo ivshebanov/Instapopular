@@ -31,13 +31,11 @@ public class GroupsService {
     private final InstagramService instagramService;
     private final InstapopularDAO instapopularDAO;
     private final MyGroupRepository myGroupRepository;
-    private final UsrRepository usrRepository;
 
-    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, MyGroupRepository myGroupRepository, UsrRepository usrRepository) {
+    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, MyGroupRepository myGroupRepository) {
         this.instagramService = instagramService;
         this.instapopularDAO = instapopularDAO;
         this.myGroupRepository = myGroupRepository;
-        this.usrRepository = usrRepository;
     }
 
     void subscribeToUsersInGroup(int countSubscriptions, Action action) {
@@ -80,11 +78,6 @@ public class GroupsService {
     @Transactional
     void removeGroup(Usr usr, String groupName) {
         try {
-            MyGroup group = new MyGroup();
-            group.setUsr(usr);
-            group.setActive(false);
-            group.setMyGroup(groupName);
-
             myGroupRepository.deactivateMyGroup(usr, groupName);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

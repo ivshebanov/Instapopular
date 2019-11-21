@@ -3,6 +3,7 @@ package ru.instapopular.service;
 import ru.instapopular.Constant;
 import ru.instapopular.Utils;
 import ru.instapopular.model.MyGroup;
+import ru.instapopular.model.Photo;
 import ru.instapopular.view.ViewMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -278,6 +279,21 @@ public class InstagramService {
             if (group.isActive()) {
                 ViewMap viewMap = context.getBean(ViewMap.class);
                 viewMap.setKey(group.getMyGroup());
+                viewMap.setValue(1);
+                resultSet.add(viewMap);
+            }
+        }
+        return resultSet;
+    }
+
+    public Set<ViewMap> revertMapViewPhoto(List<Photo> photos) {
+        HashSet<ViewMap> resultSet = new HashSet<>();
+        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
+
+        for (Photo photo : photos) {
+            if (photo.isActive()) {
+                ViewMap viewMap = context.getBean(ViewMap.class);
+                viewMap.setKey(photo.getPhoto());
                 viewMap.setValue(1);
                 resultSet.add(viewMap);
             }
