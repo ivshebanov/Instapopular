@@ -1,10 +1,5 @@
 package ru.instapopular.analysis;
 
-import ru.instapopular.Constant;
-import ru.instapopular.Utils;
-import ru.instapopular.service.InstagramService;
-import ru.instapopular.view.ViewMap;
-import ru.instapopular.repository.InstapopularDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,6 +7,14 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Constant;
+import ru.instapopular.Utils;
+import ru.instapopular.model.Photo;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.InstapopularDAO;
+import ru.instapopular.repository.PhotoRepository;
+import ru.instapopular.service.InstagramService;
+import ru.instapopular.view.ViewMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +27,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Service
@@ -33,12 +35,13 @@ public class AnalysisService {
     private static final Logger logger = LogManager.getLogger(AnalysisService.class);
 
     private final InstagramService instagramService;
-
     private final InstapopularDAO instapopularDAO;
+    private final PhotoRepository photoRepository;
 
-    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, PhotoRepository photoRepository) {
         this.instagramService = instagramService;
         this.instapopularDAO = instapopularDAO;
+        this.photoRepository = photoRepository;
     }
 
     public void loginOnWebSite(String login, String password) {
@@ -61,21 +64,34 @@ public class AnalysisService {
         }
     }
 
-    void addMyPhoto(String userName) {
+    void addMyPhoto(Usr usr, String photoName) {
         try {
-            Map<String, Integer> currentMyPhoto = instapopularDAO.getMyPhoto();
-            if (!currentMyPhoto.containsKey(userName)) {
-                instapopularDAO.addMyPhoto(userName, String.valueOf(0));
+            List<Photo> photos = photoRepository.findAllByUsr(usr);
+            for (Photo photo : photos) {
+                if (photo.getPhoto().equalsIgnoreCase(photoName)) {
+                    photoRepository.activatePhoto(usr, photoName);
+                    return;
+                }
             }
-        } catch (IOException e) {
+            Photo newPhoto = new Photo();
+            newPhoto.setPhoto(photoName);
+            newPhoto.setUsr(usr);
+            newPhoto.setActive(true);
+            photoRepository.save(newPhoto);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    void removeMyPhoto(String userName) {
+    void removeMyPhoto(Usr usr, String photoName) {
         try {
-            instapopularDAO.removeMyPhoto(userName);
-        } catch (IOException e) {
+            List<Photo> photos = photoRepository.findAllByUsr(usr);
+            for (Photo photo : photos) {
+                if (photo.getPhoto().equalsIgnoreCase(photoName)) {
+                    photoRepository.deactivatePhoto(usr, photoName);
+                }
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
@@ -90,12 +106,12 @@ public class AnalysisService {
         }
     }
 
-    List<ViewMap> getMyPhoto() {
+    List<ViewMap> getMyPhoto(Usr usr) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getMyPhoto()));
+            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapViewPhoto(photoRepository.findAllByUsr(usr)));
             Collections.sort(resultView);
             return resultView;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return emptyList();
         }
     }
