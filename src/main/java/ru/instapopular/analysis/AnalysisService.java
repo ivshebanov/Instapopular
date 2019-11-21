@@ -12,6 +12,7 @@ import ru.instapopular.Utils;
 import ru.instapopular.model.Photo;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.InstapopularDAO;
+import ru.instapopular.repository.LikeRepository;
 import ru.instapopular.repository.PhotoRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
@@ -37,11 +38,13 @@ public class AnalysisService {
     private final InstagramService instagramService;
     private final InstapopularDAO instapopularDAO;
     private final PhotoRepository photoRepository;
+    private final LikeRepository likeRepository;
 
-    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, PhotoRepository photoRepository) {
+    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, PhotoRepository photoRepository, LikeRepository likeRepository) {
         this.instagramService = instagramService;
         this.instapopularDAO = instapopularDAO;
         this.photoRepository = photoRepository;
+        this.likeRepository = likeRepository;
     }
 
     public void loginOnWebSite(String login, String password) {
@@ -96,12 +99,13 @@ public class AnalysisService {
         }
     }
 
-    List<ViewMap> getAnalysisPhoto() {
+    List<ViewMap> getAnalysisPhoto(Usr usr) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getPhotoAnalysisResults()));
+
+            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapViewLike(likeRepository.findAllByUsr(usr)));
             Collections.sort(resultView);
             return resultView;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return emptyList();
         }
     }
