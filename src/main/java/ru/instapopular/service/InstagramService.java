@@ -1,10 +1,5 @@
 package ru.instapopular.service;
 
-import ru.instapopular.Constant;
-import ru.instapopular.Utils;
-import ru.instapopular.model.MyGroup;
-import ru.instapopular.model.Photo;
-import ru.instapopular.view.ViewMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -21,6 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Constant;
+import ru.instapopular.Utils;
+import ru.instapopular.model.Like;
+import ru.instapopular.model.MyGroup;
+import ru.instapopular.model.Photo;
+import ru.instapopular.view.ViewMap;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +32,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -295,6 +295,21 @@ public class InstagramService {
                 ViewMap viewMap = context.getBean(ViewMap.class);
                 viewMap.setKey(photo.getPhoto());
                 viewMap.setValue(1);
+                resultSet.add(viewMap);
+            }
+        }
+        return resultSet;
+    }
+
+    public Set<ViewMap> revertMapViewLike(List<Like> likes) {
+        HashSet<ViewMap> resultSet = new HashSet<>();
+        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
+
+        for (Like like : likes) {
+            if (like.isActive()) {
+                ViewMap viewMap = context.getBean(ViewMap.class);
+                viewMap.setKey(like.getGuys());
+                viewMap.setValue(like.getCountLike());
                 resultSet.add(viewMap);
             }
         }

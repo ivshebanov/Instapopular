@@ -21,7 +21,7 @@ public class AnalysisController {
     @GetMapping("/analysis")
     public String analysis(@AuthenticationPrincipal Usr usr,
                            Map<String, Object> view) {
-        view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("analysisView", analysisService.getAnalysisPhoto(usr));
         view.put("photoView", analysisService.getMyPhoto(usr));
         return "analysis";
     }
@@ -36,7 +36,7 @@ public class AnalysisController {
             analysisService.loginOnWebSite(login, password);
             analysisService.runAnalysis();
         }
-        view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("analysisView", analysisService.getAnalysisPhoto(usr));
         view.put("photoView", analysisService.getMyPhoto(usr));
         return "analysis";
     }
@@ -49,7 +49,7 @@ public class AnalysisController {
         if (doNotUnsubscribe > 0) {
             analysisService.addFirstDoNotUnsubscribe(doNotUnsubscribe);
         }
-        view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("analysisView", analysisService.getAnalysisPhoto(usr));
         view.put("photoView", analysisService.getMyPhoto(usr));
         return "analysis";
     }
@@ -71,7 +71,7 @@ public class AnalysisController {
                 analysisService.removeMyPhoto(usr, remove);
             }
         }
-        view.put("analysisView", analysisService.getAnalysisPhoto());
+        view.put("analysisView", analysisService.getAnalysisPhoto(usr));
         view.put("photoView", analysisService.getMyPhoto(usr));
         return "analysis";
     }
