@@ -22,23 +22,19 @@ public class GroupsController {
     @GetMapping("/groups")
     public String groups(@AuthenticationPrincipal Usr usr,
                          Map<String, Object> view) {
-        view.put("groupView", groupsService.getGroup(usr));
+        view.put("groupView", groupsService.getActiveGroup(usr));
         return "groups";
     }
 
     @PostMapping("/group")
     public String group(@AuthenticationPrincipal Usr usr,
-                        @RequestParam(name = "login") String login,
-                        @RequestParam(name = "password") String password,
                         @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions,
                         @RequestParam(name = "action", defaultValue = "SUBSCRIBE_AND_LIKE") Action action,
                         Map<String, Object> view) {
 
-        if (login.length() > 0 || password.length() > 0) {
-            groupsService.loginOnWebSite(login, password);
-            groupsService.subscribeToUsersInGroup(countSubscriptions, action);
-        }
-        view.put("groupView", groupsService.getGroup(usr));
+        groupsService.loginOnWebSite(usr.getInstName(), usr.getInstPassword());
+        groupsService.subscribeToUsersInGroup(usr, countSubscriptions, action);
+        view.put("groupView", groupsService.getActiveGroup(usr));
         return "groups";
     }
 
@@ -53,7 +49,7 @@ public class GroupsController {
         } else if (remove.length() > 0) {
             groupsService.removeGroup(usr, remove);
         }
-        view.put("groupView", groupsService.getGroup(usr));
+        view.put("groupView", groupsService.getActiveGroup(usr));
         return "groups";
     }
 }

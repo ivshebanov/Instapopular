@@ -1,6 +1,7 @@
 package ru.instapopular.model;
 
 import lombok.Data;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
+@Scope(value = "prototype")
 @Table(name = "my_group")
 public class MyGroup {
 
