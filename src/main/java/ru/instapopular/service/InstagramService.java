@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
 import ru.instapopular.Utils;
 import ru.instapopular.model.Like;
-import ru.instapopular.model.MyGroup;
 import ru.instapopular.model.Photo;
 import ru.instapopular.view.ViewMap;
 
@@ -66,9 +65,6 @@ public class InstagramService {
 
     public void loginOnWebSite(String login, String password) {
         logger.info(String.format(Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE, login, password));
-        if (login == null || login.length() == 0 || password == null || password.length() == 0) {
-            return;
-        }
         this.login = login;
         openUrl(Constant.LinkToInstagram.LOGIN_PAGE);
         getWebElement(60, Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT).sendKeys(login);
@@ -271,17 +267,15 @@ public class InstagramService {
         return resultSet;
     }
 
-    public Set<ViewMap> revertMapViewGroup(List<MyGroup> groups) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
+    public List<ViewMap> revertToView(List<String> list) {
+        List<ViewMap> resultSet = new ArrayList<>();
         ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
 
-        for (MyGroup group : groups) {
-            if (group.isActive()) {
-                ViewMap viewMap = context.getBean(ViewMap.class);
-                viewMap.setKey(group.getMyGroup());
-                viewMap.setValue(1);
-                resultSet.add(viewMap);
-            }
+        for (String atr : list) {
+            ViewMap viewMap = context.getBean(ViewMap.class);
+            viewMap.setKey(atr);
+            viewMap.setValue(1);
+            resultSet.add(viewMap);
         }
         return resultSet;
     }

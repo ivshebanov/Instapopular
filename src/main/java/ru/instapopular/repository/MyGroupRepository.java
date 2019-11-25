@@ -3,7 +3,6 @@ package ru.instapopular.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.instapopular.model.MyGroup;
 import ru.instapopular.model.Usr;
@@ -16,6 +15,16 @@ public interface MyGroupRepository extends JpaRepository<MyGroup, Integer> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE MyGroup SET active = false WHERE usr = :usr AND myGroup = :my_group")
-    void deactivateMyGroup(@Param("usr") Usr usr, @Param("my_group") String groupName);
+    @Query("UPDATE MyGroup SET active = false WHERE usr = :usr AND myGroup = :groupName")
+    void deactivateMyGroup(Usr usr, String groupName);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE MyGroup SET active = true WHERE usr = :usr AND myGroup = :groupName")
+    void activateMyGroup(Usr usr, String groupName);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("SELECT myGroup FROM MyGroup WHERE usr = :usr AND active = :active")
+    List<String> findMyGroupByUsrAndActive(Usr usr, boolean active);
 }
