@@ -5,19 +5,19 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
 import ru.instapopular.Utils;
+import ru.instapopular.model.Like;
 import ru.instapopular.model.Photo;
 import ru.instapopular.model.Usr;
-import ru.instapopular.repository.InstapopularDAO;
 import ru.instapopular.repository.LikeRepository;
 import ru.instapopular.repository.PhotoRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,13 +36,11 @@ public class AnalysisService {
     private static final Logger logger = LogManager.getLogger(AnalysisService.class);
 
     private final InstagramService instagramService;
-    private final InstapopularDAO instapopularDAO;
     private final PhotoRepository photoRepository;
     private final LikeRepository likeRepository;
 
-    public AnalysisService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO, PhotoRepository photoRepository, LikeRepository likeRepository) {
+    public AnalysisService(InstagramService instagramService, PhotoRepository photoRepository, LikeRepository likeRepository) {
         this.instagramService = instagramService;
-        this.instapopularDAO = instapopularDAO;
         this.photoRepository = photoRepository;
         this.likeRepository = likeRepository;
     }
@@ -56,11 +54,11 @@ public class AnalysisService {
         }
     }
 
-    void runAnalysis() {
+    void runAnalysis(Usr usr) {
         try {
-            Map<String, Integer> user = analysisPhotos(instapopularDAO.getMyPhoto());
-            instapopularDAO.addPhotoAnalysisResults(addNewUser(instapopularDAO.getPhotoAnalysisResults(), user));
-        } catch (IOException e) {
+            List<String> photos = photoRepository.findPhotosByUsrAndActive(usr, false);
+            addNewUser(usr, analysisPhotos(usr, photos));
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
             instagramService.quitDriver();
@@ -69,14 +67,14 @@ public class AnalysisService {
 
     void addMyPhoto(Usr usr, String photoName) {
         try {
-            List<Photo> photos = photoRepository.findAllByUsr(usr);
-            for (Photo photo : photos) {
-                if (photo.getPhoto().equalsIgnoreCase(photoName)) {
-                    photoRepository.activatePhoto(usr, photoName);
-                    return;
-                }
+            photoName = cutOfUrl(photoName);
+            Photo photo = photoRepository.findPhotoByUsrAndPhoto(usr, photoName);
+            if (photo != null && !photo.isActive()) {
+                photoRepository.activatePhoto(usr, photoName);
+                return;
             }
-            Photo newPhoto = new Photo();
+            ApplicationContext context = new AnnotationConfigApplicationContext(Photo.class);
+            Photo newPhoto = context.getBean(Photo.class);
             newPhoto.setPhoto(photoName);
             newPhoto.setUsr(usr);
             newPhoto.setActive(true);
@@ -88,21 +86,20 @@ public class AnalysisService {
 
     void removeMyPhoto(Usr usr, String photoName) {
         try {
-            List<Photo> photos = photoRepository.findAllByUsr(usr);
-            for (Photo photo : photos) {
-                if (photo.getPhoto().equalsIgnoreCase(photoName)) {
-                    photoRepository.deactivatePhoto(usr, photoName);
-                }
+            photoName = cutOfUrl(photoName);
+            Photo photo = photoRepository.findPhotoByUsrAndPhoto(usr, photoName);
+            if (photo != null && photo.isActive()) {
+                photoRepository.deactivatePhoto(usr, photoName);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> getAnalysisPhoto(Usr usr) {
+    List<ViewMap> getAnalysisGuys(Usr usr) {
         try {
-
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapViewLike(likeRepository.findAllByUsr(usr)));
+            List<String> guys = likeRepository.findGuysByUsrAndActive(usr, true);
+            List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;
         } catch (Exception e) {
@@ -112,7 +109,8 @@ public class AnalysisService {
 
     List<ViewMap> getMyPhoto(Usr usr) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapViewPhoto(photoRepository.findAllByUsr(usr)));
+            List<String> photos = photoRepository.findPhotosByUsrAndActive(usr, true);
+            List<ViewMap> resultView = instagramService.revertToView(photos);
             Collections.sort(resultView);
             return resultView;
         } catch (Exception e) {
@@ -120,9 +118,9 @@ public class AnalysisService {
         }
     }
 
-    String cutOfUrl(String url) {
-        Pattern p = Pattern.compile(Constant.AnalysisConstant.CUT_OF_URL);
-        Matcher matcher = p.matcher(url);
+    private String cutOfUrl(String url) {
+        Pattern pattern = Pattern.compile(Constant.AnalysisConstant.CUT_OF_URL);
+        Matcher matcher = pattern.matcher(url);
         String result = "";
         while (matcher.find()) {
             result = matcher.group();
@@ -130,61 +128,65 @@ public class AnalysisService {
         return result;
     }
 
-    void addFirstDoNotUnsubscribe(int count) {
+    void doNotUnsubscribe(Usr usr, int count) {
         try {
-            Map<String, Integer> photoAnalysisResults = instapopularDAO.getPhotoAnalysisResults();
-            for (Map.Entry<String, Integer> entry : photoAnalysisResults.entrySet()) {
-                if (entry.getValue() >= count) {
-                    instapopularDAO.addDoNotUnsubscribe(entry.getKey(), String.valueOf(entry.getValue()));
-                }
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    private Map<String, Integer> addNewUser(Map<String, Integer> oldUser, Map<String, Integer> newUser) {
-        for (Map.Entry<String, Integer> user : newUser.entrySet()) {
-            if (oldUser.containsKey(user.getKey())) {
-                oldUser.put(user.getKey(), oldUser.get(user.getKey()) + user.getValue());
-                continue;
-            }
-            oldUser.put(user.getKey(), user.getValue());
-        }
-        return oldUser;
-    }
-
-    private Map<String, Integer> analysisPhotos(Map<String, Integer> photos) throws IOException {
-        if (photos == null || photos.size() == 0) {
-            return null;
-        }
-        Map<String, Integer> resultUser = new HashMap<>();
-        Map<String, Integer> resultPhotos = new HashMap<>(photos);
-        try {
-            for (Map.Entry<String, Integer> photo : photos.entrySet()) {
-                if (photo.getValue() == 1) {
-                    continue;
-                }
-                if (photo.getValue() == 0) {
-                    Set<String> activeUsers = getActive(photo.getKey());
-                    if (activeUsers == null || activeUsers.size() == 0) {
-                        continue;
-                    }
-                    addActiveUsersToMap(resultUser, activeUsers);
-                    resultPhotos.put(photo.getKey(), 1);
+            List<Like> likes = likeRepository.findAllByUsr(usr);
+            for (Like like : likes) {
+                if (like.getCountLike() >= count) {
+                    likeRepository.activateGuys(usr, like.getGuys());
+                } else {
+                    likeRepository.deactivateGuys(usr, like.getGuys());
                 }
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        instapopularDAO.addMyPhotos(resultPhotos);
+    }
+
+    private void addNewUser(Usr usr, Map<String, Integer> guys) {
+        for (Map.Entry<String, Integer> guy : guys.entrySet()) {
+            Like like = likeRepository.findLikeByUsrAndGuys(usr, guy.getKey());
+            if (like != null) {
+                likeRepository.updateCountLikeAndActiveByUsrAndGuys(usr, guy.getKey(), like.getCountLike() + guy.getValue());
+                continue;
+            }
+            ApplicationContext context = new AnnotationConfigApplicationContext(Like.class);
+            Like newLike = context.getBean(Like.class);
+            newLike.setUsr(usr);
+            newLike.setActive(true);
+            newLike.setGuys(guy.getKey());
+            newLike.setCountLike(guy.getValue());
+            likeRepository.save(newLike);
+        }
+    }
+
+    private Map<String, Integer> analysisPhotos(Usr usr, List<String> photos) {
+        if (photos == null || photos.size() == 0) {
+            return null;
+        }
+        Map<String, Integer> resultUser = new HashMap<>();
+        List<String> resultPhoto = new ArrayList<>();
+        try {
+            for (String photo : photos) {
+                Set<String> activeUsers = getActive(photo);
+                if (activeUsers == null || activeUsers.size() == 0) {
+                    continue;
+                }
+                addActiveUsersToMap(resultUser, activeUsers);
+                resultPhoto.add(photo);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            for (String photo : resultPhoto) {
+                photoRepository.deactivatePhoto(usr, photo);
+            }
+        }
+
         return resultUser;
     }
 
     private Set<String> getActive(String urlPhoto) {
-        if (urlPhoto == null || urlPhoto.length() == 0) {
-            return null;
-        }
         Set<String> resultActiveUser = new HashSet<>();
         instagramService.openUrl(String.format(Constant.LinkToInstagram.HOME_PAGE_2, urlPhoto));
         instagramService.timeOut(2, 0);
