@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PhotoRepository extends JpaRepository<Photo, Integer> {
 
-    List<Photo> findAllByUsr(Usr usr);
+    Photo findPhotoByUsrAndPhoto(Usr usr, String photo);
 
     @Transactional
     @Modifying(clearAutomatically = true)
@@ -22,4 +22,9 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Photo SET active = true WHERE usr = :usr AND photo = :photo")
     void activatePhoto(Usr usr, String photo);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("SELECT photo FROM Photo WHERE usr = :usr AND active = :active")
+    List<String> findPhotosByUsrAndActive(Usr usr, boolean active);
 }

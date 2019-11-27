@@ -255,7 +255,7 @@ public class InstagramService {
     }
 
     public Set<ViewMap> revertMapView(Map<String, Integer> map) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
+        Set<ViewMap> resultSet = new HashSet<>();
         ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
 
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -276,36 +276,6 @@ public class InstagramService {
             viewMap.setKey(atr);
             viewMap.setValue(1);
             resultSet.add(viewMap);
-        }
-        return resultSet;
-    }
-
-    public Set<ViewMap> revertMapViewPhoto(List<Photo> photos) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
-        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
-
-        for (Photo photo : photos) {
-            if (photo.isActive()) {
-                ViewMap viewMap = context.getBean(ViewMap.class);
-                viewMap.setKey(photo.getPhoto());
-                viewMap.setValue(1);
-                resultSet.add(viewMap);
-            }
-        }
-        return resultSet;
-    }
-
-    public Set<ViewMap> revertMapViewLike(List<Like> likes) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
-        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
-
-        for (Like like : likes) {
-            if (like.isActive()) {
-                ViewMap viewMap = context.getBean(ViewMap.class);
-                viewMap.setKey(like.getGuys());
-                viewMap.setValue(like.getCountLike());
-                resultSet.add(viewMap);
-            }
         }
         return resultSet;
     }
