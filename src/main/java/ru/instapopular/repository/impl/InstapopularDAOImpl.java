@@ -19,14 +19,12 @@ import java.util.Map;
 @Repository
 public class InstapopularDAOImpl implements InstapopularDAO {
 
-    private final UsrRepository usrRepository;
     private final MyGroupRepository myGroupRepository;
     private final HashtagRepository hashtagRepository;
     private final LikeRepository likeRepository;
     private final PhotoRepository photoRepository;
 
-    public InstapopularDAOImpl(UsrRepository usrRepository, MyGroupRepository myGroupRepository, HashtagRepository hashtagRepository, LikeRepository likeRepository, PhotoRepository photoRepository) {
-        this.usrRepository = usrRepository;
+    public InstapopularDAOImpl(MyGroupRepository myGroupRepository, HashtagRepository hashtagRepository, LikeRepository likeRepository, PhotoRepository photoRepository) {
         this.myGroupRepository = myGroupRepository;
         this.hashtagRepository = hashtagRepository;
         this.likeRepository = likeRepository;

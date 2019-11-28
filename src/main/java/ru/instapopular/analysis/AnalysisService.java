@@ -51,6 +51,7 @@ public class AnalysisService {
             instagramService.loginOnWebSite(login, password);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            instagramService.quitDriver();
         }
     }
 
@@ -69,7 +70,7 @@ public class AnalysisService {
         try {
             photoName = cutOfUrl(photoName);
             Photo photo = photoRepository.findPhotoByUsrAndPhoto(usr, photoName);
-            if (photo != null && !photo.isActive()) {
+            if (photo != null) {
                 photoRepository.activatePhoto(usr, photoName);
                 return;
             }
@@ -88,7 +89,7 @@ public class AnalysisService {
         try {
             photoName = cutOfUrl(photoName);
             Photo photo = photoRepository.findPhotoByUsrAndPhoto(usr, photoName);
-            if (photo != null && photo.isActive()) {
+            if (photo != null) {
                 photoRepository.deactivatePhoto(usr, photoName);
             }
         } catch (Exception e) {

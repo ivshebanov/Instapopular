@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MyGroupRepository extends JpaRepository<MyGroup, Integer> {
 
-    List<MyGroup> findAllByUsr(Usr usr);
+    MyGroup findMyGroupByUsrAndMyGroup(Usr usr, String myGroup);
 
     @Transactional
     @Modifying(clearAutomatically = true)
