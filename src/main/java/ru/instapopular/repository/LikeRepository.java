@@ -27,11 +27,11 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Like SET countLike = :countLike, active = true WHERE usr = :usr AND guys = :guys")
-    void updateCountLikeAndActiveByUsrAndGuys(Usr usr, String guys, Integer countLike);
+    @Query("SELECT guys FROM Like WHERE usr = :usr AND active = :active")
+    List<String> findGuysByUsrAndActive(Usr usr, boolean active);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("SELECT guys FROM Like WHERE usr = :usr AND active = :active")
-    List<String> findGuysByUsrAndActive(Usr usr, boolean active);
+    @Query("UPDATE Like SET countLike = :countLike, active = true WHERE usr = :usr AND guys = :guys")
+    void updateCountLikeAndActiveByUsrAndGuys(Usr usr, String guys, Integer countLike);
 }

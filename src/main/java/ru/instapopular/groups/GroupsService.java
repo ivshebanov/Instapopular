@@ -59,8 +59,8 @@ public class GroupsService {
     @Transactional
     void addGroup(Usr usr, String groupName) {
         try {
-            List<String> myDeativateGroups = myGroupRepository.findMyGroupByUsrAndActive(usr, false);
-            if (myDeativateGroups.contains(groupName)) {
+            MyGroup myDeativateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
+            if (myDeativateGroup != null) {
                 myGroupRepository.activateMyGroup(usr, groupName);
                 return;
             }
@@ -78,7 +78,10 @@ public class GroupsService {
     @Transactional
     void removeGroup(Usr usr, String groupName) {
         try {
-            myGroupRepository.deactivateMyGroup(usr, groupName);
+            MyGroup myActivateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
+            if (myActivateGroup != null) {
+                myGroupRepository.deactivateMyGroup(usr, groupName);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
