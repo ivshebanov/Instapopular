@@ -23,6 +23,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -67,7 +68,7 @@ public class Usr implements UserDetails {
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
     private List<Hashtag> hashtags;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<MyGroup> groups;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
@@ -103,5 +104,49 @@ public class Usr implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usr usr = (Usr) o;
+        return active == usr.active &&
+                Objects.equals(id, usr.id) &&
+                Objects.equals(email, usr.email) &&
+                Objects.equals(usrname, usr.usrname) &&
+                Objects.equals(password, usr.password) &&
+                Objects.equals(instName, usr.instName) &&
+                Objects.equals(instPassword, usr.instPassword) &&
+                Objects.equals(doNotUnsubscribe, usr.doNotUnsubscribe) &&
+                Objects.equals(photos, usr.photos) &&
+                Objects.equals(likes, usr.likes) &&
+                Objects.equals(hashtags, usr.hashtags) &&
+                Objects.equals(groups, usr.groups) &&
+                Objects.equals(role, usr.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, active, email, usrname, password, instName, instPassword, doNotUnsubscribe, photos, likes, hashtags, groups, role);
+    }
+
+    @Override
+    public String toString() {
+        return "Usr{" +
+                "id=" + id +
+                ", active=" + active +
+                ", email='" + email + '\'' +
+                ", usrname='" + usrname + '\'' +
+                ", password='" + password + '\'' +
+                ", instName='" + instName + '\'' +
+                ", instPassword='" + instPassword + '\'' +
+                ", doNotUnsubscribe=" + doNotUnsubscribe +
+                ", photos=" + photos +
+                ", likes=" + likes +
+                ", hashtags=" + hashtags +
+                ", groups=" + groups +
+                ", role=" + role +
+                '}';
     }
 }
