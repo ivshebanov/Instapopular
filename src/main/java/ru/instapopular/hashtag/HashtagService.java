@@ -46,7 +46,7 @@ public class HashtagService {
         }
     }
 
-    public void newPublications(Usr usr, Action action, int countPhoto) {
+    void newPublications(Usr usr, Action action, int countPhoto) {
         try {
             List<String> hashtags = hashtagRepository.findHashtagsByUsrAndActive(usr, true);
             for (String hashtag : hashtags) {

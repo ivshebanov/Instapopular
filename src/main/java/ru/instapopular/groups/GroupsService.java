@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.instapopular.Action;
 import ru.instapopular.Constant;
 import ru.instapopular.model.MyGroup;
@@ -56,7 +55,6 @@ public class GroupsService {
         }
     }
 
-    @Transactional
     void addGroup(Usr usr, String groupName) {
         try {
             MyGroup myDeativateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
@@ -75,7 +73,6 @@ public class GroupsService {
         }
     }
 
-    @Transactional
     void removeGroup(Usr usr, String groupName) {
         try {
             MyGroup myActivateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
