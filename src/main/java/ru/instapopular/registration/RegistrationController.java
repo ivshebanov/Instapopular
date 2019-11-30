@@ -31,25 +31,11 @@ public class RegistrationController {
         return "login";
     }
 
+
     @PostMapping("/registration")
     public String addUser(Usr usr, Map<String, Object> model) {
-        String valid = registrationService.validate(usr);
-        if (valid != null) {
-            model.put("message", valid);
-            return "login";
-        }
-
-        Usr usrFromDb = registrationService.findByUsrname(usr);
-        if (usrFromDb != null) {
-            model.put("message", "Пользователь существует!");
-            return "login";
-        }
-
-        if (registrationService.createNewUsr(usr)) {
-            model.put("message", "Пользователь зарегистрирован!");
-        } else {
-            model.put("message", "Пользователь не зарегистрирован!");
-        }
+        String resultMassage = registrationService.createNewUsr(usr);
+        model.put("message", resultMassage);
         return "login";
     }
 }

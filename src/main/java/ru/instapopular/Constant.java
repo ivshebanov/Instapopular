@@ -136,4 +136,11 @@ public interface Constant {
         String LINE_BREAK = "\n";
         String CUT_OF_URL = "p/.*";
     }
+
+    interface RegistrationServiceConstant {
+        String USER_EXIST = "Пользователь существует!";
+        String USER_IS_REGISTERED = "Пользователь зарегистрирован!";
+        String USER_NOT_REGISTERED = "Пользователь не зарегистрирован!";
+        String INVALID_DATA = "Вы ввели невалидные данные, ";
+    }
 }
