@@ -59,16 +59,16 @@ public class Usr implements UserDetails {
     @Column(name = "do_not_unsubscribe")
     private Integer doNotUnsubscribe;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Like> likes;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Hashtag> hashtags;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MyGroup> groups;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)

@@ -1,9 +1,11 @@
 package ru.instapopular.unsubscribe;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.instapopular.model.Usr;
 
 import java.util.Map;
 
@@ -17,36 +19,35 @@ public class UnsubscribeController {
     }
 
     @GetMapping("/unsubscribe")
-    public String unsubscribe(Map<String, Object> view) {
-        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
+    public String unsubscribe(@AuthenticationPrincipal Usr usr,
+                              Map<String, Object> view) {
+        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser(usr));
         return "unsubscribe";
     }
 
     @PostMapping("/unsub")
-    private String unsub(@RequestParam(name = "login") String login,
-                         @RequestParam(name = "password") String password,
+    private String unsub(@AuthenticationPrincipal Usr usr,
                          @RequestParam(name = "countUnsubscribe", defaultValue = "400") int countUnsubscribe,
                          Map<String, Object> view) {
 
-        if ((login != null && login.length() > 0) || (password != null && password.length() > 0)) {
-            unsubscribeService.loginOnWebSite(login, password);
-            unsubscribeService.unsubscribe(countUnsubscribe);
-        }
-        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
+        unsubscribeService.loginOnWebSite(usr.getInstName(), usr.getInstPassword());
+        unsubscribeService.unsubscribe(usr, countUnsubscribe);
+        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser(usr));
         return "unsubscribe";
     }
 
     @PostMapping("/addRemoveUnsub")
-    public String addRemove(@RequestParam(name = "addGroup") String add,
+    public String addRemove(@AuthenticationPrincipal Usr usr,
+                            @RequestParam(name = "addGroup") String add,
                             @RequestParam(name = "removeGroup") String remove,
                             Map<String, Object> view) {
 
-        if (add != null && add.length() > 0) {
-            unsubscribeService.addDoNotUnsubscribeUser(add);
-        } else if (remove != null && remove.length() > 0) {
-            unsubscribeService.removeDoNotUnsubscribeUser(remove);
+        if (add.length() > 0) {
+            unsubscribeService.addGuy(usr, add);
+        } else if (remove.length() > 0) {
+            unsubscribeService.removeGuy(usr, remove);
         }
-        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser());
+        view.put("groupView", unsubscribeService.getDoNotUnsubscribeUser(usr));
         return "unsubscribe";
     }
 }
