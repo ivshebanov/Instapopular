@@ -99,7 +99,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisGuys(Usr usr) {
         try {
-            List<String> guys = likeRepository.findGuysByUsrAndActive(usr, true);
+            List<String> guys = likeRepository.findGuysByUsr(usr);
             List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;

@@ -254,19 +254,6 @@ public class InstagramService {
         }
     }
 
-    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
-        Set<ViewMap> resultSet = new HashSet<>();
-        ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
-
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            ViewMap viewMap = context.getBean(ViewMap.class);
-            viewMap.setKey(entry.getKey());
-            viewMap.setValue(entry.getValue());
-            resultSet.add(viewMap);
-        }
-        return resultSet;
-    }
-
     public List<ViewMap> revertToView(List<String> list) {
         List<ViewMap> resultSet = new ArrayList<>();
         ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);

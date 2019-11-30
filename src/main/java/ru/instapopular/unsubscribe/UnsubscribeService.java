@@ -1,21 +1,22 @@
 package ru.instapopular.unsubscribe;
 
-import ru.instapopular.Constant;
-import ru.instapopular.repository.InstapopularDAO;
-import ru.instapopular.service.InstagramService;
-import ru.instapopular.view.ViewMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Constant;
+import ru.instapopular.model.Like;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.InstapopularDAO;
+import ru.instapopular.repository.LikeRepository;
+import ru.instapopular.service.InstagramService;
+import ru.instapopular.view.ViewMap;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Service
@@ -24,17 +25,18 @@ public class UnsubscribeService {
     private static final Logger logger = LogManager.getLogger(UnsubscribeService.class);
 
     private final InstagramService instagramService;
-
     private final InstapopularDAO instapopularDAO;
+    private final LikeRepository likeRepository;
 
-    public UnsubscribeService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public UnsubscribeService(LikeRepository likeRepository, InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
         this.instagramService = instagramService;
         this.instapopularDAO = instapopularDAO;
+        this.likeRepository = likeRepository;
     }
 
-    void unsubscribe(int count) {
+    void unsubscribe(Usr usr, int count) {
         try {
-            unsubscribeFromUsers(count, instapopularDAO.getDoNotUnsubscribe().keySet());
+            unsubscribeFromUsers(count, likeRepository.findGuysByUsrAndActive(usr, true));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -52,33 +54,47 @@ public class UnsubscribeService {
         }
     }
 
-    void addDoNotUnsubscribeUser(String userName) {
+    void addGuy(Usr usr, String userName) {
         try {
-            instapopularDAO.addDoNotUnsubscribe(userName, "");
-        } catch (IOException e) {
+            Like like = likeRepository.findLikeByUsrAndGuys(usr, userName);
+            if (like != null) {
+                return;
+            }
+            ApplicationContext context = new AnnotationConfigApplicationContext(Like.class);
+            Like newLike = context.getBean(Like.class);
+            newLike.setUsr(usr);
+            newLike.setActive(true);
+            newLike.setGuys(userName);
+            newLike.setCountLike(100000);
+            likeRepository.save(newLike);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    void removeDoNotUnsubscribeUser(String userName) {
+    void removeGuy(Usr usr, String userName) {
         try {
-            instapopularDAO.removeDoNotUnsubscribe(userName);
-        } catch (IOException e) {
+            Like like = likeRepository.findLikeByUsrAndGuys(usr, userName);
+            if (like != null) {
+                likeRepository.deactivateGuys(usr, userName);
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> getDoNotUnsubscribeUser() {
+    List<ViewMap> getDoNotUnsubscribeUser(Usr usr) {
         try {
-            List<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getDoNotUnsubscribe()));
+            List<String> guys = likeRepository.findGuysByUsrAndActive(usr, true);
+            List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return emptyList();
         }
     }
 
-    private void unsubscribeFromUsers(int countSubscribers, Set<String> subscribers) {
+    private void unsubscribeFromUsers(int countSubscribers, List<String> subscribers) {
         logger.info(String.format(Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS, countSubscribers, subscribers.size()));
         if (instagramService.openHomePage()) {
             return;
@@ -104,7 +120,7 @@ public class UnsubscribeService {
 
     }
 
-    private boolean isSubscribed(Set<String> subscribers, String xpath) {
+    private boolean isSubscribed(List<String> subscribers, String xpath) {
         String url = instagramService.getWebElement(60, xpath).getAttribute(Constant.Attribute.TITLE);
         return subscribers.contains(url);
     }
