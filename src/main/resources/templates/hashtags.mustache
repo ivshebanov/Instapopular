@@ -10,13 +10,7 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form" method="post" action="top">
-            <label for="loginField">Введите логин от инстаграма</label>
-            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
-
-            <label for="passwordField">Введите пароль от инстаграма</label>
-            <input id="passwordField" type="password" name="password" placeholder="password"/>
-
+        <form class="register-form" method="post" action="top">
             <label for="actionField">Введите действие</label>
             <input id="actionField" type="text" name="action" placeholder="LIKE"/>
             <h6>Возможные действия: SUBSCRIBE, LIKE, SUBSCRIBE_AND_LIKE</h6>
@@ -28,7 +22,7 @@
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
-        <form class="register-form" method="post" action="addRemoveHashtag">
+        <form class="login-form" method="post" action="addRemoveHashtag">
             <label for="add">Добавить хештег?</label>
             <input id="add" type="text" name="addHashtag" placeholder="Хештег"/>
 
