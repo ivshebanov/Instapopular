@@ -2,14 +2,12 @@ package ru.instapopular.unsubscribe;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
 import ru.instapopular.model.Like;
 import ru.instapopular.model.Usr;
-import ru.instapopular.repository.InstapopularDAO;
 import ru.instapopular.repository.LikeRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
@@ -25,12 +23,10 @@ public class UnsubscribeService {
     private static final Logger logger = LogManager.getLogger(UnsubscribeService.class);
 
     private final InstagramService instagramService;
-    private final InstapopularDAO instapopularDAO;
     private final LikeRepository likeRepository;
 
-    public UnsubscribeService(LikeRepository likeRepository, InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public UnsubscribeService(LikeRepository likeRepository, InstagramService instagramService) {
         this.instagramService = instagramService;
-        this.instapopularDAO = instapopularDAO;
         this.likeRepository = likeRepository;
     }
 
