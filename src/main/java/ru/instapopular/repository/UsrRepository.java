@@ -1,7 +1,7 @@
 package ru.instapopular.repository;
 
-import ru.instapopular.model.Usr;
 import org.springframework.data.jpa.repository.JpaRepository;
+import ru.instapopular.model.Usr;
 
 public interface UsrRepository extends JpaRepository<Usr, Integer> {
 

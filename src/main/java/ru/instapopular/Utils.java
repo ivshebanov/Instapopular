@@ -4,7 +4,9 @@ import static ru.instapopular.Constant.AnalysisConstant.LOGIN_USER_MAC;
 import static ru.instapopular.Constant.AnalysisConstant.LOGIN_USER_WINDOWS;
 import static ru.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_MAC;
 import static ru.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_WINDOWS;
-import static ru.instapopular.Constant.Utils.*;
+import static ru.instapopular.Constant.Utils.MAC;
+import static ru.instapopular.Constant.Utils.OS_NAME;
+import static ru.instapopular.Constant.Utils.WINDOWS;
 
 public class Utils {
 

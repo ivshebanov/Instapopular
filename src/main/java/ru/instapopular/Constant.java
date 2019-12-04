@@ -18,8 +18,6 @@ public interface Constant {
         String REQUEST_SENT = "Запрос отправлен";
         String I_DO_NOT_LIKE = "Не нравится";
         String SUBSCRIPTIONS = "Подписки";
-        String TARGET_CLASSES = "target/classes";
-        String SRC_MAIN_RESOURCES = "src/main/resources";
     }
 
     interface Utils {
@@ -44,14 +42,6 @@ public interface Constant {
                 String CHROME_DRIVER_MAC = "chromedriver";
                 String CHROME_DRIVER_WINDOWS = "chromedriver.exe";
             }
-        }
-
-        interface PropertiesName {
-            String DO_NOT_UNSUBSCRIBE = "properties/doNotUnsubscribe.properties";
-            String HASHTAGS = "properties/hashtags.properties";
-            String GROUPS = "properties/groups.properties";
-            String MY_PHOTO = "properties/myPhoto.properties";
-            String PHOTO_ANALYSIS_RESULTS = "properties/photoAnalysisResults.properties";
         }
     }
 
@@ -83,7 +73,6 @@ public interface Constant {
         interface Xpath {
             String LOGIN_USERNAME_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='username']";
             String LOGIN_PASSWORD_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='password']";
-            String CHECK_LOGIN_BY_NAME = "//*[@id=\"react-root\"]//div[1]/div/div[2]/div[1]/a";
             String LOGIN_BUTTON_4 = "//form/div[4]/button";
             String LOGIN_BUTTON_5 = "//form/div[5]/button";
             String IS_ACTIVE_LIKE = "//div[2]/section[1]/span[1]/button/span";
@@ -118,7 +107,6 @@ public interface Constant {
 
         interface MessageConstants {
             String SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG = "topPublications(hashtag = %s)";
-            String SUBSCRIBE_NEW_PUBLICATIONS_BY_HASHTAG = "newPublications(%s, %d)";
         }
 
         interface Xpath {
