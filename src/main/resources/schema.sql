@@ -36,23 +36,23 @@ ALTER TABLE public.photo
     OWNER to ivshebanov;
 
 
--- Table: public.like
-CREATE TABLE public.like
+-- Table: public.guys
+CREATE TABLE public.guys
 (
     id         bigint                                              NOT NULL,
     usr_id     bigint                                              NOT NULL,
     active     boolean                                             NOT NULL,
-    guys       character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    guy_name   character varying(255) COLLATE pg_catalog."default" NOT NULL,
     count_like integer                                             NOT NULL,
-    CONSTRAINT like_pkey PRIMARY KEY (id),
-    CONSTRAINT like_usr_id_fkey FOREIGN KEY (usr_id)
+    CONSTRAINT guys_pkey PRIMARY KEY (id),
+    CONSTRAINT guys_usr_id_fkey FOREIGN KEY (usr_id)
         REFERENCES public.usr (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
     TABLESPACE pg_default;
 
-ALTER TABLE public.like
+ALTER TABLE public.guys
     OWNER to ivshebanov;
 
 

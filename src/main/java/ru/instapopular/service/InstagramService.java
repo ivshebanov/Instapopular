@@ -18,17 +18,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
 import ru.instapopular.Utils;
-import ru.instapopular.model.Like;
-import ru.instapopular.model.Photo;
 import ru.instapopular.view.ViewMap;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;

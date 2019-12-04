@@ -6,9 +6,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
-import ru.instapopular.model.Like;
+import ru.instapopular.model.Guys;
 import ru.instapopular.model.Usr;
-import ru.instapopular.repository.LikeRepository;
+import ru.instapopular.repository.GuysRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
 
@@ -23,16 +23,16 @@ public class UnsubscribeService {
     private static final Logger logger = LogManager.getLogger(UnsubscribeService.class);
 
     private final InstagramService instagramService;
-    private final LikeRepository likeRepository;
+    private final GuysRepository guysRepository;
 
-    public UnsubscribeService(LikeRepository likeRepository, InstagramService instagramService) {
+    public UnsubscribeService(GuysRepository guysRepository, InstagramService instagramService) {
         this.instagramService = instagramService;
-        this.likeRepository = likeRepository;
+        this.guysRepository = guysRepository;
     }
 
     void unsubscribe(Usr usr, int count) {
         try {
-            unsubscribeFromUsers(count, likeRepository.findGuysByUsrAndActive(usr, true));
+            unsubscribeFromUsers(count, guysRepository.findGuysByUsrAndActive(usr, true));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -52,17 +52,18 @@ public class UnsubscribeService {
 
     void addGuy(Usr usr, String userName) {
         try {
-            Like like = likeRepository.findLikeByUsrAndGuys(usr, userName);
-            if (like != null) {
+            Guys guys = guysRepository.findLikeByUsrAndGuyName(usr, userName);
+            if (guys != null) {
+                guysRepository.activateGuys(usr, userName);
                 return;
             }
-            ApplicationContext context = new AnnotationConfigApplicationContext(Like.class);
-            Like newLike = context.getBean(Like.class);
-            newLike.setUsr(usr);
-            newLike.setActive(true);
-            newLike.setGuys(userName);
-            newLike.setCountLike(100000);
-            likeRepository.save(newLike);
+            ApplicationContext context = new AnnotationConfigApplicationContext(Guys.class);
+            Guys newGuys = context.getBean(Guys.class);
+            newGuys.setUsr(usr);
+            newGuys.setActive(true);
+            newGuys.setGuyName(userName);
+            newGuys.setCountLike(100000);
+            guysRepository.save(newGuys);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -70,9 +71,9 @@ public class UnsubscribeService {
 
     void removeGuy(Usr usr, String userName) {
         try {
-            Like like = likeRepository.findLikeByUsrAndGuys(usr, userName);
-            if (like != null) {
-                likeRepository.deactivateGuys(usr, userName);
+            Guys guys = guysRepository.findLikeByUsrAndGuyName(usr, userName);
+            if (guys != null) {
+                guysRepository.deactivateGuys(usr, userName);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -81,7 +82,7 @@ public class UnsubscribeService {
 
     List<ViewMap> getDoNotUnsubscribeUser(Usr usr) {
         try {
-            List<String> guys = likeRepository.findGuysByUsrAndActive(usr, true);
+            List<String> guys = guysRepository.findGuysByUsrAndActive(usr, true);
             List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;
