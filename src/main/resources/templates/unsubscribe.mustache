@@ -10,13 +10,7 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form" method="post" action="unsub">
-            <label for="loginField">Введите логин от инстаграма</label>
-            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
-
-            <label for="passwordField">Введите пароль от инстаграма</label>
-            <input id="passwordField" type="password" name="password" placeholder="password"/>
-
+        <form class="register-form" method="post" action="unsub">
             <label for="countUnsubscribeField">От скольки отписываться?</label>
             <input id="countUnsubscribeField" type="number" name="countUnsubscribe" placeholder="400"/>
 
@@ -26,7 +20,7 @@
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
-        <form class="register-form" method="post" action="addRemoveUnsub">
+        <form class="login-form" method="post" action="addRemoveUnsub">
             <label for="add">Добавить группу?</label>
             <input id="add" type="text" name="addGroup" placeholder="Название группы"/>
 
