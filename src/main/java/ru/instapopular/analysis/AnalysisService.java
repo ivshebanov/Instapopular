@@ -10,10 +10,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Service;
 import ru.instapopular.Constant;
 import ru.instapopular.Utils;
-import ru.instapopular.model.Like;
+import ru.instapopular.model.Guys;
 import ru.instapopular.model.Photo;
 import ru.instapopular.model.Usr;
-import ru.instapopular.repository.LikeRepository;
+import ru.instapopular.repository.GuysRepository;
 import ru.instapopular.repository.PhotoRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
@@ -37,12 +37,12 @@ public class AnalysisService {
 
     private final InstagramService instagramService;
     private final PhotoRepository photoRepository;
-    private final LikeRepository likeRepository;
+    private final GuysRepository guysRepository;
 
-    public AnalysisService(InstagramService instagramService, PhotoRepository photoRepository, LikeRepository likeRepository) {
+    public AnalysisService(InstagramService instagramService, PhotoRepository photoRepository, GuysRepository guysRepository) {
         this.instagramService = instagramService;
         this.photoRepository = photoRepository;
-        this.likeRepository = likeRepository;
+        this.guysRepository = guysRepository;
     }
 
     public void loginOnWebSite(String login, String password) {
@@ -99,7 +99,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisGuys(Usr usr) {
         try {
-            List<String> guys = likeRepository.findGuysByUsr(usr);
+            List<String> guys = guysRepository.findGuyNameByUsr(usr);
             List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;
@@ -131,12 +131,12 @@ public class AnalysisService {
 
     void doNotUnsubscribe(Usr usr, int count) {
         try {
-            List<Like> likes = likeRepository.findAllByUsr(usr);
-            for (Like like : likes) {
-                if (like.getCountLike() >= count) {
-                    likeRepository.activateGuys(usr, like.getGuys());
+            List<Guys> guys = guysRepository.findAllByUsr(usr);
+            for (Guys guy : guys) {
+                if (guy.getCountLike() >= count) {
+                    guysRepository.activateGuys(usr, guy.getGuyName());
                 } else {
-                    likeRepository.deactivateGuys(usr, like.getGuys());
+                    guysRepository.deactivateGuys(usr, guy.getGuyName());
                 }
             }
         } catch (Exception e) {
@@ -146,18 +146,18 @@ public class AnalysisService {
 
     private void addNewUser(Usr usr, Map<String, Integer> guys) {
         for (Map.Entry<String, Integer> guy : guys.entrySet()) {
-            Like like = likeRepository.findLikeByUsrAndGuys(usr, guy.getKey());
-            if (like != null) {
-                likeRepository.updateCountLikeAndActiveByUsrAndGuys(usr, guy.getKey(), like.getCountLike() + guy.getValue());
+            Guys oldGuy = guysRepository.findLikeByUsrAndGuyName(usr, guy.getKey());
+            if (oldGuy != null) {
+                guysRepository.updateCountLikeAndActiveByUsrAndGuyName(usr, guy.getKey(), oldGuy.getCountLike() + guy.getValue());
                 continue;
             }
-            ApplicationContext context = new AnnotationConfigApplicationContext(Like.class);
-            Like newLike = context.getBean(Like.class);
-            newLike.setUsr(usr);
-            newLike.setActive(true);
-            newLike.setGuys(guy.getKey());
-            newLike.setCountLike(guy.getValue());
-            likeRepository.save(newLike);
+            ApplicationContext context = new AnnotationConfigApplicationContext(Guys.class);
+            Guys newGuys = context.getBean(Guys.class);
+            newGuys.setUsr(usr);
+            newGuys.setActive(true);
+            newGuys.setGuyName(guy.getKey());
+            newGuys.setCountLike(guy.getValue());
+            guysRepository.save(newGuys);
         }
     }
 

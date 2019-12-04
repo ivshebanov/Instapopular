@@ -63,7 +63,7 @@ public class Usr implements UserDetails {
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Like> likes;
+    private List<Guys> guys;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Hashtag> hashtags;
@@ -120,7 +120,7 @@ public class Usr implements UserDetails {
                 Objects.equals(instPassword, usr.instPassword) &&
                 Objects.equals(doNotUnsubscribe, usr.doNotUnsubscribe) &&
                 Objects.equals(photos, usr.photos) &&
-                Objects.equals(likes, usr.likes) &&
+                Objects.equals(guys, usr.guys) &&
                 Objects.equals(hashtags, usr.hashtags) &&
                 Objects.equals(groups, usr.groups) &&
                 Objects.equals(role, usr.role);
@@ -128,7 +128,7 @@ public class Usr implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, active, email, usrname, password, instName, instPassword, doNotUnsubscribe, photos, likes, hashtags, groups, role);
+        return Objects.hash(id, active, email, usrname, password, instName, instPassword, doNotUnsubscribe, photos, guys, hashtags, groups, role);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class Usr implements UserDetails {
                 ", instPassword='" + instPassword + '\'' +
                 ", doNotUnsubscribe=" + doNotUnsubscribe +
                 ", photos=" + photos +
-                ", likes=" + likes +
+                ", guys=" + guys +
                 ", hashtags=" + hashtags +
                 ", groups=" + groups +
                 ", role=" + role +

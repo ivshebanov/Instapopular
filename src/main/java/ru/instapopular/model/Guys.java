@@ -17,8 +17,8 @@ import java.util.Objects;
 @Data
 @Entity
 @Scope(value = "prototype")
-@Table(name = "like")
-public class Like {
+@Table(name = "guys")
+public class Guys {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +31,8 @@ public class Like {
     private boolean active;
 
     @NotBlank
-    private String guys;
+    @JoinColumn(name = "guy_name")
+    private String guyName;
 
     @PositiveOrZero
     @JoinColumn(name = "count_like")
@@ -41,26 +42,26 @@ public class Like {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Like like = (Like) o;
-        return active == like.active &&
-                Objects.equals(id, like.id) &&
-                Objects.equals(usr, like.usr) &&
-                Objects.equals(guys, like.guys) &&
-                Objects.equals(countLike, like.countLike);
+        Guys guys = (Guys) o;
+        return active == guys.active &&
+                Objects.equals(id, guys.id) &&
+                Objects.equals(usr, guys.usr) &&
+                Objects.equals(this.guyName, guys.guyName) &&
+                Objects.equals(countLike, guys.countLike);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, usr, active, guys, countLike);
+        return Objects.hash(id, usr, active, guyName, countLike);
     }
 
     @Override
     public String toString() {
-        return "Like{" +
+        return "Guys{" +
                 "id=" + id +
                 ", usr=" + usr +
                 ", active=" + active +
-                ", guys='" + guys + '\'' +
+                ", guyName='" + guyName + '\'' +
                 ", countLike=" + countLike +
                 '}';
     }
