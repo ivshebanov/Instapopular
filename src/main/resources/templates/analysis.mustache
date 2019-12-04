@@ -10,6 +10,13 @@
 
 <div class="login-page">
     <div class="form">
+
+        <form class="register-form" method="post" action="loginToInst">
+            <button>Запустить сканирование</button>
+            <br><br>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        </form>
+
         <form class="register-form" method="post" action="analysis">
             <label for="doNotUnsubscribeField">Не отписываться от кол-лайков:</label>
             <input id="doNotUnsubscribeField" type="number" name="doNotUnsubscribe"/>
@@ -31,12 +38,6 @@
                     </table>
                 </div>
             {{/analysisView}}
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        </form>
-
-        <form class="register-form" method="post" action="loginToInst">
-            <button>Запустить сканирование</button>
-            <br><br>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
