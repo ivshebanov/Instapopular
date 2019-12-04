@@ -1,8 +1,5 @@
 package ru.instapopular.service;
 
-import ru.instapopular.Constant;
-import ru.instapopular.Utils;
-import ru.instapopular.view.ViewMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -19,17 +16,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Constant;
+import ru.instapopular.Utils;
+import ru.instapopular.view.ViewMap;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -64,9 +60,6 @@ public class InstagramService {
 
     public void loginOnWebSite(String login, String password) {
         logger.info(String.format(Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE, login, password));
-        if (login == null || login.length() == 0 || password == null || password.length() == 0) {
-            return;
-        }
         this.login = login;
         openUrl(Constant.LinkToInstagram.LOGIN_PAGE);
         getWebElement(60, Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT).sendKeys(login);
@@ -256,14 +249,14 @@ public class InstagramService {
         }
     }
 
-    public Set<ViewMap> revertMapView(Map<String, Integer> map) {
-        HashSet<ViewMap> resultSet = new HashSet<>();
+    public List<ViewMap> revertToView(List<String> list) {
+        List<ViewMap> resultSet = new ArrayList<>();
         ApplicationContext context = new AnnotationConfigApplicationContext(ViewMap.class);
 
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+        for (String atr : list) {
             ViewMap viewMap = context.getBean(ViewMap.class);
-            viewMap.setKey(entry.getKey());
-            viewMap.setValue(entry.getValue());
+            viewMap.setKey(atr);
+            viewMap.setValue(1);
             resultSet.add(viewMap);
         }
         return resultSet;

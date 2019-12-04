@@ -1,23 +1,22 @@
 package ru.instapopular.groups;
 
-import ru.instapopular.Action;
-import ru.instapopular.Constant;
-import ru.instapopular.repository.InstapopularDAO;
-import ru.instapopular.view.ViewMap;
-import ru.instapopular.service.InstagramService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Action;
+import ru.instapopular.Constant;
+import ru.instapopular.model.MyGroup;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.MyGroupRepository;
+import ru.instapopular.service.InstagramService;
+import ru.instapopular.view.ViewMap;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Service
@@ -26,21 +25,19 @@ public class GroupsService {
     private static final Logger logger = LogManager.getLogger(GroupsService.class);
 
     private final InstagramService instagramService;
+    private final MyGroupRepository myGroupRepository;
 
-    private final InstapopularDAO instapopularDAO;
-
-    public GroupsService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public GroupsService(InstagramService instagramService, MyGroupRepository myGroupRepository) {
         this.instagramService = instagramService;
-        this.instapopularDAO = instapopularDAO;
+        this.myGroupRepository = myGroupRepository;
     }
 
-    void subscribeToUsersInGroup(int countSubscriptions, Action action) {
+    void subscribeToUsersInGroup(Usr usr, int countSubscriptions, Action action) {
         try {
-            Set<String> groups = instapopularDAO.getGroups().keySet();
+            List<String> groups = myGroupRepository.findMyGroupByUsrAndActive(usr, true);
             for (String urlGroup : groups) {
                 subscribeToUsersInGroup(urlGroup, countSubscriptions, action);
             }
-            System.out.println();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -58,37 +55,48 @@ public class GroupsService {
         }
     }
 
-    void addGroup(String userName) {
+    void addGroup(Usr usr, String groupName) {
         try {
-            instapopularDAO.addGroup(userName);
-        } catch (IOException e) {
+            MyGroup myDeativateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
+            if (myDeativateGroup != null) {
+                myGroupRepository.activateMyGroup(usr, groupName);
+                return;
+            }
+            ApplicationContext context = new AnnotationConfigApplicationContext(MyGroup.class);
+            MyGroup group = context.getBean(MyGroup.class);
+            group.setUsr(usr);
+            group.setActive(true);
+            group.setMyGroup(groupName);
+            myGroupRepository.save(group);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    void removeGroup(String userName) {
+    void removeGroup(Usr usr, String groupName) {
         try {
-            instapopularDAO.removeGroup(userName);
-        } catch (IOException e) {
+            MyGroup myActivateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
+            if (myActivateGroup != null) {
+                myGroupRepository.deactivateMyGroup(usr, groupName);
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> getGroup() {
+    List<ViewMap> getActiveGroup(Usr usr) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getGroups()));
-            Collections.sort(resultView);
-            return resultView;
-        } catch (IOException e) {
+            List<String> myActiveGroup = myGroupRepository.findMyGroupByUsrAndActive(usr, true);
+            List<ViewMap> myActiveGroupViewMap = instagramService.revertToView(myActiveGroup);
+            Collections.sort(myActiveGroupViewMap);
+            return myActiveGroupViewMap;
+        } catch (Exception e) {
             return emptyList();
         }
     }
 
     private void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
         logger.info(String.format(Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
-        if (channelName == null || countSubscriptions <= 0 || action == null) {
-            return;
-        }
         String baseWindowHandle = null;
         if (!String.format(Constant.LinkToInstagram.HOME_PAGE, channelName).equalsIgnoreCase(instagramService.getCurrentUrl())) {
             baseWindowHandle = instagramService.openUrl(String.format(Constant.LinkToInstagram.HOME_PAGE, channelName));

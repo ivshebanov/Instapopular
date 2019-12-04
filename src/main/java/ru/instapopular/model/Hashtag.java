@@ -4,7 +4,6 @@ import lombok.Data;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,28 +16,19 @@ import java.util.Objects;
 @Data
 @Entity
 @Scope(value = "prototype")
-@Table(name = "my_group")
-public class MyGroup {
-
-    public MyGroup() {
-    }
-
-    public MyGroup(Usr usr, @NotBlank String myGroup) {
-        this.usr = usr;
-        this.myGroup = myGroup;
-    }
+@Table(name = "hashtag")
+public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
     @NotBlank
-    @JoinColumn(name = "my_group")
-    private String myGroup;
+    private String hashtag;
 
     private boolean active;
 
@@ -46,24 +36,24 @@ public class MyGroup {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MyGroup group = (MyGroup) o;
-        return active == group.active &&
-                Objects.equals(id, group.id) &&
-                Objects.equals(usr, group.usr) &&
-                Objects.equals(myGroup, group.myGroup);
+        Hashtag hashtag1 = (Hashtag) o;
+        return active == hashtag1.active &&
+                Objects.equals(id, hashtag1.id) &&
+                Objects.equals(usr, hashtag1.usr) &&
+                Objects.equals(hashtag, hashtag1.hashtag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, usr, myGroup, active);
+        return Objects.hash(id, usr, hashtag, active);
     }
 
     @Override
     public String toString() {
-        return "MyGroup{" +
+        return "Hashtag{" +
                 "id=" + id +
                 ", usr=" + usr +
-                ", myGroup='" + myGroup + '\'' +
+                ", hashtag='" + hashtag + '\'' +
                 ", active=" + active +
                 '}';
     }

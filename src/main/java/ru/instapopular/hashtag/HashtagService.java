@@ -1,23 +1,23 @@
 package ru.instapopular.hashtag;
 
-import ru.instapopular.Action;
-import ru.instapopular.Constant;
-import ru.instapopular.service.InstagramService;
-import ru.instapopular.view.ViewMap;
-import ru.instapopular.repository.InstapopularDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.instapopular.Action;
+import ru.instapopular.Constant;
+import ru.instapopular.model.Hashtag;
+import ru.instapopular.model.Usr;
+import ru.instapopular.repository.HashtagRepository;
+import ru.instapopular.service.InstagramService;
+import ru.instapopular.view.ViewMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Service
@@ -26,17 +26,16 @@ public class HashtagService {
     private static final Logger logger = LogManager.getLogger(HashtagService.class);
 
     private final InstagramService instagramService;
+    private final HashtagRepository hashtagRepository;
 
-    private final InstapopularDAO instapopularDAO;
-
-    public HashtagService(InstagramService instagramService, @Qualifier("propertiesDao") InstapopularDAO instapopularDAO) {
+    public HashtagService(InstagramService instagramService, HashtagRepository hashtagRepository) {
         this.instagramService = instagramService;
-        this.instapopularDAO = instapopularDAO;
+        this.hashtagRepository = hashtagRepository;
     }
 
-    void topPublications(Action action) {
+    void topPublications(Usr usr, Action action) {
         try {
-            Set<String> hashtags = instapopularDAO.getHestags().keySet();
+            List<String> hashtags = hashtagRepository.findHashtagsByUsrAndActive(usr, true);
             for (String hashtag : hashtags) {
                 topPublications(hashtag, action);
             }
@@ -47,9 +46,9 @@ public class HashtagService {
         }
     }
 
-    public void newPublications(Action action, int countPhoto) {
+    void newPublications(Usr usr, Action action, int countPhoto) {
         try {
-            Set<String> hashtags = instapopularDAO.getHestags().keySet();
+            List<String> hashtags = hashtagRepository.findHashtagsByUsrAndActive(usr, true);
             for (String hashtag : hashtags) {
                 newPublications(action, countPhoto, hashtag);
             }
@@ -70,28 +69,42 @@ public class HashtagService {
         }
     }
 
-    void addHestag(String userName) {
+    void addHestag(Usr usr, String hashtagName) {
         try {
-            instapopularDAO.addHestag(userName);
-        } catch (IOException e) {
+            Hashtag hashtag = hashtagRepository.findHashtagByUsrAndHashtag(usr, hashtagName);
+            if (hashtag != null) {
+                hashtagRepository.activateHashtag(usr, hashtagName);
+                return;
+            }
+            ApplicationContext context = new AnnotationConfigApplicationContext(Hashtag.class);
+            Hashtag newHashtag = context.getBean(Hashtag.class);
+            newHashtag.setUsr(usr);
+            newHashtag.setActive(true);
+            newHashtag.setHashtag(hashtagName);
+            hashtagRepository.save(newHashtag);
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    void removeHestag(String userName) {
+    void removeHestag(Usr usr, String hashtagName) {
         try {
-            instapopularDAO.removeHestag(userName);
-        } catch (IOException e) {
+            Hashtag photo = hashtagRepository.findHashtagByUsrAndHashtag(usr, hashtagName);
+            if (photo != null) {
+                hashtagRepository.deactivateHashtag(usr, hashtagName);
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    List<ViewMap> getHestags() {
+    List<ViewMap> getHestags(Usr usr) {
         try {
-            ArrayList<ViewMap> resultView = new ArrayList<>(instagramService.revertMapView(instapopularDAO.getHestags()));
+            List<String> hashtags = hashtagRepository.findHashtagsByUsrAndActive(usr, true);
+            List<ViewMap> resultView = instagramService.revertToView(hashtags);
             Collections.sort(resultView);
             return resultView;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return emptyList();
         }
     }

@@ -17,16 +17,8 @@ import java.util.Objects;
 @Data
 @Entity
 @Scope(value = "prototype")
-@Table(name = "my_group")
-public class MyGroup {
-
-    public MyGroup() {
-    }
-
-    public MyGroup(Usr usr, @NotBlank String myGroup) {
-        this.usr = usr;
-        this.myGroup = myGroup;
-    }
+@Table(name = "photo")
+public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,35 +28,34 @@ public class MyGroup {
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
-    @NotBlank
-    @JoinColumn(name = "my_group")
-    private String myGroup;
-
     private boolean active;
+
+    @NotBlank
+    private String photo;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MyGroup group = (MyGroup) o;
-        return active == group.active &&
-                Objects.equals(id, group.id) &&
-                Objects.equals(usr, group.usr) &&
-                Objects.equals(myGroup, group.myGroup);
+        Photo photo1 = (Photo) o;
+        return active == photo1.active &&
+                Objects.equals(id, photo1.id) &&
+                Objects.equals(usr, photo1.usr) &&
+                Objects.equals(photo, photo1.photo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, usr, myGroup, active);
+        return Objects.hash(id, usr, active, photo);
     }
 
     @Override
     public String toString() {
-        return "MyGroup{" +
+        return "Photo{" +
                 "id=" + id +
                 ", usr=" + usr +
-                ", myGroup='" + myGroup + '\'' +
                 ", active=" + active +
+                ", photo='" + photo + '\'' +
                 '}';
     }
 }

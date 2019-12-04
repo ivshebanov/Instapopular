@@ -10,13 +10,8 @@
 
 <div class="login-page">
     <div class="form">
+
         <form class="register-form" method="post" action="loginToInst">
-            <label for="loginField">Введите логин от инстаграма</label>
-            <input id="loginField" type="text" name="login" placeholder="lilka.lily.1"/>
-
-            <label for="passwordField">Введите пароль от инстаграма</label>
-            <input id="passwordField" type="password" name="password" placeholder="password"/>
-
             <button>Запустить сканирование</button>
             <br><br>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
