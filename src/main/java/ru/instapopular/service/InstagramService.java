@@ -1,6 +1,5 @@
 package ru.instapopular.service;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
@@ -9,15 +8,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import ru.instapopular.Constant;
-import ru.instapopular.Utils;
 import ru.instapopular.view.ViewMap;
 
 import java.util.ArrayList;
@@ -26,31 +22,60 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
+import static org.openqa.selenium.By.xpath;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static ru.instapopular.Constant.Attribute.ARIA_LABEL;
+import static ru.instapopular.Constant.Attribute.I_DO_NOT_LIKE;
+import static ru.instapopular.Constant.Attribute.SUBSCRIPTIONS;
+import static ru.instapopular.Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER;
+import static ru.instapopular.Constant.DriverConstant.MessageConstants.GET_DRIVER;
+import static ru.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIVER;
+import static ru.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
+import static ru.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
+import static ru.instapopular.Constant.InstagramConstant.MessageConstants.DID_NOT_FIND_THE_BUTTON;
+import static ru.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_FAILED;
+import static ru.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
+import static ru.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON_4;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.LOGIN_BUTTON_5;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.LOGIN_PASSWORD_INPUT;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.SET_LIKE;
+import static ru.instapopular.Constant.InstagramConstant.Xpath.SUBSCRIBE;
+import static ru.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static ru.instapopular.Constant.LinkToInstagram.LOGIN_PAGE;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
+import static ru.instapopular.Constant.Utils.OS_NAME;
+import static ru.instapopular.Utils.getChromeDriver;
 
 @Service
 public class InstagramService {
 
     private static final Logger logger = LoggerFactory.getLogger(InstagramService.class);
-    private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(Utils.getChromeDriver())).getPath();
+    private static final String CHROME_DRIVER_PATH = requireNonNull(ClassLoader.getSystemResource(getChromeDriver())).getPath();
 
     private WebDriver driver;
     private String login;
 
-    public void initDriver() {
-        logger.info(System.getProperty(Constant.Utils.OS_NAME));
-        logger.info(String.format(Constant.DriverConstant.MessageConstants.GET_DRIVER, Calendar.getInstance()));
-        initChromeDriver();
-    }
-
     public void quitDriver() {
-        logger.info(String.format(Constant.DriverConstant.MessageConstants.QUIT_DRIVER, Calendar.getInstance()));
+        logger.info(format(QUIT_DRIVER, Calendar.getInstance()));
         driver.quit();
     }
 
+    public void initDriver() {
+        logger.info(format(GET_DRIVER, Calendar.getInstance()));
+        logger.info(System.getProperty(OS_NAME));
+        initChromeDriver();
+    }
+
     private void initChromeDriver() {
-        logger.debug(String.format(Constant.DriverConstant.MessageConstants.SET_PROPERTY, Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH));
-        System.setProperty(Constant.DriverConstant.Driver.Chrome.WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH);
+        logger.debug(format(SET_PROPERTY, WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH));
+        System.setProperty(WEBDRIVER_CHROME_DRIVER, CHROME_DRIVER_PATH);
         driver = new ChromeDriver();
         driver.manage().window().setSize(new Dimension(1400, 900));
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -59,25 +84,27 @@ public class InstagramService {
     }
 
     public void loginOnWebSite(String login, String password) {
-        logger.info(String.format(Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE, login, password));
+        logger.info(format(LOGIN_ON_WEB_SITE, login, password));
         this.login = login;
-        openUrl(Constant.LinkToInstagram.LOGIN_PAGE);
-        getWebElement(60, Constant.InstagramConstant.Xpath.LOGIN_USERNAME_INPUT).sendKeys(login);
-        getWebElement(60, Constant.InstagramConstant.Xpath.LOGIN_PASSWORD_INPUT).sendKeys(password);
+        openUrl(LOGIN_PAGE);
+        getWebElement(60, LOGIN_USERNAME_INPUT).sendKeys(login);
+        getWebElement(60, LOGIN_PASSWORD_INPUT).sendKeys(password);
         try {
-            getWebElement(20, Constant.InstagramConstant.Xpath.LOGIN_BUTTON_4).click();
+            getWebElement(20, LOGIN_BUTTON_4).click();
         } catch (TimeoutException ex) {
-            logger.error(String.format(Constant.InstagramConstant.MessageConstants.DID_NOT_FIND_THE_BUTTON, Constant.InstagramConstant.Xpath.LOGIN_BUTTON_4, Constant.InstagramConstant.Xpath.LOGIN_BUTTON_5));
-            getWebElement(20, Constant.InstagramConstant.Xpath.LOGIN_BUTTON_5).click();
+            logger.error(format(DID_NOT_FIND_THE_BUTTON, LOGIN_BUTTON_4, LOGIN_BUTTON_5));
+            getWebElement(20, LOGIN_BUTTON_5).click();
         }
+        timeOut(20, 0);
+        openHomePage();
     }
 
     public boolean openHomePage() {
-        if (!driver.getCurrentUrl().equalsIgnoreCase(String.format(Constant.LinkToInstagram.HOME_PAGE, login))) {
-            openUrl(String.format(Constant.LinkToInstagram.HOME_PAGE, login));
+        if (!driver.getCurrentUrl().equalsIgnoreCase(format(HOME_PAGE, login))) {
+            openUrl(format(HOME_PAGE, login));
         }
-        String accountName = getWebElement(60, Constant.UnsubscribeConstant.Xpath.ACCOUNT_NAME).getText();
-        return !login.equalsIgnoreCase(accountName);
+        String accountName = getWebElement(60, ACCOUNT_NAME).getText();
+        return login.equalsIgnoreCase(accountName);
     }
 
     public int convertStringToInt(String count) {
@@ -103,7 +130,7 @@ public class InstagramService {
     public void scrollSubscriptions(int currentPosition) {
         for (int i = 1; i <= currentPosition; i++) {
             try {
-                scrollElementSubscriptions(String.format(Constant.UnsubscribeConstant.Xpath.SCROLL, i));
+                scrollElementSubscriptions(format(SCROLL, i));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -112,7 +139,7 @@ public class InstagramService {
 
     public void scrollOpenLikeUser(WebElement countWebElement) {
         try {
-            ((JavascriptExecutor) driver).executeScript(Constant.InstagramConstant.Script.SCROLL_INTO_VIEW, countWebElement);
+            ((JavascriptExecutor) driver).executeScript(SCROLL_INTO_VIEW, countWebElement);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -133,7 +160,7 @@ public class InstagramService {
     }
 
     public String openUrlNewTab(String url) {
-        ((JavascriptExecutor) driver).executeScript(Constant.GroupsConstant.Script.WINDOW_OPEN);
+        ((JavascriptExecutor) driver).executeScript(WINDOW_OPEN);
         ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         selectTab(tabs.size() - 1);
         return openUrl(url);
@@ -160,7 +187,7 @@ public class InstagramService {
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
             if (isNotActiveLike()) {
-                getWebElement(60, Constant.InstagramConstant.Xpath.SET_LIKE).click();
+                getWebElement(60, SET_LIKE).click();
                 checkLike = true;
             }
         } catch (Exception ignored) {
@@ -179,12 +206,10 @@ public class InstagramService {
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
             if (isNotSubscribe()) {
-                getWebElement(60, Constant.InstagramConstant.Xpath.SUBSCRIBE).click();
+                getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
             timeOut(2, 0);
-        } catch (Exception ignored) {
-
         } finally {
             closeTab(photoWindowHandle);
             selectTab(currentWindowHandle);
@@ -199,15 +224,13 @@ public class InstagramService {
         try {
             photoWindowHandle = openUrlNewTab(urlPhoto);
             if (isNotActiveLike()) {
-                getWebElement(60, Constant.InstagramConstant.Xpath.SET_LIKE).click();
+                getWebElement(60, SET_LIKE).click();
             }
             if (isNotSubscribe()) {
-                getWebElement(60, Constant.InstagramConstant.Xpath.SUBSCRIBE).click();
+                getWebElement(60, SUBSCRIBE).click();
                 checkSubscribe = true;
             }
             timeOut(2, 0);
-        } catch (Exception ignored) {
-
         } finally {
             closeTab(photoWindowHandle);
             selectTab(currentWindowHandle);
@@ -220,21 +243,23 @@ public class InstagramService {
     }
 
     private boolean isNotActiveLike() {
-        String ariaLabel = getWebElement(60, Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE).getAttribute(Constant.Attribute.ARIA_LABEL);
-        return !Constant.Attribute.I_DO_NOT_LIKE.equalsIgnoreCase(ariaLabel);
+        String ariaLabel = getWebElement(60, IS_ACTIVE_LIKE).getAttribute(ARIA_LABEL);
+        return !I_DO_NOT_LIKE.equalsIgnoreCase(ariaLabel);
     }
 
     private boolean isNotSubscribe() {
-        String ariaLabel = getWebElement(60, Constant.InstagramConstant.Xpath.SUBSCRIBE).getText();
-        return !Constant.Attribute.SUBSCRIPTIONS.equalsIgnoreCase(ariaLabel);
+        String ariaLabel = getWebElement(60, SUBSCRIBE).getText();
+        return !SUBSCRIPTIONS.equalsIgnoreCase(ariaLabel);
     }
 
     public WebElement getWebElement(int timeOutInSeconds, String xpathExpression) {
-        return (new WebDriverWait(driver, timeOutInSeconds)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpression)));
+        return (new WebDriverWait(driver, timeOutInSeconds))
+                .until(presenceOfElementLocated(xpath(xpathExpression)));
     }
 
     public List<WebElement> getWebElements(int timeOutInSeconds, String xpathExpression) {
-        return (new WebDriverWait(driver, timeOutInSeconds)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathExpression)));
+        return (new WebDriverWait(driver, timeOutInSeconds))
+                .until(presenceOfAllElementsLocatedBy(xpath(xpathExpression)));
     }
 
     public void timeOut(int timeOutInSeconds, int dispersionInSeconds) {

@@ -30,7 +30,7 @@ public interface Constant {
     interface DriverConstant {
 
         interface MessageConstants {
-            String GET_DRIVER = "getDriver() Local time: %tT";
+            String GET_DRIVER = "initDriver() Local time: %tT";
             String QUIT_DRIVER = "quitDriver() Local time: %tT";
             String SET_PROPERTY = "initDriver(%s, %s)";
         }
@@ -48,7 +48,7 @@ public interface Constant {
     interface GroupsConstant {
 
         interface MessageConstants {
-            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToUsersInGroup(%s, %d)";
+            String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToUsersInGroup(%s, %d, %s)";
             String SUBSCRIBE_TO_GROUP = "subscribe from %d";
         }
 
@@ -68,12 +68,13 @@ public interface Constant {
         interface MessageConstants {
             String LOGIN_ON_WEB_SITE = "loginOnWebSite(%s, %s)";
             String DID_NOT_FIND_THE_BUTTON = "Не нашел кнопку %s, нажимаем на %s";
+            String LOGIN_FAILED = "Не получилось залогинитья.";
         }
 
         interface Xpath {
-            String LOGIN_USERNAME_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='username']";
-            String LOGIN_PASSWORD_INPUT = "//*[@id=\"react-root\"]//div/div[1]/input[@name='password']";
-            String LOGIN_BUTTON_4 = "//form/div[4]/button";
+            String LOGIN_USERNAME_INPUT = "//div[2]/div/label/input[@name='username']";
+            String LOGIN_PASSWORD_INPUT = "//div[3]/div/label/input[@name='password']";
+            String LOGIN_BUTTON_4 = "//div[4]/button";
             String LOGIN_BUTTON_5 = "//form/div[5]/button";
             String IS_ACTIVE_LIKE = "//div[2]/section[1]/span[1]/button/span";
             String SET_LIKE = "//div[2]/section[1]/span[1]/button";
@@ -93,7 +94,7 @@ public interface Constant {
         }
 
         interface Xpath {
-            String ACCOUNT_NAME = "//*[@id=\"react-root\"]//div/header/section/div[1]/h1";
+            String ACCOUNT_NAME = "//header/section/div[1]/h1";
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
@@ -117,12 +118,13 @@ public interface Constant {
     }
 
     interface AnalysisConstant {
-        String OPEN_LIKE = "//div[2]/section[2]/div/div/a";
+        String OPEN_LIKE = "//div[2]/section[2]/div";
         String LOGIN_USER_MAC = "//div[4]/div/div[2]/div/div/div";
         String LOGIN_USER_WINDOWS = "//div[3]/div/div[2]/div/div/div";
-        String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/a/span";
+        String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/button/span";
         String LINE_BREAK = "\n";
         String CUT_OF_URL = "p/.*";
+        String VIEWS = "Просмотры";
     }
 
     interface RegistrationServiceConstant {

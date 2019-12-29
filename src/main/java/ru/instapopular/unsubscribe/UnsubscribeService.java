@@ -93,7 +93,7 @@ public class UnsubscribeService {
 
     private void unsubscribeFromUsers(int countSubscribers, List<String> subscribers) {
         logger.info(String.format(Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS, countSubscribers, subscribers.size()));
-        if (instagramService.openHomePage()) {
+        if (!instagramService.openHomePage()) {
             return;
         }
         instagramService.getWebElement(60, Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS).click();
