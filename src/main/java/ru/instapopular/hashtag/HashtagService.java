@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Action;
-import ru.instapopular.Constant;
 import ru.instapopular.model.Hashtag;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.HashtagRepository;
@@ -18,7 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static ru.instapopular.Constant.Attribute.HREF;
+import static ru.instapopular.Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG;
+import static ru.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_NEW_PUBLICATIONS;
+import static ru.instapopular.Constant.HashtagConstant.Xpath.PATH_SEARCH_TOP_PUBLICATIONS;
+import static ru.instapopular.Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS;
+import static ru.instapopular.Constant.LinkToInstagram.HASHTAG_PAGE;
 
 @Service
 public class HashtagService {
@@ -110,14 +116,14 @@ public class HashtagService {
     }
 
     private void topPublications(String hashtag, Action action) {
-        logger.info(String.format(Constant.HashtagConstant.MessageConstants.SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
+        logger.info(format(SUBSCRIBE_TOP_PUBLICATIONS_BY_HASHTAG, hashtag));
         if (hashtag == null || hashtag.length() == 0 || action == null) {
             return;
         }
-        if (!String.format(Constant.LinkToInstagram.HASHTAG_PAGE, hashtag).equalsIgnoreCase(instagramService.getCurrentUrl())) {
-            instagramService.openUrl(String.format(Constant.LinkToInstagram.HASHTAG_PAGE, hashtag));
+        if (!format(HASHTAG_PAGE, hashtag).equalsIgnoreCase(instagramService.getCurrentUrl())) {
+            instagramService.openUrl(format(HASHTAG_PAGE, hashtag));
         }
-        List<WebElement> weLinkTopPublications = instagramService.getWebElements(60, Constant.HashtagConstant.Xpath.PATH_SEARCH_TOP_PUBLICATIONS);
+        List<WebElement> weLinkTopPublications = instagramService.getWebElements(60, PATH_SEARCH_TOP_PUBLICATIONS);
         List<String> linkTopPublications = getUrlsPhoto(weLinkTopPublications);
         choiceOfAction(action, linkTopPublications);
     }
@@ -139,7 +145,7 @@ public class HashtagService {
         List<WebElement> newPublication = new ArrayList<>();
         int countRow = countPhoto / 3 + 1;
         for (int i = 1; i <= countRow; i++) {
-            newPublication.addAll(instagramService.getWebElements(60, String.format(Constant.HashtagConstant.Xpath.PATH_SEARCH_NEW_PUBLICATIONS, i)));
+            newPublication.addAll(instagramService.getWebElements(60, format(PATH_SEARCH_NEW_PUBLICATIONS, i)));
             scrollElement(i);
         }
         return newPublication;
@@ -148,10 +154,10 @@ public class HashtagService {
     private void scrollElement(int i) {
         if (i > 14) {
             for (int t = 10; t < 15; t++) {
-                instagramService.scrollElementSubscriptions(String.format(Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS, t));
+                instagramService.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, t));
             }
         }
-        instagramService.scrollElementSubscriptions(String.format(Constant.HashtagConstant.Xpath.SCROLL_NEW_PUBLICATIONS, i));
+        instagramService.scrollElementSubscriptions(format(SCROLL_NEW_PUBLICATIONS, i));
         instagramService.timeOut(2, 0);
     }
 
@@ -196,7 +202,7 @@ public class HashtagService {
     private List<String> getUrlsPhoto(List<WebElement> weLinkTopPublications) {
         List<String> resultUrls = new ArrayList<>();
         for (WebElement we : weLinkTopPublications) {
-            resultUrls.add(we.getAttribute(Constant.Attribute.HREF));
+            resultUrls.add(we.getAttribute(HREF));
         }
         return resultUrls;
     }

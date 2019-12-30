@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import ru.instapopular.Constant;
 import ru.instapopular.model.Guys;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.GuysRepository;
@@ -15,7 +14,16 @@ import ru.instapopular.view.ViewMap;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static ru.instapopular.Constant.Attribute.TITLE;
+import static ru.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBED_FROM;
+import static ru.instapopular.Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SUBSCRIPTIONS_BTN;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 
 @Service
 public class UnsubscribeService {
@@ -92,23 +100,23 @@ public class UnsubscribeService {
     }
 
     private void unsubscribeFromUsers(int countSubscribers, List<String> subscribers) {
-        logger.info(String.format(Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBE_FROM_USERS, countSubscribers, subscribers.size()));
-        if (instagramService.openHomePage()) {
+        logger.info(format(UNSUBSCRIBE_FROM_USERS, countSubscribers, subscribers.size()));
+        if (!instagramService.openHomePage()) {
             return;
         }
-        instagramService.getWebElement(60, Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIPTIONS).click();
+        instagramService.getWebElement(60, OPEN_SUBSCRIPTIONS).click();
         instagramService.scrollSubscriptions(20);
         for (int i = 1; i <= countSubscribers; i++) {
             try {
-                instagramService.scrollElementSubscriptions(String.format(Constant.UnsubscribeConstant.Xpath.SCROLL, i));
-                if (subscribers.size() != 0 && isSubscribed(subscribers, String.format(Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS, i))) {
+                instagramService.scrollElementSubscriptions(format(SCROLL, i));
+                if (subscribers.size() != 0 && isSubscribed(subscribers, format(USER_LINK_TO_SUBSCRIBERS, i))) {
                     countSubscribers += 1;
                     continue;
                 }
                 instagramService.timeOut(150, 50);
-                instagramService.getWebElement(60, String.format(Constant.UnsubscribeConstant.Xpath.SUBSCRIPTIONS_BTN, i)).click();
-                instagramService.getWebElement(60, Constant.UnsubscribeConstant.Xpath.UNSUBSCRIBE_BTN).click();
-                logger.info(String.format(Constant.UnsubscribeConstant.MessageConstants.UNSUBSCRIBED_FROM, i));
+                instagramService.getWebElement(60, format(SUBSCRIPTIONS_BTN, i)).click();
+                instagramService.getWebElement(60, UNSUBSCRIBE_BTN).click();
+                logger.info(format(UNSUBSCRIBED_FROM, i));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 instagramService.scrollSubscriptions(i);
@@ -118,7 +126,7 @@ public class UnsubscribeService {
     }
 
     private boolean isSubscribed(List<String> subscribers, String xpath) {
-        String url = instagramService.getWebElement(60, xpath).getAttribute(Constant.Attribute.TITLE);
+        String url = instagramService.getWebElement(60, xpath).getAttribute(TITLE);
         return subscribers.contains(url);
     }
 }
