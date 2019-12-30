@@ -6,7 +6,7 @@
 
     <groupId>ru.instapopular</groupId>
     <artifactId>instapopular</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>instapopular</name>
 
