@@ -98,7 +98,7 @@ public interface Constant {
             String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
             String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
-            String UNSUBSCRIBE_BTN = "/html/body/div[4]/div/div/div[3]/button[1]";
+            String UNSUBSCRIBE_BTN = "//div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
             String USER_LINK_TO_SUBSCRIBERS = "//li[%d]/div/div[1]/div[2]/div[1]/a";
         }
