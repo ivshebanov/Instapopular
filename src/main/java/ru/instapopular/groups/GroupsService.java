@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Action;
-import ru.instapopular.Constant;
 import ru.instapopular.model.MyGroup;
 import ru.instapopular.model.Usr;
 import ru.instapopular.repository.MyGroupRepository;
@@ -17,7 +16,23 @@ import ru.instapopular.view.ViewMap;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static ru.instapopular.Action.LIKE;
+import static ru.instapopular.Action.SUBSCRIBE;
+import static ru.instapopular.Action.SUBSCRIBE_AND_LIKE;
+import static ru.instapopular.Constant.Attribute.HREF;
+import static ru.instapopular.Constant.Attribute.REQUEST_SENT;
+import static ru.instapopular.Constant.Attribute.SUBSCRIPTIONS;
+import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
+import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
+import static ru.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
+import static ru.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
+import static ru.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
+import static ru.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
 
 @Service
 public class GroupsService {
@@ -96,29 +111,27 @@ public class GroupsService {
     }
 
     private void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
-        logger.info(String.format(Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions));
+        logger.info(format(SUBSCRIBE_TO_GROUP_MEMBERS, channelName, countSubscriptions, action.toString()));
         String baseWindowHandle = null;
-        if (!String.format(Constant.LinkToInstagram.HOME_PAGE, channelName).equalsIgnoreCase(instagramService.getCurrentUrl())) {
-            baseWindowHandle = instagramService.openUrl(String.format(Constant.LinkToInstagram.HOME_PAGE, channelName));
+        if (!format(HOME_PAGE, channelName).equalsIgnoreCase(instagramService.getCurrentUrl())) {
+            baseWindowHandle = instagramService.openUrl(format(HOME_PAGE, channelName));
         }
-        instagramService.getWebElement(60, Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS).click();
+        instagramService.getWebElement(60, OPEN_SUBSCRIBERS).click();
         instagramService.scrollSubscriptions(20);
         for (int i = 1; i <= countSubscriptions; i++) {
             try {
-                instagramService.scrollElementSubscriptions(String.format(Constant.UnsubscribeConstant.Xpath.SCROLL, i));
-                if (action == Action.SUBSCRIBE || action == Action.SUBSCRIBE_AND_LIKE) {
-                    if (isSubscribed(String.format(Constant.GroupsConstant.Xpath.IS_SUBSCRIBED, i))) {
+                instagramService.scrollElementSubscriptions(format(SCROLL, i));
+                if (action == SUBSCRIBE || action == SUBSCRIBE_AND_LIKE) {
+                    if (isSubscribed(format(IS_SUBSCRIBED, i))) {
                         countSubscriptions++;
                         continue;
                     }
-                    instagramService.getWebElement(60, String.format(Constant.GroupsConstant.Xpath.IS_SUBSCRIBED, i)).click();
+                    instagramService.getWebElement(60, format(IS_SUBSCRIBED, i)).click();
                     Thread.sleep(2000);
                 }
-                if (requestSent(String.format(Constant.GroupsConstant.Xpath.IS_SUBSCRIBED, i))) {
-                    continue;
-                }
-                if (action == Action.LIKE || action == Action.SUBSCRIBE_AND_LIKE) {
-                    String urlUser = instagramService.getWebElement(60, String.format(Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(Constant.Attribute.HREF);
+                if (requestSent(format(IS_SUBSCRIBED, i))) continue;
+                if (action == LIKE || action == SUBSCRIBE_AND_LIKE) {
+                    String urlUser = instagramService.getWebElement(60, format(USER_LINK_TO_SUBSCRIBERS, i)).getAttribute(HREF);
                     String userWindowHandle = instagramService.openUrlNewTab(urlUser);
                     int countPhoto;
                     try {
@@ -132,15 +145,14 @@ public class GroupsService {
                     if (countPhoto != 0) {
                         for (int j = 1; j <= countPhoto; j++) {
                             try {
-                                String urlPhoto = instagramService.getWebElement(10, String.format(Constant.GroupsConstant.Xpath.URL_PHOTO, j)).getAttribute(Constant.Attribute.HREF);
-                                instagramService.setLike(urlPhoto);
+                                instagramService.setLike(instagramService.getWebElement(10, format(URL_PHOTO, j)).getAttribute(HREF));
                             } catch (Exception e) {
                                 instagramService.selectTab(userWindowHandle);
                                 break;
                             }
                         }
                     }
-                    logger.info(String.format(Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP, i));
+                    logger.info(format(SUBSCRIBE_TO_GROUP, i));
                     instagramService.closeTab(userWindowHandle);
                     instagramService.selectTab(baseWindowHandle);
                 }
@@ -154,16 +166,17 @@ public class GroupsService {
 
     private boolean isSubscribed(String xpath) {
         String isSubscribed = instagramService.getWebElement(60, xpath).getText();
-        return Constant.Attribute.SUBSCRIPTIONS.equalsIgnoreCase(isSubscribed) || Constant.Attribute.REQUEST_SENT.equalsIgnoreCase(isSubscribed);
+        return SUBSCRIPTIONS.equalsIgnoreCase(isSubscribed)
+                || REQUEST_SENT.equalsIgnoreCase(isSubscribed);
     }
 
     private boolean requestSent(String xpath) {
         String isSubscribed = instagramService.getWebElement(60, xpath).getText();
-        return Constant.Attribute.REQUEST_SENT.equalsIgnoreCase(isSubscribed);
+        return REQUEST_SENT.equalsIgnoreCase(isSubscribed);
     }
 
     private int checkPhoto() {
-        List<WebElement> webElement = instagramService.getWebElements(10, Constant.GroupsConstant.Xpath.CHECK_PHOTO);
+        List<WebElement> webElement = instagramService.getWebElements(10, CHECK_PHOTO);
         return (webElement == null) ? 0 : webElement.size();
     }
 }

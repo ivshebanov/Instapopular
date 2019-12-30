@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import ru.instapopular.Constant;
-import ru.instapopular.Utils;
 import ru.instapopular.model.Guys;
 import ru.instapopular.model.Photo;
 import ru.instapopular.model.Usr;
@@ -29,6 +27,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Collections.emptyList;
+import static ru.instapopular.Constant.AnalysisConstant.COUNT_USER_LIKE;
+import static ru.instapopular.Constant.AnalysisConstant.CUT_OF_URL;
+import static ru.instapopular.Constant.AnalysisConstant.LINE_BREAK;
+import static ru.instapopular.Constant.AnalysisConstant.OPEN_LIKE;
+import static ru.instapopular.Constant.AnalysisConstant.VIEWS;
+import static ru.instapopular.Constant.LinkToInstagram.HOME_PAGE_2;
+import static ru.instapopular.Utils.getLoginUserBtn;
 
 @Service
 public class AnalysisService {
@@ -57,7 +62,7 @@ public class AnalysisService {
 
     void runAnalysis(Usr usr) {
         try {
-            List<String> photos = photoRepository.findPhotosByUsrAndActive(usr, false);
+            List<String> photos = photoRepository.findPhotosByUsrAndActive(usr, true);
             addNewUser(usr, analysisPhotos(usr, photos));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -99,7 +104,7 @@ public class AnalysisService {
 
     List<ViewMap> getAnalysisGuys(Usr usr) {
         try {
-            List<String> guys = guysRepository.findGuyNameByUsr(usr);
+            List<String> guys = guysRepository.findGuysByUsrAndActive(usr, true);
             List<ViewMap> resultView = instagramService.revertToView(guys);
             Collections.sort(resultView);
             return resultView;
@@ -120,7 +125,7 @@ public class AnalysisService {
     }
 
     private String cutOfUrl(String url) {
-        Pattern pattern = Pattern.compile(Constant.AnalysisConstant.CUT_OF_URL);
+        Pattern pattern = Pattern.compile(CUT_OF_URL);
         Matcher matcher = pattern.matcher(url);
         String result = "";
         while (matcher.find()) {
@@ -166,20 +171,20 @@ public class AnalysisService {
             return null;
         }
         Map<String, Integer> resultUser = new HashMap<>();
-        List<String> resultPhoto = new ArrayList<>();
+        List<String> deactivatePhoto = new ArrayList<>();
         try {
             for (String photo : photos) {
+                deactivatePhoto.add(photo);
                 Set<String> activeUsers = getActive(photo);
-                if (activeUsers == null || activeUsers.size() == 0) {
+                if (activeUsers == null) {
                     continue;
                 }
                 addActiveUsersToMap(resultUser, activeUsers);
-                resultPhoto.add(photo);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
-            for (String photo : resultPhoto) {
+            for (String photo : deactivatePhoto) {
                 photoRepository.deactivatePhoto(usr, photo);
             }
         }
@@ -189,35 +194,41 @@ public class AnalysisService {
 
     private Set<String> getActive(String urlPhoto) {
         Set<String> resultActiveUser = new HashSet<>();
-        instagramService.openUrl(String.format(Constant.LinkToInstagram.HOME_PAGE_2, urlPhoto));
+        instagramService.openUrl(String.format(HOME_PAGE_2, urlPhoto));
+        if (isVideo()) return null;
         instagramService.timeOut(2, 0);
         try {
-            instagramService.getWebElement(60, Constant.AnalysisConstant.OPEN_LIKE).click();
+            instagramService.getWebElement(60, OPEN_LIKE).click();
             instagramService.timeOut(3, 0);
-            String countUserLike = instagramService.getWebElement(15, Constant.AnalysisConstant.COUNT_USER_LIKE).getText();
+            String countUserLike = instagramService.getWebElement(15, COUNT_USER_LIKE).getText();
             int countUserLikeInt = instagramService.convertStringToInt(countUserLike);
             for (int i = 0; i < countUserLikeInt / 6 + 2; i++) {
                 instagramService.timeOut(1, 0);
                 List<WebElement> elements = null;
                 try {
-                    elements = instagramService.getWebElements(30, Utils.getLoginUserBtn());
+                    elements = instagramService.getWebElements(30, getLoginUserBtn());
                 } catch (NoSuchElementException ignored) {
                 }
                 if (elements == null || elements.size() == 0) {
                     continue;
                 }
-                Set<String> set = getActiveUser(elements);
-                if (set == null) {
+                Set<String> nameActiveUser = getActiveUser(elements);
+                if (nameActiveUser == null) {
                     i--;
                     continue;
                 }
-                resultActiveUser.addAll(set);
+                resultActiveUser.addAll(nameActiveUser);
                 instagramService.scrollOpenLikeUser(elements.get(elements.size() - 1));
             }
         } catch (Exception e) {
             return resultActiveUser;
         }
         return resultActiveUser;
+    }
+
+    private boolean isVideo() {
+        String checkVideo = instagramService.getWebElement(15, OPEN_LIKE).getText();
+        return checkVideo.contains(VIEWS);
     }
 
     private Set<String> getActiveUser(List<WebElement> elements) {
@@ -227,7 +238,7 @@ public class AnalysisService {
         Set<String> resultUser = new HashSet<>();
         try {
             for (WebElement element : elements) {
-                resultUser.add(element.getText().split(Constant.AnalysisConstant.LINE_BREAK)[0]);
+                resultUser.add(element.getText().split(LINE_BREAK)[0]);
             }
         } catch (StaleElementReferenceException ex) {
             return null;
