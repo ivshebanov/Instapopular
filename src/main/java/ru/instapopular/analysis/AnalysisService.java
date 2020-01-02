@@ -198,10 +198,10 @@ public class AnalysisService {
         if (isVideo()) return null;
         instagramService.timeOut(2, 0);
         try {
-            instagramService.getWebElement(60, OPEN_LIKE).click();
-            instagramService.timeOut(3, 0);
             String countUserLike = instagramService.getWebElement(15, COUNT_USER_LIKE).getText();
             int countUserLikeInt = instagramService.convertStringToInt(countUserLike);
+            instagramService.getWebElement(60, OPEN_LIKE).click();
+            instagramService.timeOut(3, 0);
             for (int i = 0; i < countUserLikeInt / 6 + 2; i++) {
                 instagramService.timeOut(1, 0);
                 List<WebElement> elements = null;

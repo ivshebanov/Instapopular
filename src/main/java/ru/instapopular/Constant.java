@@ -49,6 +49,7 @@ public interface Constant {
 
         interface MessageConstants {
             String SUBSCRIBE_TO_GROUP_MEMBERS = "subscribeToUsersInGroup(%s, %d, %s)";
+            String SCAN_CLIENT = "scanClient(%s)";
             String SUBSCRIBE_TO_GROUP = "subscribe from %d";
         }
 
@@ -95,8 +96,9 @@ public interface Constant {
 
         interface Xpath {
             String ACCOUNT_NAME = "//header/section/div[1]/h1";
-            String OPEN_SUBSCRIPTIONS = "//*[@id=\"react-root\"]//div/header/section/ul/li[3]/a";
-            String OPEN_SUBSCRIBERS = "//*[@id=\"react-root\"]//div/header/section/ul/li[2]/a";
+            String OPEN_SUBSCRIPTIONS = "//ul/li[3]/a";
+            String OPEN_SUBSCRIBERS = "//ul/li[2]/a";
+            String COUNT_SUBSCRIBERS = "//ul/li[2]/a/span";
             String SUBSCRIPTIONS_BTN = "//li[%d]/div/div[2]/button";
             String UNSUBSCRIBE_BTN = "//div[3]/button[1]";
             String SCROLL = "//ul/div/li[%d]";
@@ -121,6 +123,8 @@ public interface Constant {
         String OPEN_LIKE = "//div[2]/section[2]/div";
         String LOGIN_USER_MAC = "//div[4]/div/div[2]/div/div/div";
         String LOGIN_USER_WINDOWS = "//div[3]/div/div[2]/div/div/div";
+        String SUBSCRIBERS_USER_MAC = "//div[4]/div/div[2]/ul/div/li";
+        String SUBSCRIBERS_USER_WINDOWS = "//div[3]/div/div[2]/ul/div/li";
         String COUNT_USER_LIKE = "//div[2]/section[2]/div/div/button/span";
         String LINE_BREAK = "\n";
         String CUT_OF_URL = "p/.*";

@@ -2,6 +2,8 @@ package ru.instapopular;
 
 import static ru.instapopular.Constant.AnalysisConstant.LOGIN_USER_MAC;
 import static ru.instapopular.Constant.AnalysisConstant.LOGIN_USER_WINDOWS;
+import static ru.instapopular.Constant.AnalysisConstant.SUBSCRIBERS_USER_MAC;
+import static ru.instapopular.Constant.AnalysisConstant.SUBSCRIBERS_USER_WINDOWS;
 import static ru.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_MAC;
 import static ru.instapopular.Constant.DriverConstant.Driver.Chrome.CHROME_DRIVER_WINDOWS;
 import static ru.instapopular.Constant.Utils.MAC;
@@ -28,6 +30,16 @@ public class Utils {
         }
         if (WINDOWS.equalsIgnoreCase(ocName)) {
             return LOGIN_USER_WINDOWS;
+        }
+        return "";
+    }
+
+    public static String getSubscribeUser() {
+        if (MAC.equalsIgnoreCase(ocName)) {
+            return SUBSCRIBERS_USER_MAC;
+        }
+        if (WINDOWS.equalsIgnoreCase(ocName)) {
+            return SUBSCRIBERS_USER_WINDOWS;
         }
         return "";
     }

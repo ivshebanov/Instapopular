@@ -36,7 +36,6 @@ import static ru.instapopular.Constant.DriverConstant.MessageConstants.QUIT_DRIV
 import static ru.instapopular.Constant.DriverConstant.MessageConstants.SET_PROPERTY;
 import static ru.instapopular.Constant.GroupsConstant.Script.WINDOW_OPEN;
 import static ru.instapopular.Constant.InstagramConstant.MessageConstants.DID_NOT_FIND_THE_BUTTON;
-import static ru.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_FAILED;
 import static ru.instapopular.Constant.InstagramConstant.MessageConstants.LOGIN_ON_WEB_SITE;
 import static ru.instapopular.Constant.InstagramConstant.Script.SCROLL_INTO_VIEW;
 import static ru.instapopular.Constant.InstagramConstant.Xpath.IS_ACTIVE_LIKE;
@@ -95,7 +94,7 @@ public class InstagramService {
             logger.error(format(DID_NOT_FIND_THE_BUTTON, LOGIN_BUTTON_4, LOGIN_BUTTON_5));
             getWebElement(20, LOGIN_BUTTON_5).click();
         }
-        timeOut(20, 0);
+        timeOut(10, 0);
         openHomePage();
     }
 
@@ -108,29 +107,24 @@ public class InstagramService {
     }
 
     public int convertStringToInt(String count) {
-        if (count.length() == 1 || count.length() == 2 || count.length() == 3) {
-            return Integer.parseInt(count);
-        }
-        if (count.length() == 5) {
-            return Integer.parseInt(removeCharAt(count, 1));
+        if (count.length() <= 5) {
+            return Integer.parseInt(removeSpace(count));
         }
         if (count.length() == 6) {//переделать
-            return Integer.parseInt(removeCharAt(count, 2));
-        }
-        if (count.length() == 7) {//переделать
-            return Integer.parseInt(removeCharAt(count, 3));
+            return Integer.parseInt(removeSpace(count));
         }
         return 0;
     }
 
-    private String removeCharAt(String s, int pos) {
-        return s.substring(0, pos) + s.substring(pos + 1);
+    private String removeSpace(String count) {
+        return count.replaceAll(" ", "");
     }
 
     public void scrollSubscriptions(int currentPosition) {
         for (int i = 1; i <= currentPosition; i++) {
             try {
                 scrollElementSubscriptions(format(SCROLL, i));
+                timeOutMilliseconds(100, 0);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -262,16 +256,20 @@ public class InstagramService {
                 .until(presenceOfAllElementsLocatedBy(xpath(xpathExpression)));
     }
 
-    public void timeOut(int timeOutInSeconds, int dispersionInSeconds) {
-        timeOutInSeconds *= 1000;
-        dispersionInSeconds *= 1000;
+    public void timeOutMilliseconds(int timeOutInMilliseconds, int dispersionInMilliseconds) {
         try {
             Random random = new Random();
-            int num = dispersionInSeconds + random.nextInt(timeOutInSeconds - dispersionInSeconds);
+            int num = dispersionInMilliseconds + random.nextInt(timeOutInMilliseconds - dispersionInMilliseconds);
             Thread.sleep(num);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public void timeOut(int timeOutInSeconds, int dispersionInSeconds) {
+        timeOutInSeconds *= 1000;
+        dispersionInSeconds *= 1000;
+        timeOutMilliseconds(timeOutInSeconds, dispersionInSeconds);
     }
 
     public List<ViewMap> revertToView(List<String> list) {

@@ -2,37 +2,49 @@ package ru.instapopular.groups;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.instapopular.Action;
+import ru.instapopular.model.Client;
 import ru.instapopular.model.MyGroup;
 import ru.instapopular.model.Usr;
+import ru.instapopular.repository.ClientRepository;
 import ru.instapopular.repository.MyGroupRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static ru.instapopular.Action.LIKE;
 import static ru.instapopular.Action.SUBSCRIBE;
 import static ru.instapopular.Action.SUBSCRIBE_AND_LIKE;
+import static ru.instapopular.Constant.AnalysisConstant.LINE_BREAK;
 import static ru.instapopular.Constant.Attribute.HREF;
 import static ru.instapopular.Constant.Attribute.REQUEST_SENT;
 import static ru.instapopular.Constant.Attribute.SUBSCRIPTIONS;
+import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SCAN_CLIENT;
 import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
 import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
 import static ru.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
 import static ru.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
 import static ru.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
 import static ru.instapopular.Constant.LinkToInstagram.HOME_PAGE;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.COUNT_SUBSCRIBERS;
 import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
 import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
 import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
+import static ru.instapopular.Utils.getSubscribeUser;
 
 @Service
 public class GroupsService {
@@ -41,10 +53,12 @@ public class GroupsService {
 
     private final InstagramService instagramService;
     private final MyGroupRepository myGroupRepository;
+    private final ClientRepository clientRepository;
 
-    public GroupsService(InstagramService instagramService, MyGroupRepository myGroupRepository) {
+    public GroupsService(InstagramService instagramService, MyGroupRepository myGroupRepository, ClientRepository clientRepository) {
         this.instagramService = instagramService;
         this.myGroupRepository = myGroupRepository;
+        this.clientRepository = clientRepository;
     }
 
     void subscribeToUsersInGroup(Usr usr, int countSubscriptions, Action action) {
@@ -58,6 +72,46 @@ public class GroupsService {
         } finally {
             instagramService.quitDriver();
         }
+    }
+
+    void scanClient(Usr usr) {
+        Map<String, Integer> resultClientName = new HashMap<>();
+        try {
+            List<String> groups = myGroupRepository.findMyGroupByUsrAndActive(usr, true);
+            for (String groupName : groups) {
+                Set<String> clientNames = scanClient(groupName);
+                addNameClientToMap(resultClientName, clientNames);
+                removeGroup(usr, groupName);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            saveResultClientName(usr, resultClientName);
+            instagramService.quitDriver();
+        }
+    }
+
+    private void saveResultClientName(Usr usr, Map<String, Integer> resultClientName) {
+        List<String> allClient = clientRepository.findClientNameByUsr(usr);
+        for (Map.Entry<String, Integer> entry : resultClientName.entrySet()) {
+            if (allClient.contains(entry.getKey())) {
+                Client client = clientRepository.findClientByUsrAndClientName(usr, entry.getKey());
+                int frequency = client.getFrequency() + entry.getValue();
+                clientRepository.updateFrequencyByUsrAndClientName(usr, entry.getKey(), frequency);
+                continue;
+            }
+            saveNewClient(usr, entry);
+        }
+    }
+
+    private void saveNewClient(Usr usr, Map.Entry<String, Integer> entry) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(Client.class);
+        Client client = context.getBean(Client.class);
+        client.setUsr(usr);
+        client.setClientName(entry.getKey());
+        client.setFrequency(entry.getValue());
+        client.setActive(true);
+        clientRepository.save(client);
     }
 
     void loginOnWebSite(String login, String password) {
@@ -108,6 +162,54 @@ public class GroupsService {
         } catch (Exception e) {
             return emptyList();
         }
+    }
+
+    List<ViewMap> getActiveClient(Usr usr) {
+        try {
+            List<String> myActiveGroup = clientRepository.findClientNameByUsrAndActive(usr, true);
+            List<ViewMap> myActiveGroupViewMap = instagramService.revertToView(myActiveGroup);
+            Collections.sort(myActiveGroupViewMap);
+            return myActiveGroupViewMap;
+        } catch (Exception e) {
+            return emptyList();
+        }
+    }
+
+    private Set<String> scanClient(String channelName) {
+        logger.info(format(SCAN_CLIENT, channelName));
+        if (!format(HOME_PAGE, channelName).equalsIgnoreCase(instagramService.getCurrentUrl())) {
+            instagramService.openUrl(format(HOME_PAGE, channelName));
+        }
+        String countSubscribers = instagramService.getWebElement(15, COUNT_SUBSCRIBERS).getText();
+        int countSubscribersInt = instagramService.convertStringToInt(countSubscribers);
+        if (countSubscribersInt > 2400) countSubscribersInt = 2300;//2400
+
+        instagramService.getWebElement(60, OPEN_SUBSCRIBERS).click();
+        instagramService.scrollSubscriptions(20);
+        instagramService.timeOut(2, 0);
+        instagramService.scrollSubscriptions(countSubscribersInt);
+
+        List<WebElement> elements = null;
+        try {
+            elements = instagramService.getWebElements(30, getSubscribeUser());
+        } catch (NoSuchElementException ignored) {
+        }
+        return getActiveUser(elements);
+    }
+
+    private Set<String> getActiveUser(List<WebElement> elements) {
+        if (elements == null || elements.size() == 0) {
+            return new HashSet<>();
+        }
+        Set<String> resultUser = new HashSet<>();
+        try {
+            for (WebElement element : elements) {
+                resultUser.add(element.getText().split(LINE_BREAK)[0]);
+            }
+        } catch (StaleElementReferenceException ex) {
+            return null;
+        }
+        return resultUser;
     }
 
     private void subscribeToUsersInGroup(String channelName, int countSubscriptions, Action action) {
@@ -178,5 +280,15 @@ public class GroupsService {
     private int checkPhoto() {
         List<WebElement> webElement = instagramService.getWebElements(10, CHECK_PHOTO);
         return (webElement == null) ? 0 : webElement.size();
+    }
+
+    private void addNameClientToMap(Map<String, Integer> mapClient, Set<String> client) {
+        for (String user : client) {
+            if (mapClient.containsKey(user)) {
+                mapClient.put(user, mapClient.get(user) + 1);
+                continue;
+            }
+            mapClient.put(user, 1);
+        }
     }
 }

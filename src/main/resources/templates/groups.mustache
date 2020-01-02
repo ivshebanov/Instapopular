@@ -10,6 +10,13 @@
 
 <div class="login-page">
     <div class="form">
+
+        <form class="register-form" method="post" action="scanClient">
+            <button>Запустить сканирование</button>
+            <br><br>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        </form>
+
         <form class="register-form" method="post" action="group">
             <label for="countSubscriptionsField">На сколько акаунтов?</label>
             <input id="countSubscriptionsField" type="number" name="countSubscriptions" placeholder="350"/>
@@ -22,6 +29,16 @@
             <br><br>
             <p class="message"><a href="#">Редактирование групп.</a></p>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+
+            <br>
+            <hr>
+            <div><b><h3>Список клиентов</h3></b></div>
+            {{#scanClient}}
+                <div>
+                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
+                    <br>
+                </div>
+            {{/scanClient}}
         </form>
 
         <form class="login-form" method="post" action="addRemove">
@@ -35,18 +52,17 @@
             <br><br>
             <p class="message"><a href="#">Начать работу?</a></p>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+
+            <br>
+            <hr>
+            <div><b><h3>Список групп</h3></b></div>
+            {{#groupView}}
+                <div>
+                    <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
+                    <br>
+                </div>
+            {{/groupView}}
         </form>
-
-
-        <br>
-        <hr>
-        <div><b><h3>Список групп</h3></b></div>
-        {{#groupView}}
-            <div>
-                <a target="_blank" href="https://www.instagram.com/{{key}}">{{key}}</a>
-                <br>
-            </div>
-        {{/groupView}}
     </div>
 </div>
 
