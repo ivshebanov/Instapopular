@@ -23,6 +23,18 @@ public class GroupsController {
     public String groups(@AuthenticationPrincipal Usr usr,
                          Map<String, Object> view) {
         view.put("groupView", groupsService.getActiveGroup(usr));
+        view.put("scanClient", groupsService.getActiveClient(usr));
+        return "groups";
+    }
+
+    @PostMapping("/scanClient")
+    public String scanClient(@AuthenticationPrincipal Usr usr,
+                             Map<String, Object> view) {
+
+        groupsService.loginOnWebSite(usr.getInstName(), usr.getInstPassword());
+        groupsService.scanClient(usr);
+        view.put("groupView", groupsService.getActiveGroup(usr));
+        view.put("scanClient", groupsService.getActiveClient(usr));
         return "groups";
     }
 
@@ -35,6 +47,7 @@ public class GroupsController {
         groupsService.loginOnWebSite(usr.getInstName(), usr.getInstPassword());
         groupsService.subscribeToUsersInGroup(usr, countSubscriptions, action);
         view.put("groupView", groupsService.getActiveGroup(usr));
+        view.put("scanClient", groupsService.getActiveClient(usr));
         return "groups";
     }
 
@@ -50,6 +63,7 @@ public class GroupsController {
             groupsService.removeGroup(usr, remove);
         }
         view.put("groupView", groupsService.getActiveGroup(usr));
+        view.put("scanClient", groupsService.getActiveClient(usr));
         return "groups";
     }
 }

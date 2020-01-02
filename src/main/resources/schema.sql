@@ -108,3 +108,23 @@ CREATE TABLE public.roles
 
 ALTER TABLE public.roles
     OWNER to ivshebanov;
+
+
+-- Table: public.potential_client
+CREATE TABLE public.potential_client
+(
+    id          bigint                                              NOT NULL,
+    usr_id      bigint                                              NOT NULL,
+    active      boolean                                             NOT NULL,
+    client_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    frequency   integer                                             NOT NULL,
+    CONSTRAINT potential_client_pkey PRIMARY KEY (id),
+    CONSTRAINT potential_client_usr_id_fkey FOREIGN KEY (usr_id)
+        REFERENCES public.usr (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+    TABLESPACE pg_default;
+
+ALTER TABLE public.guys
+    OWNER to ivshebanov;
