@@ -1,5 +1,6 @@
 package ru.instapopular.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +31,10 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "usr")
-public class Usr implements UserDetails {
+public class Usr implements UserDetails, Serializable {
+
+    public Usr() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,6 +50,7 @@ public class Usr implements UserDetails {
     private String usrname;
 
     @NotBlank
+    @JsonBackReference
     private String password;
 
     @NotBlank
@@ -53,6 +59,7 @@ public class Usr implements UserDetails {
 
     @NotBlank
     @Column(name = "inst_password")
+    @JsonBackReference
     private String instPassword;
 
     @PositiveOrZero
@@ -60,48 +67,59 @@ public class Usr implements UserDetails {
     private Integer doNotUnsubscribe;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Guys> guys;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Hashtag> hashtags;
 
     @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<MyGroup> groups;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
+    @JsonBackReference
     private Set<Roles> role;
 
     @Override
+    @JsonBackReference
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRole();
     }
 
     @Override
+    @JsonBackReference
     public String getUsername() {
         return getUsrname();
     }
 
     @Override
+    @JsonBackReference
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonBackReference
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonBackReference
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonBackReference
     public boolean isEnabled() {
         return isActive();
     }

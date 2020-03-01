@@ -1,5 +1,6 @@
 package ru.instapopular.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 
@@ -12,20 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Data
 @Entity
 @Scope(value = "prototype")
 @Table(name = "my_group")
-public class MyGroup {
+public class MyGroup implements Serializable {
 
     public MyGroup() {
-    }
-
-    public MyGroup(Usr usr, @NotBlank String myGroup) {
-        this.usr = usr;
-        this.myGroup = myGroup;
     }
 
     @Id
@@ -34,6 +31,7 @@ public class MyGroup {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
+    @JsonBackReference
     private Usr usr;
 
     @NotBlank

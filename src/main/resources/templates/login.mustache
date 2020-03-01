@@ -31,7 +31,6 @@
             </label>
             <button>Создать</button>
             <p class="message">Уже зарегистрирован? <a href="#">Войти в систему</a></p>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
         <form class="login-form" action="/login" method="post">
             <h1>Instapopular</h1>
@@ -44,7 +43,6 @@
             </label>
             <button>Войти</button>
             <p class="message">Не зарегистрирован? <a href="#">Завести аккаунт</a></p>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
         {{#message}}
             {{message}}

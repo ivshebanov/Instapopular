@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
@@ -17,33 +18,17 @@ import ru.instapopular.repository.MyGroupRepository;
 import ru.instapopular.service.InstagramService;
 import ru.instapopular.view.ViewMap;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
-import static ru.instapopular.Action.LIKE;
-import static ru.instapopular.Action.SUBSCRIBE;
-import static ru.instapopular.Action.SUBSCRIBE_AND_LIKE;
+import static ru.instapopular.Action.*;
 import static ru.instapopular.Constant.AnalysisConstant.LINE_BREAK;
-import static ru.instapopular.Constant.Attribute.HREF;
-import static ru.instapopular.Constant.Attribute.REQUEST_SENT;
-import static ru.instapopular.Constant.Attribute.SUBSCRIPTIONS;
-import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SCAN_CLIENT;
-import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP;
-import static ru.instapopular.Constant.GroupsConstant.MessageConstants.SUBSCRIBE_TO_GROUP_MEMBERS;
-import static ru.instapopular.Constant.GroupsConstant.Xpath.CHECK_PHOTO;
-import static ru.instapopular.Constant.GroupsConstant.Xpath.IS_SUBSCRIBED;
-import static ru.instapopular.Constant.GroupsConstant.Xpath.URL_PHOTO;
+import static ru.instapopular.Constant.Attribute.*;
+import static ru.instapopular.Constant.GroupsConstant.MessageConstants.*;
+import static ru.instapopular.Constant.GroupsConstant.Xpath.*;
 import static ru.instapopular.Constant.LinkToInstagram.HOME_PAGE;
-import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.COUNT_SUBSCRIBERS;
-import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.OPEN_SUBSCRIBERS;
-import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.SCROLL;
-import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.USER_LINK_TO_SUBSCRIBERS;
+import static ru.instapopular.Constant.UnsubscribeConstant.Xpath.*;
 import static ru.instapopular.Utils.getSubscribeUser;
 
 @Service
@@ -124,6 +109,16 @@ public class GroupsService {
         }
     }
 
+    public List<MyGroup> getMyGroupsByUsr(Usr usr) {
+        List<MyGroup> resultGroups = null;
+        try {
+            resultGroups = myGroupRepository.findAllByUsr(usr);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return resultGroups;
+    }
+
     void addGroup(Usr usr, String groupName) {
         try {
             MyGroup myDeativateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
@@ -142,6 +137,17 @@ public class GroupsService {
         }
     }
 
+    public MyGroup createGroup(MyGroup myGroup, Usr usr) {
+        MyGroup resultGroup = null;
+        try {
+            myGroup.setUsr(usr);
+            resultGroup = myGroupRepository.save(myGroup);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return resultGroup;
+    }
+
     void removeGroup(Usr usr, String groupName) {
         try {
             MyGroup myActivateGroup = myGroupRepository.findMyGroupByUsrAndMyGroup(usr, groupName);
@@ -151,6 +157,25 @@ public class GroupsService {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    void deleteGroup(MyGroup myGroup) {
+        try {
+            myGroupRepository.delete(myGroup);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    MyGroup updateGroup(MyGroup myGroup, MyGroup myGroupFromRepo) {
+        MyGroup resultGroup = null;
+        try {
+            BeanUtils.copyProperties(myGroup, myGroupFromRepo, "id", "usr", "user");
+            resultGroup = myGroupRepository.save(myGroupFromRepo);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return resultGroup;
     }
 
     List<ViewMap> getActiveGroup(Usr usr) {

@@ -13,6 +13,8 @@ public interface MyGroupRepository extends JpaRepository<MyGroup, Integer> {
 
     MyGroup findMyGroupByUsrAndMyGroup(Usr usr, String myGroup);
 
+    List<MyGroup> findAllByUsr(Usr usr);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE MyGroup SET active = false WHERE usr = :usr AND myGroup = :groupName")

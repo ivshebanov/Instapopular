@@ -1,0 +1,37 @@
+{
+  "name": "instapopular",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ivshebanov/instapopulars.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ivshebanov/instapopulars/issues"
+  },
+  "homepage": "https://gitlab.com/ivshebanov/instapopulars#readme",
+  "dependencies": {
+    "vue": "^2.6.11",
+    "vue-resource": "^1.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "vue-loader": "^15.9.0",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify": "^2.2.15",
+    "vuetify-loader": "^1.4.3",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
