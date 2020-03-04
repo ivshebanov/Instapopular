@@ -16,13 +16,11 @@
             <div><a href="http://localhost:8080/hashtags"><h3>Работа с хештэгами.</h3></a></div>
             <div><a href="http://localhost:8080/unsubscribe"><h3>Зпупустить отписку.</h3></a></div>
             <div><a href="http://localhost:8080/analysis"><h3>Анализ фото.</h3></a></div>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
         </form>
 
         <div>
             <form action="/logout" method="post">
                 <button>Выход</button>
-                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             </form>
         </div>
     </div>
