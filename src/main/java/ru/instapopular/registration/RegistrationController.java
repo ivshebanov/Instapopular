@@ -1,5 +1,6 @@
 package ru.instapopular.registration;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,9 +51,9 @@ public class RegistrationController {
 
 
     @PostMapping("/registration")
-    public String addUser(Usr usr, Map<String, Object> model) {
+    public ResponseEntity addUser(Usr usr, Map<String, Object> model) {
         String resultMassage = registrationService.createNewUsr(usr);
         model.put("message", resultMassage);
-        return "login";
+        return ResponseEntity.ok().build();
     }
 }

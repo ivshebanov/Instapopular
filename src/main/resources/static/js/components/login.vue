@@ -6,16 +6,16 @@
                     <v-card class="elevation-12">
                         <v-toolbar color="deep-purple accent-4" dark flat>
                             <v-toolbar-title>Войти</v-toolbar-title>
-<!--                            <v-spacer></v-spacer>-->
-<!--                            <v-tooltip bottom>-->
-<!--                                <template v-slot:activator="{ on }">-->
-<!--                                    <v-btn href="https://github.com/pagekit/vue-resource/blob/develop/docs/api.md"-->
-<!--                                           icon large target="_blank" v-on="on">-->
-<!--                                        <v-icon>fiber_new</v-icon>-->
-<!--                                    </v-btn>-->
-<!--                                </template>-->
-<!--                                <span>Регистрация</span>-->
-<!--                            </v-tooltip>-->
+                            <v-spacer></v-spacer>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn @click="registrationFunc"
+                                           icon large target="_blank" v-on="on">
+                                        <v-icon>fiber_new</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Регистрация</span>
+                            </v-tooltip>
 <!--                            <v-tooltip right>-->
 <!--                                <template v-slot:activator="{ on }">-->
 <!--                                    <v-btn icon large href="https://codepen.io/johnjleider/pen/pMvGQO" target="_blank" v-on="on">-->
@@ -24,7 +24,7 @@
 <!--                                </template>-->
 <!--                                <span>Codepen</span>-->
 <!--                            </v-tooltip>-->
-<!--                        </v-toolbar>-->
+                        </v-toolbar>
 
                         <v-form @submit.prevent="loginFunc" method="POST">
                             <v-card-text>
@@ -79,12 +79,15 @@
                             this.password = ''
                             this.$resource('/group1/profile').get().then(data => {
                                 data.json().then(inf => {
-                                    this.updateData(false, inf.profile, inf.messages)
+                                    this.updateData(false, false, inf.profile, inf.messages)
                                 })
                             })
                         }
                     }
                 )
+            },
+            registrationFunc() {
+                this.updateData(false, true)
             }
         }
     }

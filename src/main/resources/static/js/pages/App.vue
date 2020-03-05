@@ -26,6 +26,10 @@
                 <login :updateData="updateData"/>
             </v-container>
 
+            <v-container v-if="isRegistration">
+                <registration :updateData="updateData"/>
+            </v-container>
+
             <v-container v-if="profile">
                 <messages-list :messages="messages"/>
             </v-container>
@@ -36,22 +40,26 @@
 <script>
     import MessagesList from '../components/messages/MessageList.vue'
     import Login from '../components/login.vue'
+    import Registration from '../components/registration.vue'
 
     export default {
         components: {
             MessagesList,
-            Login
+            Login,
+            Registration
         },
         data() {
             return {
                 messages: frontendData.messages,
                 profile: frontendData.profile,
-                isLogin: null
+                isLogin: null,
+                isRegistration: null
             }
         },
         methods: {
-            updateData(flag,profile,messages ) {
-                this.isLogin = flag
+            updateData(isLogin, isRegistration, profile, messages) {
+                this.isLogin = isLogin
+                this.isRegistration = isRegistration
                 this.profile = profile
                 this.messages = messages
             }
