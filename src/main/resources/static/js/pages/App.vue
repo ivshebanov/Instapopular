@@ -39,8 +39,8 @@
 </template>
 <script>
     import MessagesList from '../components/messages/MessageList.vue'
-    import Login from '../components/login.vue'
-    import Registration from '../components/registration.vue'
+    import Login from './login/login.vue'
+    import Registration from './login/registration.vue'
 
     export default {
         components: {
