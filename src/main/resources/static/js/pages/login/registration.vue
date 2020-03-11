@@ -45,7 +45,7 @@
                                               type="text"/>
 
                                 <v-text-field v-model="instPassword"
-                                              label="Пароль от инстаграмаь"
+                                              label="Пароль от инстаграма"
                                               name="instPassword"
                                               prepend-icon="lock"
                                               type="text"/>
