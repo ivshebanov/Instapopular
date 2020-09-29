@@ -1,10 +1,10 @@
 <template>
-    <v-text-field>hashtag</v-text-field>
+    <v-card-text>info</v-card-text>
 </template>
 
 <script>
     export default {
-        name: "hashtag"
+        name: "info"
     }
 </script>
 

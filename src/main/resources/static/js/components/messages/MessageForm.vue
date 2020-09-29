@@ -1,7 +1,7 @@
 <template>
     <v-layout row>
         <v-text-field label="New message" placeholder="Write something" v-model="text"/>
-        <v-btn @click="save">
+        <v-btn @click="sav">
             Save
         </v-btn>
     </v-layout>
@@ -18,7 +18,7 @@
     }
 
     export default {
-        props: ['messages', 'messageAttr'],
+        props: ['messages', 'messageAttr', 'save'],
         data() {
             return {
                 text: '',
@@ -27,30 +27,13 @@
         },
         watch: {
             messageAttr(newVal, oldVal) {
-                this.text = newVal.text
+                this.text = newVal.myGroup
                 this.id = newVal.id
             }
         },
         methods: {
-            save() {
-                const message = {text: this.text}
-                if (this.id) {
-                    this.$resource('/message{/id}').update({id: this.id}, message).then(result =>
-                        result.json().then(data => {
-                            const index = getIndex(this.messages, data.id)
-                            this.messages.splice(index, 1, data)
-                            this.text = ''
-                            this.id = ''
-                        })
-                    )
-                } else {
-                    this.$resource('/message{/id}').save({}, message).then(result =>
-                        result.json().then(data => {
-                            this.messages.push(data)
-                            this.text = ''
-                        })
-                    )
-                }
+            sav() {
+                this.save(this.text, this.id)
             }
         }
     }

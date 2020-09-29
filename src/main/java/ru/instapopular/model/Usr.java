@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "usr")
 public class Usr implements UserDetails, Serializable {
@@ -122,6 +121,111 @@ public class Usr implements UserDetails, Serializable {
     @JsonBackReference
     public boolean isEnabled() {
         return isActive();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsrname() {
+        return usrname;
+    }
+
+    public void setUsrname(String usrname) {
+        this.usrname = usrname;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getInstName() {
+        return instName;
+    }
+
+    public void setInstName(String instName) {
+        this.instName = instName;
+    }
+
+    public String getInstPassword() {
+        return instPassword;
+    }
+
+    public void setInstPassword(String instPassword) {
+        this.instPassword = instPassword;
+    }
+
+    public Integer getDoNotUnsubscribe() {
+        return doNotUnsubscribe;
+    }
+
+    public void setDoNotUnsubscribe(Integer doNotUnsubscribe) {
+        this.doNotUnsubscribe = doNotUnsubscribe;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public List<Guys> getGuys() {
+        return guys;
+    }
+
+    public void setGuys(List<Guys> guys) {
+        this.guys = guys;
+    }
+
+    public List<Hashtag> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(List<Hashtag> hashtags) {
+        this.hashtags = hashtags;
+    }
+
+    public List<MyGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<MyGroup> groups) {
+        this.groups = groups;
+    }
+
+    public Set<Roles> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<Roles> role) {
+        this.role = role;
     }
 
     @Override

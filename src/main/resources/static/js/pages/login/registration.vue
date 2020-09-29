@@ -66,7 +66,6 @@
 <script>
     export default {
         props: ['updateData'],
-        name: "registration",
         data() {
             return {
                 username: "",

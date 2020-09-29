@@ -1,10 +1,10 @@
 <template>
-    <v-text-field>main</v-text-field>
+    <v-card-text>analysis</v-card-text>
 </template>
 
 <script>
     export default {
-        name: "main"
+        name: "analysis"
     }
 </script>
 

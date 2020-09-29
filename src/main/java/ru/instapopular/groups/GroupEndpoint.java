@@ -1,5 +1,6 @@
 package ru.instapopular.groups;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.instapopular.Action;
@@ -32,24 +33,26 @@ public class GroupEndpoint {
 
     @PostMapping("/start")
     public void start(@AuthenticationPrincipal Usr usr,
-                        @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions,
-                        @RequestParam(name = "action", defaultValue = "LIKE") Action action) {
+                      @RequestParam(name = "countSubscriptions", defaultValue = "350") int countSubscriptions,
+                      @RequestParam(name = "action", defaultValue = "LIKE") Action action) {
 
         groupsService.loginOnWebSite(usr.getInstName(), usr.getInstPassword());
         groupsService.subscribeToUsersInGroup(usr, countSubscriptions, action);
     }
 
     @GetMapping
-    public List<MyGroup> getMyGroups(@AuthenticationPrincipal Usr usr) {
+    public ResponseEntity<List<MyGroup>> getMyGroups(@AuthenticationPrincipal Usr usr) {
 
-        return groupsService.getMyGroupsByUsr(usr);
+        List<MyGroup> resultGroup = groupsService.getMyGroupsByUsr(usr);
+        return ResponseEntity.ok(resultGroup);
     }
 
-    @PostMapping
-    public MyGroup createGroup(@AuthenticationPrincipal Usr usr,
-                               @RequestBody MyGroup message) {
+    @PostMapping(produces = {"application/json;charset=UTF-8"})
+    public ResponseEntity<MyGroup> createGroup(@AuthenticationPrincipal Usr usr,
+                                               @RequestBody MyGroup myGroup) {
 
-        return groupsService.createGroup(message, usr);
+        MyGroup resultGroup = groupsService.createGroup(myGroup, usr);
+        return ResponseEntity.ok(resultGroup);
     }
 
     @PutMapping("{id}")

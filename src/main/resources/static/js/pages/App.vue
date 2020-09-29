@@ -2,8 +2,6 @@
     <v-app>
         <div>
             <v-toolbar color="deep-purple accent-4" dark tabs>
-                <v-toolbar-side-icon></v-toolbar-side-icon>
-
                 <v-toolbar-title>Instapopular</v-toolbar-title>
 
                 <v-spacer></v-spacer>
@@ -36,10 +34,13 @@
                 <v-tab-item v-for="item in items" :key="item">
                     <v-card flat>
                         <v-container v-if="item==='Главная'">
-                            <main/>
+                            <info/>
                         </v-container>
                         <v-container v-if="item==='Группы'">
-                            <groupe/>
+                            <keep-alive>
+                                <component v-bind:is="getMyGroups"></component>
+                            </keep-alive>
+                            <groupe :group="group" :getMyGroups="getMyGroups"/>
                         </v-container>
                         <v-container v-if="item==='Хештеги'">
                             <hashtag/>
@@ -71,18 +72,18 @@
     import MessagesList from '../components/messages/MessageList.vue'
     import Login from './login/login.vue'
     import Registration from './login/registration.vue'
-    import Analysis from './analysis.vue'
-    import Main from "./main.vue";
+    import Analysis from './actions/analysis.vue'
+    import Info from "./actions/info.vue";
     import Groupe from "./groupe.vue";
-    import Hashtag from "./hashtag.vue";
-    import Unsubscribe from "./unsubscribe.vue";
+    import Hashtag from "./actions/hashtag.vue";
+    import Unsubscribe from "./actions/unsubscribe.vue";
 
     export default {
         components: {
             Unsubscribe,
             Hashtag,
             Groupe,
-            Main,
+            Info,
             MessagesList,
             Login,
             Registration,
@@ -96,12 +97,21 @@
                 isRegistration: null,
                 tab: null,
                 items: [
-                    'Главная', 'Группы', 'Хештеги', 'Анализ', 'Отписка',
+                    'Главная', 'Группы', 'Хештеги', 'Анализ', 'Отписка'
                 ],
-                text: '123123123'
+                group: null
             }
         },
         methods: {
+            getMyGroups() {
+                this.$http.get('/group1').then(result => {
+                        if (result.ok) {
+                            result.json().then(data => {
+                                this.group = data
+                            })
+                        }
+                    })
+            },
             updateData(isLogin, isRegistration, profile, messages) {
                 this.isLogin = isLogin
                 this.isRegistration = isRegistration
@@ -112,5 +122,6 @@
     }
 </script>
 
-<style>
+<style scoped>
+
 </style>

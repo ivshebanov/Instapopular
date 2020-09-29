@@ -1,10 +1,10 @@
 <template>
-    <v-text-field>unsubscribe</v-text-field>
+    <v-card-text>hashtag</v-card-text>
 </template>
 
 <script>
     export default {
-        name: "unsubscribe"
+        name: "hashtag"
     }
 </script>
 

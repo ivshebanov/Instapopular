@@ -51,9 +51,8 @@ public class RegistrationController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity addUser(Usr usr, Map<String, Object> model) {
-        String resultMassage = registrationService.createNewUsr(usr);
-        model.put("message", resultMassage);
+    public ResponseEntity<Usr> addUser(Usr usr) {
+        registrationService.createNewUsr(usr);
         return ResponseEntity.ok().build();
     }
 }

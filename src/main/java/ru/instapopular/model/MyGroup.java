@@ -1,6 +1,7 @@
 package ru.instapopular.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 
@@ -16,7 +17,6 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Data
 @Entity
 @Scope(value = "prototype")
 @Table(name = "my_group")
@@ -31,14 +31,47 @@ public class MyGroup implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Usr usr;
 
     @NotBlank
     @JoinColumn(name = "my_group")
     private String myGroup;
 
+    @JsonBackReference
     private boolean active;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Usr getUsr() {
+        return usr;
+    }
+
+    public void setUsr(Usr usr) {
+        this.usr = usr;
+    }
+
+    public String getMyGroup() {
+        return myGroup;
+    }
+
+    public void setMyGroup(String myGroup) {
+        this.myGroup = myGroup;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public boolean equals(Object o) {
